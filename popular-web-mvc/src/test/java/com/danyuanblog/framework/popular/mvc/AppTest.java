@@ -33,12 +33,5 @@ public class AppTest
     public void testLocale(){
     	System.out.println(Locale.US.toString());
     }
-    
-    @Test
-    public void testBeanUtil(){
-    	ApiInfo info = new ApiInfo();
-    	info.setApiName("test");
-    	SpringBeanUtil.addExistSingletonBean(info);
-    	info = SpringBeanUtil.getBean(ApiInfo.class);    	
-    }
+
 }

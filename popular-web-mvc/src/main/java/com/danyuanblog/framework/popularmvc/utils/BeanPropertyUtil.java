@@ -57,8 +57,11 @@ public class BeanPropertyUtil {
 		Set<String> hashCodeSet = new HashSet<>();//防止对象间引用关系存在环状结构
 		return objToStringMap(object, parentKey, hashCodeSet);
 	}
-	public static Map<String, String> objToStringMap(Object object, String parentKey, Set<String> hashCodeSet) {		
+	public static Map<String, String> objToStringMap(Object object, String parentKey, Set<String> hashCodeSet) {			
 		Map<String, String> resultMap = new HashMap<>();
+		if(object == null){
+			return resultMap;
+		}
 		if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
 			return resultMap;
 		}
