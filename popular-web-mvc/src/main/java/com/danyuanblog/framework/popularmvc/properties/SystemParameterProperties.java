@@ -1,0 +1,130 @@
+/**  
+* Title SystemParameterProperties.java  
+* Description  
+* @author danyuan
+* @date Oct 18, 2020
+* @version 1.0.0
+* site: www.danyuanblog.com
+*/ 
+package com.danyuanblog.framework.popularmvc.properties;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+import org.springframework.beans.factory.InitializingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+
+@Data
+@Accessors(chain = true)
+@ConfigurationProperties(prefix = "popularmvc.api.request.parameter.rename")
+public class SystemParameterProperties implements InitializingBean{
+	public static final Map<String, String> defaultParameterMap = new HashMap<>();
+	
+	public static final String APP_ID = "appId";
+	public static final String CHANNEL_ID = "channelId";
+	public static final String SESSION_ID = "sessionId";
+	public static final String USER_ID = "userId";
+	public static final String SIGN = "sign";
+	public static final String VERSION_CODE = "versionCode";
+	public static final String REPEAT_CODE = "repeatCode";
+	public static final String TIMESTAMP = "timestamp";
+	public static final String LOCALE = "locale";
+	public static final String CURRENCY = "currency";
+	public static final String COUNTRY_CODE = "countryCode";
+	public static final String TIME_ZONE = "timeZone";
+	public static final String CLIENT_ID = "clientId";
+	public static final String CLIENT_IP = "clientIp";
+	
+	/**
+	 * 应用ID，可以按应用维度控制api的访问权限
+	 */
+	private String appId = APP_ID;
+	/**
+	 * 渠道ID，如：安卓、iOS、微信、官网等等，可以按访问渠道控制api的访问权限
+	 */
+	private String channelId = CHANNEL_ID;
+	
+	/**
+	 * 会话ID，用于便于用户认证后在一定时间段内进行有状态的访问后续接口
+	 */
+	private String sessionId = SESSION_ID;
+	/**
+	 * 用户访问唯一标识
+	 */
+	private String userId = USER_ID;
+	/**
+	 * 客户端通过秘钥+参数进行验签后生成的数字签名
+	 */
+	private String sign = SIGN;
+	/**
+	 * 客户端版本号
+	 */
+	private String versionCode = VERSION_CODE;
+	/**
+	 * 防重复提交码,用来控制接口防重复提交
+	 */
+	private String repeatCode = REPEAT_CODE;
+	/**
+	 * 时间戳
+	 */
+	private String timestamp = TIMESTAMP;
+	/**
+	 * 客户端类型标识
+	 */
+	private String clientId = CLIENT_ID;
+	/**
+	 * 客户端调用者IP
+	 */
+	private String clientIp = CLIENT_IP;
+	
+	/****************国际化相关的系统参数****************/	
+	/**
+	 * 语言，如： en_US、zh_CN等等
+	 */
+	private String locale = LOCALE;
+	/**
+	 * 货币类型,如：USD、CNY等等
+	 */
+	private String currency = CURRENCY;
+	/**
+	 * 国家码，如： US、CN等等
+	 */
+	private String countryCode = COUNTRY_CODE;
+	/**
+	 * 时区,如： GTM+8   北京时间所在时区
+	 */
+	private String timeZone = TIME_ZONE;
+	
+	/**
+	 * 其他可自定义配置的额外系统参数
+	 */
+	private Map<String, String> expandParams;
+	
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public void afterPropertiesSet() throws Exception {//允许自定义系统参数名
+		defaultParameterMap.put(LOCALE, locale);
+		defaultParameterMap.put(APP_ID, appId);
+		defaultParameterMap.put(CURRENCY, currency);
+		defaultParameterMap.put(COUNTRY_CODE, countryCode);
+		defaultParameterMap.put(TIME_ZONE, timeZone);
+		defaultParameterMap.put(SESSION_ID, sessionId);
+		defaultParameterMap.put(USER_ID, userId);
+		defaultParameterMap.put(SIGN, sign);
+		defaultParameterMap.put(CHANNEL_ID, channelId);
+		defaultParameterMap.put(VERSION_CODE, versionCode);
+		defaultParameterMap.put(REPEAT_CODE, repeatCode);
+		defaultParameterMap.put(TIMESTAMP, timestamp);
+		defaultParameterMap.put(CLIENT_ID, clientId);
+		defaultParameterMap.put(CLIENT_IP, clientIp);
+		if(expandParams != null){
+			defaultParameterMap.putAll(expandParams);
+		}
+	}	
+	
+}

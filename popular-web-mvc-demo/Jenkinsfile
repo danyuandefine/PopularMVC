@@ -1,0 +1,195 @@
+def PROJ_VERSION = "1.0.0"
+def errMsg='';
+pipeline{
+    
+    agent any
+    
+    tools {
+      maven "apache-maven-3.6.3-bin"
+    }
+    
+    options { 
+        //只保留最近三次构建的包
+        buildDiscarder(logRotator(numToKeepStr: '6'))
+        //跳过默认的代码检出操作
+        skipDefaultCheckout(true) 
+        //如果整个流程执行异常导致失败可以自动重试
+        //retry(1)
+    }
+    
+    
+    stages {
+        stage('拉取最新代码') {
+            steps{
+                sh 'printenv'
+                echo "拉取[${SOURCE_TAG}]的最新代码......"
+                script{
+                    try{
+                        //提取分支或者tag名
+                        // String sourceTag = params.SOURCE_TAG.substring(params.SOURCE_TAG.lastIndexOf("/")+1,params.SOURCE_TAG.length());
+                        echo "checkout branches:[ ${SOURCE_TAG} ]"
+                        checkout([$class: 'GitSCM', branches: [[name: params.SOURCE_TAG]], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'a616a2cd-8d4c-42a7-ae4d-cc359aedb34d', url: 'http://gogs.skyroam.com.cn:3000/bsp/bsp-ota.git']]])
+                        if(params.PROJ_VERSION == null || params.PROJ_VERSION.trim().equals("")){
+                            PROJ_VERSION = sh returnStdout: true, script: 'mvn help:evaluate -Dexpression=project.version -q -DforceStdout'
+                        } 
+                    }catch(Exception e){
+                        errMsg = e;
+                        throw e
+                    }                    
+                }                            
+                echo "PROJ_VERSION:${PROJ_VERSION}"                
+            }
+        }     
+        
+        stage('代码检查') {
+            steps{
+                script{   
+                    try{
+                        echo "CHECK_CODE:${CHECK_CODE}"
+                        if(params.CHECK_CODE){                       
+                            echo "mvn clean compile sonar:sonar -Dsonar.projectKey=${SONAR_PROJ_KEY} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN_PASSWORD} 执行代码静态检查任务......"
+                            sh "mvn clean compile sonar:sonar -Dsonar.projectKey=${SONAR_PROJ_KEY} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN_PASSWORD}"
+                        
+                        }else{
+                            echo "未开启代码检查，直接跳过！"
+                        }                        
+                    }catch(Exception e){
+                        errMsg = e;
+                        throw e
+                    } 
+               } 
+            }
+        } 
+        
+        stage('单元测试') {             
+             steps{
+                echo "clean test执行单元测试开始,注入jacoco插件配置,并将结果上传到将SonarQaue!"
+                script{
+                    withSonarQubeEnv('sonar') {
+                          if(params.CHECK_CODE_COVER){
+                              sh "mvn org.jacoco:jacoco-maven-plugin:prepare-agent clean compile test -pl ${MODULE_IDS} -am -U -Dautoconfig.skip=true -Dmaven.test.skip=false -Dmaven.test.failure.ignore=true sonar:sonar -Dsonar.projectKey=${SONAR_PROJ_KEY} -Dsonar.host.url=${SONAR_HOST} -Dsonar.login=${SONAR_LOGIN_PASSWORD}"
+                          }else{
+                              sh "mvn clean compile test -pl ${MODULE_IDS} -am -Dmaven.test.skip=false -Dmaven.test.failure.ignore=true"
+                          }
+                          
+                          //95%通过即为合格
+                          junit allowEmptyResults: true, healthScaleFactor: 5.0, testResults: '**/target/surefire-reports/*.xml'                                                                                           
+                    }
+                    if(params.CHECK_CODE_COVER){
+                        echo "开始单元测试覆盖率统计...... "                                              
+                        jacoco runAlways: true, sourceInclusionPattern: '**/*.java'
+                        
+                        timeout(3) { //一分钟   
+                             //利用sonar webhook功能通知pipeline代码检测结果，未通过质量阈，pipeline将会fail
+                             def qg = waitForQualityGate() 
+                             if (qg.status != 'OK') {
+                                 echo "未通过Sonarqube的代码质量阈检查，本次任务执行被迫中止，请及时修改！failure: ${qg.status}"
+                                 throw new Exception("未通过Sonarqube的代码质量阈检查，请及时修改！failure: ${qg.status}");
+                             }
+                         }    
+                    }
+                }
+             }                                                           
+        }
+        
+        stage('构建依赖模块') {
+            steps{
+                script{   
+                    try{
+                        echo "mvn clean install ${MODULE_IDS}和其依赖的基础模块......"
+                        sh "mvn clean install -pl ${MODULE_IDS} -am -U -Dmaven.test.skip=true"                        
+                    }catch(Exception e){
+                        errMsg = e;
+                        throw e
+                    } 
+               } 
+            }
+        }  
+        
+        stage('动态生成子stage'){
+            failFast true
+            steps{
+                echo "开始打包镜像和发布服务......"
+                 script{   
+                   try{
+                  
+                    String[] modules = params.MODULE_IDS.split(",");
+                    for(module in modules){
+                        
+                            String pkgStageName='生成镜像：'+module;
+                            String deployStageName='部署项目：'+module;
+                             
+                            stage(pkgStageName) {
+                                    echo "构建${module}镜像并推送到镜像仓库......"
+                                    dir (module){
+                                        sh "mvn install -P docker docker:build docker:push -U -DskipTests=true"
+                                    }                                    
+                            }                               
+                            stage(deployStageName) {
+                                    echo "部署项目${module}......"
+                                    script{                    
+                                        def remote = getServer(SWARM_HOST_IP);
+                                        echo "starting ${module}${PROJ_VERSION} docker swarm deploy ......"
+                                        def _command='sh deploy.sh '+module+" "+PROJ_VERSION
+                                        if(params.EXPOSE_PORT != null && !params.EXPOSE_PORT.trim().equals("")){
+                                           _command='sh deploy.sh '+module+" "+PROJ_VERSION +" "+params.EXPOSE_PORT+":"+params.INNER_PORT 
+                                        }
+                                        echo "执行远程命令:"+_command
+                                        sshPut remote: remote, from: 'deploy.sh', into: 'deploy.sh'
+                                        sshCommand remote: remote, command: _command
+                                        sshRemove remote: remote, path: 'deploy.sh'
+                                    }
+                            }                                              
+                    }
+                  }catch(Exception e){
+                        errMsg = e.getMessage();
+                        throw e
+                  }                                      
+                }
+                
+                echo "打包镜像和发布服务完成......"    
+            }                       
+        }
+        //集成测试，可并行测试，节省时间
+        
+     }   
+     
+     post { 
+        failure { //执行流水线失败进行邮件提醒
+            
+            script{
+                if(params.NEED_NOTIFY_EMAIL){
+                    echo '执行任务失败，邮件通知对应的研发人员！'
+                    String content='构建任务'+env.JOB_BASE_NAME+'失败,请及时查看！\n原因：'+errMsg
+                    String title='[ERROR]-jenkins任务'+env.JOB_NAME+'-'+env.BUILD_NUMBER+'构建结果提醒'
+                    mail bcc: '', body: content, cc: '', from: 'activate@skyroam.com', replyTo: '', subject: title, to: params.EMAILS
+                }                
+            }           
+        }
+        success { //执行成功进行邮件提醒
+            
+            script{
+                if(params.NEED_NOTIFY_EMAIL){
+                    echo '执行任务成功，邮件通知对应的研发人员！'
+                    String content='执行任务'+env.JOB_BASE_NAME+'-'+env.BUILD_NUMBER+'成功,请及时查看！'
+                    String title='[SUCCESS]-jenkins任务'+env.JOB_NAME+'-'+env.BUILD_NUMBER+'构建结果提醒'
+                    mail bcc: '', body: content, cc: '', replyTo: '', subject: title, to: params.EMAILS
+                }               
+            }           
+        }
+    }
+       
+}
+
+def getServer(ip){
+    def remote = [:]
+    remote.name = "server-${ip}"
+    remote.host = ip
+    remote.port = 52113
+    remote.allowAnyHosts = true
+    withCredentials([usernamePassword(credentialsId: SWRAM_MANAGER_HOST_ID, passwordVariable: 'password', usernameVariable: 'username')]) {
+        remote.user = "${username}"
+        remote.password = "${password}"
+    }
+    return remote
+}
