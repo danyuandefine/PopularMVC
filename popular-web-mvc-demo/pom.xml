@@ -98,6 +98,17 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <repository>            
+			<id>ossrh</id>
+			<name>oss.sonatype.org</name>
+            <url>https://oss.sonatype.org/content/groups/public</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
 	</repositories>
 
 	<pluginRepositories>
