@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.AutoConfigureAfter;
+import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -39,7 +39,7 @@ import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 	PopularMvcSwaggerProperties.class
 	})
 @ConditionalOnProperty(name={"popularmvc.enable","popularmvc.enableSwagger"},havingValue = "true")
-@AutoConfigureAfter(PopularMvcWebConfigurer.class)
+@AutoConfigureBefore(PopularMvcWebConfigurer.class)
 @Configuration
 public class PopularMvcSwaggerConfigurer {
 	@Bean
@@ -71,7 +71,7 @@ public class PopularMvcSwaggerConfigurer {
 		return pars;
 	}
 
-	@Bean(value = "defaultApi")	
+	@Bean(value = "defaultApi")		
     public Docket defaultApi(@Autowired SystemParameterProperties systemParameterProperties) {
         Docket docket=new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(systemApiInfo())

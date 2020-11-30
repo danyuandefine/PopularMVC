@@ -10,6 +10,8 @@ package com.danyuanblog.framework.popularmvc.annotation;
 
 import org.springframework.context.annotation.Import;
 
+import com.danyuanblog.framework.popularmvc.config.PopularMvcBeanConfigurer;
+import com.danyuanblog.framework.popularmvc.config.PopularMvcSwaggerConfigurer;
 import com.danyuanblog.framework.popularmvc.config.PopularMvcWebConfigurer;
 
 import java.lang.annotation.*;
@@ -18,7 +20,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-@Import({PopularMvcWebConfigurer.class})
+@Import({PopularMvcWebConfigurer.class,PopularMvcSwaggerConfigurer.class,PopularMvcBeanConfigurer.class})
 public @interface EnablePopularMvc {
     
 }

@@ -19,17 +19,25 @@ import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
+import org.springframework.util.StringUtils;
 
 import com.danyuanblog.framework.popularmvc.consts.DefaultConfigPropertiesValue;
 
 public class PopularMvcEnvironmentPostProcessor implements
 		EnvironmentPostProcessor {
 
+	private static final String OPEN_LOG_KEY="popularmvc.printAllProperties";
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
-        	
-		System.out.println("#############################配置信息##############################");
+        boolean open = false;
+        String openLogValue = environment.getProperty(OPEN_LOG_KEY);
+        if(!StringUtils.isEmpty(openLogValue)){
+        	open = Boolean.valueOf(openLogValue);
+        }
+        if(open){
+        	System.out.println("#############################配置信息##############################");
+        }		
 		for (Iterator<?> it = ((AbstractEnvironment) environment)
 				.getPropertySources().iterator(); it.hasNext();) {
 			PropertySource<?> propertySource = (PropertySource<?>) it.next();
@@ -41,21 +49,25 @@ public class PopularMvcEnvironmentPostProcessor implements
 			}
 			//批量修改属性值
 			updateStringPropertys(environment, propertySource, modifyMap);
-			// 遍历每个配置来源中的配置项
-			if (propertySource instanceof EnumerablePropertySource) {
-				for (String name : ((EnumerablePropertySource<?>) propertySource)
-						.getPropertyNames()) {
-					/*
-					 * 由于每个配置来源可能配置了同一个配置项，存在相互覆盖的情况，为了保证获取到的值与通过@Value获取到的值一致，
-					 * 需要通过env.getProperty(name)获取配置项的值。
-					 */
-					System.out.println(name + " = "
-							+ environment.getProperty(name));
-					
+			if(open){
+				// 遍历每个配置来源中的配置项
+				if (propertySource instanceof EnumerablePropertySource) {
+					for (String name : ((EnumerablePropertySource<?>) propertySource)
+							.getPropertyNames()) {
+						/*
+						 * 由于每个配置来源可能配置了同一个配置项，存在相互覆盖的情况，为了保证获取到的值与通过@Value获取到的值一致，
+						 * 需要通过env.getProperty(name)获取配置项的值。
+						 */
+						System.out.println(name + " = "
+								+ environment.getProperty(name));
+						
+					}
 				}
-			}
+	        }			
 		}
-		System.out.println("###############################################################");
+		if(open){
+			System.out.println("###############################################################");
+        }		
 	}
 
 	private void updateStringPropertys(ConfigurableEnvironment environment, PropertySource<?> source, Map<String, Object> params){
