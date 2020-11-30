@@ -1,22 +1,35 @@
 spring.messages:
+  #业务错误码翻译文件地址
   basename: i18n/messages/messages
   useCodeAsDefaultMessage: false
   fallbackToSystemLocale: false
+  
 popularmvc:
   #全局默认配置
+  #是否启用popularMVC框架
   enable: true
+  #是否开启自动生成swagger接口文档
   enableSwagger: true
+  #默认语言,请求中或者会话中不存在语言参数时的默认取值
   locale: "zh_CN"
+  #当未找到该语言的翻译时，是否使用默认翻译内容
   #alwaysUseDefaultLocale: false
+  #是否强制对所有api响应添加响应壳
   forceAutoAddResponseWrapper: true
-  basePackage: "com.danyuanblog.framework.popularmvc.demo"
+  #根包名集合,以逗号分隔
+  basePackages: "com.danyuanblog.framework.popularmvc.demo"
+  #是否在控制台打印所有配置信息
+  printAllProperties: false
   error: #错误码相关配置
     #自定义系统错误码值,格式【枚举名 ：数值】
     #systemErrorCodes: 
       #INVALID_METHOD: 404
     #业务异常定义，格式【错误码多语言字典值 ：错误码指代的默认中文翻译描述信息】
+    #业务错误码默认起始值
     businessCodeStart: 200001
+    #业务错误码默认最大值
     businessCodeEnd: 999999
+    #业务异常错误码值
     businessErrorCodes: 
       USER_ACCOUNT_NOT_FOUND.desc: "用户账号[{0}]未找到!"
       ACCOUNT_NOT_FOUND:
@@ -25,6 +38,7 @@ popularmvc:
   api:
     #业务接口api包名
     swagger: 
+      #业务接口所在根包名，swagger会扫描这个包下的内容，生成接口文档
       basePackage: "com.danyuanblog.framework.popularmvc.demo.controller"  
       title: "业务API"
       description: "所有业务接口列表"
@@ -34,20 +48,21 @@ popularmvc:
     #api请求系统参数配置
     #request: 
       #parameter: 
-        #rename: 
+        #rename: #重命名系统参数
           #channelId: "buId"
     #api响应系统参数配置
     #response:
       #field: 
-        #rename: 
+        #rename: #重命名系统响应参数
           #code: "status"
     #渠道、应用信息配置
     channels:
       android:
         default:
           enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
           secret: "123456"
-          keyPair: 
+          keyPair: #用于非对称加解密的秘钥对
             privateSecret: ""
             publicSecret: ""
       ios: 
