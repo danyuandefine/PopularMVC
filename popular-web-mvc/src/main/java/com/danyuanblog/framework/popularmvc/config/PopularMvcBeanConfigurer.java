@@ -12,6 +12,7 @@ package com.danyuanblog.framework.popularmvc.config;
 import java.util.Locale;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.MessageSource;
@@ -43,6 +44,7 @@ import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
 
 @Configuration
 @ConditionalOnProperty(name={"popularmvc.enable"},havingValue = "true")
+@AutoConfigureAfter(PopularMvcWebConfigurer.class)
 public class PopularMvcBeanConfigurer {
 
 	@Bean

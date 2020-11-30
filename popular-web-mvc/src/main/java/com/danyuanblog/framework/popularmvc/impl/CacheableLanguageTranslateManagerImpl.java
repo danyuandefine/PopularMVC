@@ -81,7 +81,7 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 					exists = true;
 				}else{
 					exists = false;
-					if(popularMvcConfig.getAlwaysUserDefaultLocale() && !locale.equals(languageTranslateManager.getDefaultLocale())){
+					if(popularMvcConfig.getAlwaysUseDefaultLocale() && !locale.equals(languageTranslateManager.getDefaultLocale())){
 						value = languageTranslateManager.get(key);						
 					} 
 				}	        
@@ -100,14 +100,14 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 			        		value = realValue;
 			        	}
 					}
-					if(popularMvcConfig.getAlwaysUserDefaultLocale()){
+					if(popularMvcConfig.getAlwaysUseDefaultLocale()){
 						if(StringUtils.isEmpty(value) || key.equals(value)){
 				        	//未查询到该字典,则使用默认字典服务读取系统预置字典信息
 				        	value = defaultLanguageTranslateManager.get(key, defaultLanguageTranslateManager.getDefaultLocale());
 				        }
 					}										
 				}
-				if(popularMvcConfig.getAlwaysUserDefaultLocale()){
+				if(popularMvcConfig.getAlwaysUseDefaultLocale()){
 					//添加业务异常默认语言国际化内容
 					if(StringUtils.isEmpty(value) || key.equals(value) && (errorCodeProperties.getBusinessErrorCodes() != null)){
 						if(errorCodeProperties.getBusinessErrorCodes().containsKey(key)){

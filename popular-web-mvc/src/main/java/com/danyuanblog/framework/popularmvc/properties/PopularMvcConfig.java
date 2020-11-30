@@ -9,9 +9,12 @@
 package com.danyuanblog.framework.popularmvc.properties;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Locale;
+import java.util.Set;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.util.StringUtils;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -39,22 +42,38 @@ public class PopularMvcConfig implements Serializable {
 	/**
 	 * 当未找到该语言的翻译时，是否使用默认翻译内容
 	 */
-	private Boolean alwaysUserDefaultLocale;
+	private Boolean alwaysUseDefaultLocale;
 	/**
 	 * 是否强制对所有api响应添加响应壳
 	 */
 	private Boolean forceAutoAddResponseWrapper;
 	/**
-	 * 根包名
+	 * 根包名集合,以逗号分隔
 	 */
-	private String basePackage;
-	
+	private String basePackages;
+	/**
+	 * 是否在控制台打印所有配置信息
+	 */
+	private Boolean printAllProperties;
 	public PopularMvcConfig(){
-		this.enable=true;
-		this.locale=Locale.CHINA.toString();
-		this.alwaysUserDefaultLocale=true;
-		this.forceAutoAddResponseWrapper=true;
-		this.basePackage="com.danyuanblog.framework.popularmvc.controller";
+		this.enable = true;
+		this.enableSwagger = true;
+		this.locale = Locale.CHINA.toString();
+		this.alwaysUseDefaultLocale = true;
+		this.forceAutoAddResponseWrapper = true;
+		this.basePackages = "com.danyuanblog.framework.popularmvc";
+		this.printAllProperties = false;
+	}
+	
+	public Set<String> getAllBasePackages(){
+		Set<String> set = new HashSet<>();
+		if(!StringUtils.isEmpty(this.basePackages)){
+			String[] pkgs = this.basePackages.split(",");
+			for(String pkg : pkgs){
+				set.add(pkg);
+			}
+		}
+		return set;
 	}
 	
 }

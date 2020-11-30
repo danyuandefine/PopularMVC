@@ -20,12 +20,11 @@ import org.springframework.core.env.EnumerablePropertySource;
 import org.springframework.core.env.MapPropertySource;
 import org.springframework.core.env.PropertySource;
 
+import com.danyuanblog.framework.popularmvc.consts.DefaultConfigPropertiesValue;
+
 public class PopularMvcEnvironmentPostProcessor implements
 		EnvironmentPostProcessor {
 
-	private static final String DEFAULT_MSG_BASENAME = ",popularMvcMessages";
-
-	private static final String SRPRING_MSG_BASENAME = "spring.messages.basename";
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
@@ -34,10 +33,14 @@ public class PopularMvcEnvironmentPostProcessor implements
 		for (Iterator<?> it = ((AbstractEnvironment) environment)
 				.getPropertySources().iterator(); it.hasNext();) {
 			PropertySource<?> propertySource = (PropertySource<?>) it.next();
-			if(propertySource.containsProperty(SRPRING_MSG_BASENAME)){
-				updateStringProperty(environment, propertySource, 
-						SRPRING_MSG_BASENAME, propertySource.getProperty(SRPRING_MSG_BASENAME).toString() + DEFAULT_MSG_BASENAME);
+			Map<String,Object> modifyMap = new HashMap<>();
+			for(DefaultConfigPropertiesValue config : DefaultConfigPropertiesValue.values()){
+				if(propertySource.containsProperty(config.getKey())){
+					modifyMap.put(config.getKey(), config.getComposeValue(propertySource.getProperty(config.getKey()).toString()));
+				}
 			}
+			//批量修改属性值
+			updateStringPropertys(environment, propertySource, modifyMap);
 			// 遍历每个配置来源中的配置项
 			if (propertySource instanceof EnumerablePropertySource) {
 				for (String name : ((EnumerablePropertySource<?>) propertySource)
@@ -54,12 +57,8 @@ public class PopularMvcEnvironmentPostProcessor implements
 		}
 		System.out.println("###############################################################");
 	}
-	private void updateStringProperty(ConfigurableEnvironment environment, PropertySource<?> source, String name, String value){
-		Map<String,Object> params = new HashMap<>();
-		params.put(name, value);
-		updateStringProperty(environment, source, params);
-	}
-	private void updateStringProperty(ConfigurableEnvironment environment, PropertySource<?> source, Map<String, Object> params){
+
+	private void updateStringPropertys(ConfigurableEnvironment environment, PropertySource<?> source, Map<String, Object> params){
         Map<String,Object> map = new HashMap<>();
         if(source instanceof EnumerablePropertySource){
         	for (String name : ((EnumerablePropertySource<?>) source).getPropertyNames()) {

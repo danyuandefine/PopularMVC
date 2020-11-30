@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -36,9 +38,11 @@ import com.danyuanblog.framework.popularmvc.interceptor.ApiMethodInterceptor;
 import com.danyuanblog.framework.popularmvc.interceptor.impl.ApiLogInterceptor;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
 import com.danyuanblog.framework.popularmvc.utils.BeanPropertyUtil;
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
 
 @Aspect
 @Service
+@Slf4j
 public class ApiInvokeAspector {
 	
 	private static String DEFAULT_API_VERSION = "1.0";
@@ -108,17 +112,13 @@ public class ApiInvokeAspector {
 	}
 	
 	private Object doService(ProceedingJoinPoint joinPoint) throws Throwable {
-		try{
-			
-		}catch(Exception e){
-			apiExceptionAspector.resolveException(RequestContext.getContext().getRequest(), 
-					RequestContext.getContext().getResponse(), 
-					RequestContext.getContext().getHandler(), e);
+		if(log.isTraceEnabled()){
+			log.trace("进入API接口调用切面!");
 		}
 		Object resp = null;
 		Class<?> targetClass = joinPoint.getTarget().getClass();
 		RequestContext.getContext().setTargetClass(targetClass);
-		if(targetClass.getName().startsWith(config.getBasePackage())){
+		if(ClassOriginCheckUtil.isBasePackagesChild(targetClass, config.getAllBasePackages())){
 			//只拦截应用自己包路径下的api
 			
 			Object [] args=joinPoint.getArgs();			
@@ -190,7 +190,8 @@ public class ApiInvokeAspector {
 		//提取业务请求参数
 		ApiRequestParameter param = null;
 	    for(int i=0; i<args.length; i++){
-	    	if(args[i] != null && (BeanPropertyUtil.isBaseType(args[i]) || args[i].getClass().getName().startsWith(config.getBasePackage()))){
+	    	if(args[i] != null && (BeanPropertyUtil.isBaseType(args[i]) 
+	    			|| ClassOriginCheckUtil.isBasePackagesChild(args[i].getClass(), config.getAllBasePackages()))){
 	    		param = new ApiRequestParameter();
 	    		if(BeanPropertyUtil.isBaseType(args[i])){
 	    			String paramName = getBaseTypeParamName(annotations[i]);

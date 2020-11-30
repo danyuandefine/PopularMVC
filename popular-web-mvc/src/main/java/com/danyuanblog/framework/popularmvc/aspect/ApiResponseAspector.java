@@ -29,6 +29,7 @@ import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.interceptor.impl.ApiLogInterceptor;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
 import com.danyuanblog.framework.popularmvc.response.enhance.ResponseEnhanceHandler;
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
 import com.danyuanblog.framework.popularmvc.utils.IOUtils;
 
 @SuppressWarnings("rawtypes")
@@ -78,10 +79,7 @@ public class ApiResponseAspector implements ResponseBodyAdvice {
 		// 只需要拦截我们配置的包名下的接口即可
 		Class<?> targetClass = RequestContext.getContext().getTargetClass();
 		
-		if(targetClass != null && targetClass.getName().startsWith(config.getBasePackage())){
-			return true;
-		}
-		return false;
+		return ClassOriginCheckUtil.isBasePackagesChild(targetClass, config.getAllBasePackages());
 	}
 
 	/*

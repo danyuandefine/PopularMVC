@@ -196,6 +196,12 @@ public class BeanPropertyUtil {
                 	if(hasPublicGetter(field, object)){
                 		field.setAccessible(true);
                     	Object subObj = field.get(object);
+                    	Annotation[] fieldAnnos= field.getAnnotations();
+                    	if(fieldAnnos != null){
+                			for(Annotation anno : fieldAnnos){
+                				allAnnos.put(anno.annotationType(), anno);
+                			}
+                		}                    	
                     	field.set(object, decorateObj(subObj, allAnnos, fun, hashCodeSet));
                 	}                	
                 }

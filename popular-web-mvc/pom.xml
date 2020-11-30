@@ -6,7 +6,7 @@
 
 	<groupId>com.danyuanblog.framework</groupId>
 	<artifactId>popular-web-mvc</artifactId>
-	<version>1.0.0.RELEASE</version>
+	<version>1.0.1.RELEASE</version>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
@@ -22,13 +22,12 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<gpg.executable>C:\Program Files (x86)\GnuPG\bin\gpg.exe</gpg.executable>
-		<gpg.passphrase>123556www</gpg.passphrase>
 		<java.version>1.8</java.version>
 		<aspectj.version>1.8.9</aspectj.version>
 		<cglib.version>3.1</cglib.version>
 		<swagger.version>2.9.2</swagger.version>
 		<logstash.version>5.0</logstash.version>
-		<docker.image.prefix>192.168.10.15:5000/simo-base</docker.image.prefix>
+		<docker.image.prefix>192.168.56.22:5000/danyuanblog/framework</docker.image.prefix>
 	</properties>
 
 	<dependencyManagement>
