@@ -22,6 +22,7 @@ import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.annotation.IgnoreResponseWrapper;
 import com.danyuanblog.framework.popularmvc.controller.response.SuccessResponse;
 import com.danyuanblog.framework.popularmvc.demo.controller.dto.LanguageInfoDto;
+import com.danyuanblog.framework.popularmvc.demo.controller.dto.LanguageTranslateFieldTestDto;
 import com.danyuanblog.framework.popularmvc.demo.controller.dto.UserInfoDto;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 
@@ -44,6 +45,13 @@ public class TestResponseInfoController {
 	@ApiOperation(value="测试信息国际化自动翻译功能", notes="测试信息国际化自动翻译功能")
 	public LanguageInfoDto testGetLanguageInfo(@RequestParam("info") String info){
 		return new LanguageInfoDto(info,"danyuan",22);
+	}
+	
+	@GetMapping(value="testGetUserLocaleInfo",
+			name="测试信息国际化自动翻译对象某些字段信息")
+	@ApiOperation(value="测试信息国际化自动翻译对象某些字段信息", notes="测试信息国际化自动翻译对象某些字段信息")
+	public LanguageTranslateFieldTestDto testGetUserLocaleInfo(){
+		return new LanguageTranslateFieldTestDto("danyuan.info","danyuan","danyuan.tags");
 	}
 	
 	@GetMapping(value="testBusinessException",

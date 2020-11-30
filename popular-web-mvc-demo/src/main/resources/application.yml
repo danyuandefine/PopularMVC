@@ -7,7 +7,7 @@ popularmvc:
   enable: true
   enableSwagger: true
   locale: "zh_CN"
-  #alwaysUserDefaultLocale: false
+  #alwaysUseDefaultLocale: false
   forceAutoAddResponseWrapper: true
   basePackage: "com.danyuanblog.framework.popularmvc.demo"
   error: #错误码相关配置
