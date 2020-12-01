@@ -22,7 +22,7 @@ public enum ErrorCodes {
 	//接口状态相关错误码
 	INVALID_MEDIA_TYPE(110001),//HTTP请求Content-Type类型错误
 	INVALID_HTTP_ACTION(110002),//HTTP请求类型错误
-	INVALID_METHOD(110003),//无效的接口名
+	NOT_FOUND(110003),//无效的接口名
 	TIMOUT(110004),//请求超时
 	NETWORK_ERROR(110005),//网络异常
 	

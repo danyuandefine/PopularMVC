@@ -63,7 +63,7 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
 		registry.addResourceHandler("/statics/**").addResourceLocations(
 				"classpath:/statics/");
 		// 解决 Knife4J 404报错
-		registry.addResourceHandler("doc.html").addResourceLocations("classpath:/META-INF/resources/");
+		registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
 		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
 		log.info("Add swagger static resources success !");
 	}

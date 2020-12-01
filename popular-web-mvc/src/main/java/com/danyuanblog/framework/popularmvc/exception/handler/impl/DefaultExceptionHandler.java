@@ -59,9 +59,9 @@ public class DefaultExceptionHandler implements CommonExceptionHandler{
 		if (e instanceof NoHandlerFoundException) {
 			//接口不存在
 			errorMsg = languageTranslateManager.get(
-					ErrorCodes.INVALID_METHOD.getMsgCode(), locale
+					ErrorCodes.NOT_FOUND.getMsgCode(), locale
 					);			
-			errorCode = ErrorCodes.INVALID_METHOD.getCode();
+			errorCode = ErrorCodes.NOT_FOUND.getCode();
 		} else if (e instanceof HttpMessageNotReadableException) {
 			//请求json数据异常
 			errorMsg = languageTranslateManager.get(

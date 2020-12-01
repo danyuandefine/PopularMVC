@@ -60,10 +60,10 @@ public class CustomErrorController implements ErrorController{
         }
         if(statusCode == HttpStatus.NOT_FOUND.value()){        	      	
         	String systemError = languageTranslateManager.get(
-    				ErrorCodes.INVALID_METHOD.getMsgCode(), 
+    				ErrorCodes.NOT_FOUND.getMsgCode(), 
     				RequestContext.getContext().getLocale(),
     				originalUri);
-    		resp = new DefaultResponseWrapper<>(ErrorCodes.INVALID_METHOD);
+    		resp = new DefaultResponseWrapper<>(ErrorCodes.NOT_FOUND);
             resp.setMsg(systemError);
             response.setStatus(HttpStatus.NOT_FOUND.value());
         }else{

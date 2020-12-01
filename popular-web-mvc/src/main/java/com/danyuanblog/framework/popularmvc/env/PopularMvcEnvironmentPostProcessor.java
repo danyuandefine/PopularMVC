@@ -27,9 +27,15 @@ public class PopularMvcEnvironmentPostProcessor implements
 		EnvironmentPostProcessor {
 
 	private static final String OPEN_LOG_KEY="popularmvc.printAllProperties";
+	
+	private static final String DEFAULT_ENV_CONFIG = "defaultEnvConfig";
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
+		//先填充默认配置信息
+		MapPropertySource defaultEnvConfig = new MapPropertySource(DEFAULT_ENV_CONFIG, DefaultConfigPropertiesValue.getAllDefaultConfigs());
+		environment.getPropertySources().addLast(defaultEnvConfig);
+		
         boolean open = false;
         String openLogValue = environment.getProperty(OPEN_LOG_KEY);
         if(!StringUtils.isEmpty(openLogValue)){
@@ -44,7 +50,7 @@ public class PopularMvcEnvironmentPostProcessor implements
 			Map<String,Object> modifyMap = new HashMap<>();
 			for(DefaultConfigPropertiesValue config : DefaultConfigPropertiesValue.values()){
 				if(propertySource.containsProperty(config.getKey())){
-					modifyMap.put(config.getKey(), config.getComposeValue(propertySource.getProperty(config.getKey()).toString()));
+					modifyMap.put(config.getKey(), config.getComposeValue(propertySource.getProperty(config.getKey())));
 				}
 			}
 			//批量修改属性值
