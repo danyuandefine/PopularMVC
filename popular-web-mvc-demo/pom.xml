@@ -98,6 +98,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+        <!-- 
         <repository>            
 			<id>ossrh</id>
 			<name>oss.sonatype.org</name>
@@ -109,6 +110,7 @@
                 <enabled>true</enabled>
             </snapshots>
         </repository>
+         -->
 	</repositories>
 
 	<pluginRepositories>

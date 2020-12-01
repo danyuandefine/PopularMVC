@@ -1,25 +1,23 @@
 spring.messages:
   #业务错误码翻译文件地址
   basename: i18n/messages/messages
-  useCodeAsDefaultMessage: false
-  fallbackToSystemLocale: false
   
 popularmvc:
   #全局默认配置
   #是否启用popularMVC框架
-  enable: true
+  #enable: true
   #是否开启自动生成swagger接口文档
-  enableSwagger: true
+  #enableSwagger: true
   #默认语言,请求中或者会话中不存在语言参数时的默认取值
-  locale: "zh_CN"
+  #locale: "zh_CN"
   #当未找到该语言的翻译时，是否使用默认翻译内容
   #alwaysUseDefaultLocale: false
   #是否强制对所有api响应添加响应壳
-  forceAutoAddResponseWrapper: true
+  #forceAutoAddResponseWrapper: true
   #根包名集合,以逗号分隔
   basePackages: "com.danyuanblog.framework.popularmvc.demo"
   #是否在控制台打印所有配置信息
-  printAllProperties: false
+  #printAllProperties: true
   error: #错误码相关配置
     #自定义系统错误码值,格式【枚举名 ：数值】
     #systemErrorCodes: 
