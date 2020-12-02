@@ -74,7 +74,7 @@ public class PopularMvcSwaggerConfigurer {
             });        
         }
         SystemParameterRenameProperties.DEFAULT_PARAM_MAP.forEach((key,value) -> {
-        	if(!(execlud && otherParams.getOtherParams().contains(key))){
+        	if(!(execlud && otherParams.getOtherParams() !=null && otherParams.getOtherParams().contains(key))){
         		parameterBuilder.name(value).description(key)
             	.modelRef(new ModelRef("string"))
             	.parameterType("query")
