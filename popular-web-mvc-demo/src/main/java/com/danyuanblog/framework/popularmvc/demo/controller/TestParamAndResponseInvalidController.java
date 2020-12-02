@@ -21,17 +21,21 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danyuanblog.framework.popularmvc.annotation.InjectSystemParam;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredCountryCode;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredCurrency;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredLocale;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredNoRepeatSubmit;
+import com.danyuanblog.framework.popularmvc.annotation.RequiredParam;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredSession;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredSign;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredTimeZone;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredTimestamp;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredVersion;
 import com.danyuanblog.framework.popularmvc.consts.DenyRepeatSubmitType;
+import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.demo.controller.dto.ParamsCheckDto;
+import com.danyuanblog.framework.popularmvc.demo.controller.request.CustomRequest;
 
 @Api(tags = "测试api请求参数或响应内容的校验")
 @RestController
@@ -49,6 +53,7 @@ public class TestParamAndResponseInvalidController {
 	@RequiredTimestamp
 	@RequiredTimeZone
 	@RequiredVersion
+	@RequiredParam({"appName","nickName"})
 	public void testSystemParams(
 			) {
 	}
@@ -71,5 +76,35 @@ public class TestParamAndResponseInvalidController {
 		dto.setEmail("xxx");
 		dto.setLikes(Arrays.asList("football","watch movie","swiming","book"));
 		return dto;
+	}
+	
+	@PostMapping(value="testInjectSystemParams",
+			name="测试自动注入系统参数")
+	@ApiOperation(value="测试自动注入系统参数", notes="测试自动注入系统参数")
+	@RequiredLocale
+	@RequiredCountryCode
+	@RequiredCurrency
+	@RequiredNoRepeatSubmit(mode = DenyRepeatSubmitType.GENERATE_TOKEN)
+	@RequiredTimestamp
+	@RequiredTimeZone
+	@RequiredVersion
+	@RequiredParam({"appName","nickName"})
+	@InjectSystemParam
+	public void testInjectSystemParams(
+			@RequestBody CustomRequest req
+			) {
+	}
+	
+	@GetMapping(value="testAddSystemResponseParams",
+			name="测试设置系统响应参数")
+	@ApiOperation(value="测试设置系统响应参数", notes="测试设置系统响应参数")
+	public void testAddSystemResponseParams() {
+		RequestContext.getContext().setResonseSystemParamValue("traceId", "0001");
+		ParamsCheckDto dto = new ParamsCheckDto();
+		dto.setAccount("111222");
+		dto.setAge(25);
+		dto.setEmail("xxx");
+		dto.setLikes(Arrays.asList("football","watch movie","swiming","book"));
+		RequestContext.getContext().setResonseSystemParamValue("userInfo", dto);
 	}
 }

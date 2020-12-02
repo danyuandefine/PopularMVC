@@ -44,8 +44,12 @@ popularmvc:
       contact: "admin@danyuanblog.com"
       version: "v1.0.0"
     #api请求系统参数配置
-    #request: 
-      #parameter: 
+    request: 
+      parameter: 
+        otherParams: #其他额外系统参数
+          - "appName"
+          - "nickName"
+          - "tagId"
         #rename: #重命名系统参数
           #channelId: "buId"
     #api响应系统参数配置
