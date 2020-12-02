@@ -74,9 +74,11 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 						annos.put(anno.annotationType(), anno);
 					}
 				}					
-				obj = BeanPropertyUtil.decorateObj(obj, annos,  (data,annotations)->{
+				obj = BeanPropertyUtil.decorateObj(parameter.getParamName(), obj, annos,  (fieldName, data, annotations)->{
 					for(FieldDataFormatHandler handler : handlers){
-						data = handler.handle(data, annotations);
+						if(handler.handleRequest()){
+							data = handler.handle(fieldName, data, annotations);
+						}						
 					}						
 					return data;
 				});
@@ -101,9 +103,11 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 				annos.put(anno.annotationType(), anno);
 			}
 		}					
-		BeanPropertyUtil.decorateObj(resp, annos,  (data,annotations)->{
+		BeanPropertyUtil.decorateObj("resp", resp, annos,  (fieldName, data,annotations)->{
 			for(FieldDataFormatHandler handler : handlers){
-				data = handler.handle(data, annotations);
+				if(handler.handleResponse()){
+					data = handler.handle(fieldName, data, annotations);
+				}				
 			}				
 			return data;
 		});

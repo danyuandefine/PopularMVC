@@ -24,7 +24,7 @@ import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
 import com.danyuanblog.framework.popularmvc.dto.Session;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 import com.danyuanblog.framework.popularmvc.interceptor.AbstractApiMethodInterceptor;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 
 @Service
 @Setter
@@ -35,7 +35,7 @@ public class SessionInterceptor extends AbstractApiMethodInterceptor {
 	private SessionManager sessionManager;
 	
 	@Autowired
-	private SystemParameterProperties systemParameterProperties;
+	private SystemParameterRenameProperties systemParameterProperties;
 
 	/**
 	 * @author danyuan

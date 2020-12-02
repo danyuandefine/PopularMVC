@@ -17,7 +17,9 @@ public class ClassOriginCheckUtil {
 			return false;
 		}
 		for(String pkg : pkgs){
-			return targetClass.getName().startsWith(pkg);
+			if(targetClass.getName().startsWith(pkg)){
+				return true;
+			}
 		}
 		return false;
 	}

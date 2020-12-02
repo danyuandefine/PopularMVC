@@ -18,7 +18,7 @@ import lombok.experimental.Accessors;
 @Data
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = "popularmvc.api.response.field.rename")
-public class ResponseWrapperProperties implements Serializable{/** 
+public class ResponseSystemFieldRenameProperties implements Serializable{/** 
 	 *serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;

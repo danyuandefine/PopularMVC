@@ -20,8 +20,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @Data
 @Accessors(chain = true)
 @ConfigurationProperties(prefix = "popularmvc.api.request.parameter.rename")
-public class SystemParameterProperties implements InitializingBean{
-	public static final Map<String, String> defaultParameterMap = new HashMap<>();
+public class SystemParameterRenameProperties implements InitializingBean{
+	public static final Map<String, String> DEFAULT_PARAM_MAP = new HashMap<>();
 	
 	public static final String APP_ID = "appId";
 	public static final String CHANNEL_ID = "channelId";
@@ -99,32 +99,24 @@ public class SystemParameterProperties implements InitializingBean{
 	private String timeZone = TIME_ZONE;
 	
 	/**
-	 * 其他可自定义配置的额外系统参数
-	 */
-	private Map<String, String> expandParams;
-	
-	/**
 	 * @author danyuan
 	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {//允许自定义系统参数名
-		defaultParameterMap.put(LOCALE, locale);
-		defaultParameterMap.put(APP_ID, appId);
-		defaultParameterMap.put(CURRENCY, currency);
-		defaultParameterMap.put(COUNTRY_CODE, countryCode);
-		defaultParameterMap.put(TIME_ZONE, timeZone);
-		defaultParameterMap.put(SESSION_ID, sessionId);
-		defaultParameterMap.put(USER_ID, userId);
-		defaultParameterMap.put(SIGN, sign);
-		defaultParameterMap.put(CHANNEL_ID, channelId);
-		defaultParameterMap.put(VERSION_CODE, versionCode);
-		defaultParameterMap.put(REPEAT_CODE, repeatCode);
-		defaultParameterMap.put(TIMESTAMP, timestamp);
-		defaultParameterMap.put(CLIENT_ID, clientId);
-		defaultParameterMap.put(CLIENT_IP, clientIp);
-		if(expandParams != null){
-			defaultParameterMap.putAll(expandParams);
-		}
+		DEFAULT_PARAM_MAP.put(LOCALE, locale);
+		DEFAULT_PARAM_MAP.put(APP_ID, appId);
+		DEFAULT_PARAM_MAP.put(CURRENCY, currency);
+		DEFAULT_PARAM_MAP.put(COUNTRY_CODE, countryCode);
+		DEFAULT_PARAM_MAP.put(TIME_ZONE, timeZone);
+		DEFAULT_PARAM_MAP.put(SESSION_ID, sessionId);
+		DEFAULT_PARAM_MAP.put(USER_ID, userId);
+		DEFAULT_PARAM_MAP.put(SIGN, sign);
+		DEFAULT_PARAM_MAP.put(CHANNEL_ID, channelId);
+		DEFAULT_PARAM_MAP.put(VERSION_CODE, versionCode);
+		DEFAULT_PARAM_MAP.put(REPEAT_CODE, repeatCode);
+		DEFAULT_PARAM_MAP.put(TIMESTAMP, timestamp);
+		DEFAULT_PARAM_MAP.put(CLIENT_ID, clientId);
+		DEFAULT_PARAM_MAP.put(CLIENT_IP, clientIp);		
 	}	
 	
 }

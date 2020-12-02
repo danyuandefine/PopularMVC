@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.danyuanblog.framework.popularmvc.annotation.Encrypt;
 import com.danyuanblog.framework.popularmvc.annotation.IgnoreResponseWrapper;
@@ -23,6 +22,7 @@ import com.danyuanblog.framework.popularmvc.annotation.RequiredCountryCode;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredCurrency;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredLocale;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredNoRepeatSubmit;
+import com.danyuanblog.framework.popularmvc.annotation.RequiredParam;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredSession;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredSign;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredTimeZone;
@@ -36,14 +36,15 @@ import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
 import com.danyuanblog.framework.popularmvc.dto.ApiRestrictions;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 import com.danyuanblog.framework.popularmvc.interceptor.AbstractApiMethodInterceptor;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
+import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 
 @Service
 @Slf4j
 public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor {
 	
 	@Autowired
-	private SystemParameterProperties systemParameterProperties;
+	private SystemParameterRenameProperties systemParameterProperties;
 
 	/**
 	 * @author danyuan
@@ -66,7 +67,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		if(encrypt != null && encrypt.value()){
 			restrictions.setEncrptResponseData(encrypt.value());
 			restrictions.setEncrptHandlerClass(encrypt.type());
-			if(StringUtils.isEmpty(RequestContext.getContext().getChannelId())){
+			if(StringUtils.isBlank(RequestContext.getContext().getChannelId())){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getChannelId());
 			}
 		}
@@ -75,11 +76,11 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredSession requiredSession=method.getAnnotation(RequiredSession.class);
 		if(requiredSession != null && requiredSession.value()){
 			String sessionId = RequestContext.getContext().getSessionId();
-			if(StringUtils.isEmpty(sessionId)){
+			if(StringUtils.isBlank(sessionId)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getSessionId());
 			}
 			String timestamp = RequestContext.getContext().getTimestamp();
-			if(StringUtils.isEmpty(timestamp)){
+			if(StringUtils.isBlank(timestamp)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
 			}
 			restrictions.setSession(requiredSession.value());
@@ -88,7 +89,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredLocale requiredLocale=method.getAnnotation(RequiredLocale.class);
 		if(requiredLocale != null && requiredLocale.value()){
 			String locale = RequestContext.getContext().getLocale();
-			if(StringUtils.isEmpty(locale)){
+			if(StringUtils.isBlank(locale)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getLocale());
 			}
 		}
@@ -96,7 +97,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredCountryCode requiredCountryCode=method.getAnnotation(RequiredCountryCode.class);
 		if(requiredCountryCode != null && requiredCountryCode.value()){
 			String countryCode = RequestContext.getContext().getCountryCode();
-			if(StringUtils.isEmpty(countryCode)){
+			if(StringUtils.isBlank(countryCode)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getCountryCode());
 			}
 		}	
@@ -104,7 +105,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredCurrency requiredCurrency=method.getAnnotation(RequiredCurrency.class);
 		if(requiredCurrency != null && requiredCurrency.value()){
 			String currency = RequestContext.getContext().getCurrency();
-			if(StringUtils.isEmpty(currency)){
+			if(StringUtils.isBlank(currency)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getCurrency());
 			}
 		}
@@ -112,7 +113,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredTimestamp requiredTimestamp=method.getAnnotation(RequiredTimestamp.class);
 		if(requiredTimestamp != null && requiredTimestamp.value()){
 			String timestamp = RequestContext.getContext().getTimestamp();
-			if(StringUtils.isEmpty(timestamp)){
+			if(StringUtils.isBlank(timestamp)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
 			}
 		}
@@ -120,7 +121,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredTimeZone requiredTimeZone=method.getAnnotation(RequiredTimeZone.class);
 		if(requiredTimeZone != null && requiredTimeZone.value()){
 			String timeZone = RequestContext.getContext().getTimeZone();
-			if(StringUtils.isEmpty(timeZone)){
+			if(StringUtils.isBlank(timeZone)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimeZone());
 			}
 		}
@@ -137,14 +138,14 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 			}
 			if(restrictions.getRequestSign()){
 				String sign = RequestContext.getContext().getSign();
-				if(StringUtils.isEmpty(sign)){
+				if(StringUtils.isBlank(sign)){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getSign());
 				}
-				if(StringUtils.isEmpty(RequestContext.getContext().getTimestamp())){
+				if(StringUtils.isBlank(RequestContext.getContext().getTimestamp())){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
 				}
 			}
-			if(StringUtils.isEmpty(RequestContext.getContext().getChannelId())){
+			if(StringUtils.isBlank(RequestContext.getContext().getChannelId())){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getChannelId());
 			}
 			
@@ -154,7 +155,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		RequiredVersion requiredVersion=method.getAnnotation(RequiredVersion.class);
 		if(requiredVersion != null && requiredVersion.value()){
 			String version = RequestContext.getContext().getVersionCode();
-			if(StringUtils.isEmpty(version)){
+			if(StringUtils.isBlank(version)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getVersionCode());
 			}
 		}
@@ -163,18 +164,18 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		if(requiredNoRepeatSubmit != null && requiredNoRepeatSubmit.value()){			
 			if(DenyRepeatSubmitType.USE_SIGN.equals(requiredNoRepeatSubmit.mode())){
 				String sign = RequestContext.getContext().getSign();
-				if(StringUtils.isEmpty(sign)){
+				if(StringUtils.isBlank(sign)){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getSign());
 				}
 				RequestContext.getContext().setRepeatCodeKey(sign);
 			}
 			if(DenyRepeatSubmitType.GENERATE_TOKEN.equals(requiredNoRepeatSubmit.mode())){
 				String timestamp = RequestContext.getContext().getTimestamp();
-				if(StringUtils.isEmpty(timestamp)){
+				if(StringUtils.isBlank(timestamp)){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
 				}
 				String repeatCode = RequestContext.getContext().getRepeatCode();
-				if(StringUtils.isEmpty(repeatCode)){
+				if(StringUtils.isBlank(repeatCode)){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getRepeatCode());
 				}
 				RequestContext.getContext().setRepeatCodeKey(timestamp);
@@ -182,6 +183,22 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 			restrictions.setUniqueSubmit(requiredNoRepeatSubmit.value());
 		}
 		
+		//校验其他系统参数
+		RequiredParam requiredParam=method.getAnnotation(RequiredParam.class);
+		if(requiredParam != null){
+			String[] names = requiredParam.value();
+			String value = null;
+			for(String name : names){
+				if(!SystemParameterRenameProperties.DEFAULT_PARAM_MAP.containsKey(name)){
+					log.warn("系统参数:[{}]需要在配置文件中先配置，否则无法获取该配置信息!", name);
+				}else{
+					value = RequestContext.getContext().getAttachment(name);
+					if(StringUtils.isBlank(value)){
+						throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(name);
+					}
+				}				
+			}
+		}
 	}
 
 	/**

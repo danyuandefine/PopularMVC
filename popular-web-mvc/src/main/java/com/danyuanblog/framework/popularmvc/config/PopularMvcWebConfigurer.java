@@ -35,16 +35,18 @@ import com.danyuanblog.framework.popularmvc.interceptor.impl.PopularMvcHandlerIn
 import com.danyuanblog.framework.popularmvc.properties.ChannelConfigProperties;
 import com.danyuanblog.framework.popularmvc.properties.ErrorCodeProperties;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
-import com.danyuanblog.framework.popularmvc.properties.ResponseWrapperProperties;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.ResponseSystemFieldRenameProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterConfigProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 
 @Configuration
 @Data
 @Slf4j
 @EnableConfigurationProperties({ PopularMvcConfig.class, 
 	ChannelConfigProperties.class,
-	ResponseWrapperProperties.class,
-	SystemParameterProperties.class,
+	ResponseSystemFieldRenameProperties.class,
+	SystemParameterRenameProperties.class,
+	SystemParameterConfigProperties.class,
 	ErrorCodeProperties.class
 	})
 @EnableWebMvc

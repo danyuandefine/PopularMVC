@@ -20,7 +20,7 @@ import com.danyuanblog.framework.popularmvc.controller.response.DefaultResponseW
 import com.danyuanblog.framework.popularmvc.dto.ApiInfo;
 import com.danyuanblog.framework.popularmvc.dto.ApiRestrictions;
 import com.danyuanblog.framework.popularmvc.dto.Session;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 
 import lombok.Data;
 import lombok.experimental.Accessors;
@@ -68,6 +68,10 @@ public class RequestContext {
 	 * 防重复提交码的key
 	 */
 	private String repeatCodeKey;
+	/**
+	 * 额外的系统响应参数
+	 */
+	private Map<String, Object> resonseSystemParams = new HashMap<>();
 	
     /**
      * 附带属性
@@ -96,67 +100,83 @@ public class RequestContext {
     
     public void clear() {
         this.attachments.clear(); 
+        this.resonseSystemParams.clear();
         this.targetClass = null;
         this.apiRestrictions = null;
         this.apiInfo = null;
         this.session = null;
         this.responseWrapper = null;
-        this.repeatCodeKey = null;
+        this.repeatCodeKey = null;        
     }
     
     public String getLocale(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.LOCALE));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.LOCALE));
     }
     
     public String getTimeZone(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.TIME_ZONE));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.TIME_ZONE));
     }
     
     public String getSessionId(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.SESSION_ID));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.SESSION_ID));
     }
     
     public String getUserId(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.USER_ID));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.USER_ID));
     }
     
     public String getAppId(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.APP_ID));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.APP_ID));
     }
     
     public String getChannelId(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.CHANNEL_ID));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.CHANNEL_ID));
     }
     
     public String getRepeatCode(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.REPEAT_CODE));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.REPEAT_CODE));
     }
 
     public String getSign(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.SIGN));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.SIGN));
     }
     
     public String getTimestamp(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.TIMESTAMP));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.TIMESTAMP));
     }
     
     public String getVersionCode(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.VERSION_CODE));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.VERSION_CODE));
     }
     
     public String getCountryCode(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.COUNTRY_CODE));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.COUNTRY_CODE));
     } 
     
     public String getCurrency(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.CURRENCY));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.CURRENCY));
     } 
     
     public String getClientId(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.CLIENT_ID));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.CLIENT_ID));
     } 
     
     public String getClientIp(){
-    	return this.getAttachment(SystemParameterProperties.defaultParameterMap.get(SystemParameterProperties.CLIENT_IP));
+    	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.CLIENT_IP));
     } 
+    /**
+     * 设置响应系统参数信息
+     * @author danyuan
+     */
+    public void setResonseSystemParamValue(String key, Object value){
+    	resonseSystemParams.put(key, value);
+    }
+    
+    /**
+     * 设置响应系统参数信息
+     * @author danyuan
+     */
+    public Object getResonseSystemParamValue(String key){
+    	return resonseSystemParams.get(key);
+    }
 }

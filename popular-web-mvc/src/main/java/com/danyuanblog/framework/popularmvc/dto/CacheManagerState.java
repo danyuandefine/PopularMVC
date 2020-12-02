@@ -18,6 +18,7 @@ public class CacheManagerState implements Serializable {
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
+	private String cacheName;
 	private final long hitCount;
 	private final long missCount;
 	private final long loadSuccessCount;

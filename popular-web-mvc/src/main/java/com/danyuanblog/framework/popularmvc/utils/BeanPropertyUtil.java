@@ -129,9 +129,9 @@ public class BeanPropertyUtil {
 		return resultMap;
 	}
 	
-	public static Object decorateObj(Object object, Map<Class<?>, Annotation> annotations, DecorateContentFunction fun) throws Throwable{
+	public static Object decorateObj(String fieldName, Object object, Map<Class<?>, Annotation> annotations, DecorateContentFunction fun) throws Throwable{
 		Set<String> hashCodeSet = new HashSet<>();//防止对象间引用关系存在环状结构
-		return decorateObj(object, annotations, fun, hashCodeSet);
+		return decorateObj(fieldName, object, annotations, fun, hashCodeSet);
 	}
 	
 	/**
@@ -140,9 +140,9 @@ public class BeanPropertyUtil {
 	 * @throws Throwable 
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static Object decorateObj(Object object, Map<Class<?>, Annotation> annotations, DecorateContentFunction fun, Set<String> hashCodeSet) throws Throwable {
+	public static Object decorateObj(String fieldName, Object object, Map<Class<?>, Annotation> annotations, DecorateContentFunction fun, Set<String> hashCodeSet) throws Throwable {
 		if(object == null){
-			return object;
+			return fun.decorate(fieldName, object, annotations);
 		}
 		if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
 			return object;
@@ -162,7 +162,7 @@ public class BeanPropertyUtil {
             if (object==null || isBaseType(object)){
                 //如果object是null/基本数据类型/包装类/日期类型，则不需要在递归调用
             	if(object != null){            		
-					return fun.decorate(object, allAnnos);
+					return fun.decorate(fieldName, object, allAnnos);
             	}            	
             }else if (object instanceof Map<?,?>){
                 Map<Object,Object> map = (Map)object;
@@ -170,9 +170,9 @@ public class BeanPropertyUtil {
                     for (Object key : map.keySet()){                    	
                         Object val = map.get(key);                       
                         if(isBaseType(val)){
-                        	map.put(key, (Object)fun.decorate(val, allAnnos));
+                        	map.put(key, (Object)fun.decorate(fieldName + key, val, allAnnos));
                         }else{
-                        	map.put(key, decorateObj(val, allAnnos, fun, hashCodeSet));
+                        	map.put(key, decorateObj(fieldName + key, val, allAnnos, fun, hashCodeSet));
                         }
                     }
                 }
@@ -180,13 +180,14 @@ public class BeanPropertyUtil {
             	Object[] arr = (Object[]) object;            	
             	for(int i=0; i<arr.length; i++){
             		Object subObj = arr[i];
-            		arr[i]=decorateObj(subObj, allAnnos, fun, hashCodeSet);
+            		arr[i]=decorateObj(fieldName + i, subObj, allAnnos, fun, hashCodeSet);
             	}
             }else if(object instanceof Collection<?>){//集合
             	Collection col = (Collection) object;
             	List list = new ArrayList();
+            	int i = 0;
             	for(Object subObj : col){
-            		list.add(decorateObj(subObj, allAnnos, fun, hashCodeSet));
+            		list.add(decorateObj(fieldName + i++, subObj, allAnnos, fun, hashCodeSet));
             	}
             	col.clear();
             	col.addAll(list);
@@ -202,7 +203,7 @@ public class BeanPropertyUtil {
                 				allAnnos.put(anno.annotationType(), anno);
                 			}
                 		}                    	
-                    	field.set(object, decorateObj(subObj, allAnnos, fun, hashCodeSet));
+                    	field.set(object, decorateObj(field.getName(), subObj, allAnnos, fun, hashCodeSet));
                 	}                	
                 }
             } 

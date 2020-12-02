@@ -13,5 +13,5 @@ import java.util.Map;
 
 @FunctionalInterface
 public interface DecorateContentFunction{
-	Object decorate(Object data, Map<Class<?>, Annotation> annotations) throws Throwable;
+	Object decorate(String fieldName, Object data, Map<Class<?>, Annotation> annotations) throws Throwable;
 }

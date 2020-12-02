@@ -25,7 +25,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 import com.danyuanblog.framework.popularmvc.utils.IOUtils;
 import com.danyuanblog.framework.popularmvc.utils.request.BodyReaderHttpServletRequestWrapper;
 import com.danyuanblog.framework.popularmvc.utils.request.HttpHelper;
@@ -61,8 +61,8 @@ public final class PopularMvcHandlerInterceptor implements HandlerInterceptor {
         String method = request.getMethod();
         HttpServletRequest requestWrapper = request;
         //先通过URL获取参数
-        SystemParameterProperties.defaultParameterMap.keySet().stream().forEach(key -> {
-        	String paramName = SystemParameterProperties.defaultParameterMap.get(key);
+        SystemParameterRenameProperties.DEFAULT_PARAM_MAP.keySet().stream().forEach(key -> {
+        	String paramName = SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(key);
         	String paramValue = request.getParameter(paramName);
         	if(!StringUtils.isEmpty(paramValue)){
         		RequestContext.getContext().setAttachment(paramName, paramValue);
@@ -88,8 +88,8 @@ public final class PopularMvcHandlerInterceptor implements HandlerInterceptor {
                         	// 解析json                
                         	ObjectMapper mapper = new ObjectMapper(); 
                         	JsonNode json = mapper.readTree(body);
-                        	SystemParameterProperties.defaultParameterMap.keySet().stream().forEach(key -> {
-                            	String paramName = SystemParameterProperties.defaultParameterMap.get(key);
+                        	SystemParameterRenameProperties.DEFAULT_PARAM_MAP.keySet().stream().forEach(key -> {
+                            	String paramName = SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(key);
                             	if(json.has(paramName)){
                             		String paramValue = json.get(paramName).asText();
                                 	if(!StringUtils.isEmpty(paramValue)){

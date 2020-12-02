@@ -36,7 +36,7 @@ public class EncryptFieldDataFormatHandler extends AbstractFieldDataFormatHandle
 	 * @author danyuan
 	 */
 	@Override
-	public Object handle(Object data, Map<Class<?>, Annotation> annotations)
+	public Object handle(String fieldName, Object data, Map<Class<?>, Annotation> annotations)
 			throws Throwable {
 		Annotation anno = annotations.get(Encrypt.class);
 		if(anno != null){
@@ -60,6 +60,22 @@ public class EncryptFieldDataFormatHandler extends AbstractFieldDataFormatHandle
 			}
 		}		
 		return data;
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public boolean handleRequest() {
+		return false;
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public boolean handleResponse() {
+		return true;
 	}
 
 }

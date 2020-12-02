@@ -23,7 +23,7 @@ import com.danyuanblog.framework.popularmvc.consts.ErrorCodes;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.controller.response.DefaultResponseWrapper;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
-import com.danyuanblog.framework.popularmvc.properties.ResponseWrapperProperties;
+import com.danyuanblog.framework.popularmvc.properties.ResponseSystemFieldRenameProperties;
 import com.danyuanblog.framework.popularmvc.utils.IOUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -34,7 +34,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class AutoAddReponseWrapperHandler extends AbstractResponseEnhanceHandler {
 
 	@Autowired
-	private ResponseWrapperProperties responseWrapperProperties;
+	private ResponseSystemFieldRenameProperties responseWrapperProperties;
 	
 	@Autowired
 	private PopularMvcConfig popularMvcConfig;
@@ -95,6 +95,8 @@ public class AutoAddReponseWrapperHandler extends AbstractResponseEnhanceHandler
 		}	
 		//去除空字段
 		if(map != null){
+			//添加其他系统响应参数
+			map.putAll(RequestContext.getContext().getResonseSystemParams());
 			for(Iterator<Map.Entry<String, Object>> it = map.entrySet().iterator(); it.hasNext();){
 				if(it.next().getValue() == null){
 					it.remove();
@@ -132,8 +134,7 @@ public class AutoAddReponseWrapperHandler extends AbstractResponseEnhanceHandler
 		}
 		if(json.hasNonNull(responseWrapperProperties.getData())){
 			map.put(responseWrapperProperties.getData(), json.get(responseWrapperProperties.getData()));
-		}	
-			
+		}			
 		return map;
 	}
 

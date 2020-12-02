@@ -16,7 +16,7 @@ import org.springframework.util.StringUtils;
 
 import com.danyuanblog.framework.popularmvc.consts.ErrorCodes;
 import com.danyuanblog.framework.popularmvc.properties.ErrorCodeProperties;
-import com.danyuanblog.framework.popularmvc.properties.ResponseWrapperProperties;
+import com.danyuanblog.framework.popularmvc.properties.ResponseSystemFieldRenameProperties;
 
 @Service
 public class CustomSystemErrorCodeHandler extends AbstractResponseEnhanceHandler {
@@ -25,7 +25,7 @@ public class CustomSystemErrorCodeHandler extends AbstractResponseEnhanceHandler
 	private ErrorCodeProperties errorCodeProperties;
 	
 	@Autowired
-	private ResponseWrapperProperties responseWrapperProperties;
+	private ResponseSystemFieldRenameProperties responseWrapperProperties;
 
 	/**
 	 * @author danyuan

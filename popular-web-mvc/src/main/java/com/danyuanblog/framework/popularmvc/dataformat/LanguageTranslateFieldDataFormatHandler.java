@@ -39,7 +39,7 @@ public class LanguageTranslateFieldDataFormatHandler extends AbstractFieldDataFo
 	 * @author danyuan
 	 */
 	@Override
-	public Object handle(Object data, Map<Class<?>, Annotation> annotations)
+	public Object handle(String fieldName, Object data, Map<Class<?>, Annotation> annotations)
 			throws Throwable {
 		Annotation anno = annotations.get(LanguageTranslate.class);
 		if(anno != null){
@@ -59,6 +59,22 @@ public class LanguageTranslateFieldDataFormatHandler extends AbstractFieldDataFo
 			}
 		}		
 		return data;
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public boolean handleRequest() {
+		return false;
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public boolean handleResponse() {
+		return true;
 	}
 
 }

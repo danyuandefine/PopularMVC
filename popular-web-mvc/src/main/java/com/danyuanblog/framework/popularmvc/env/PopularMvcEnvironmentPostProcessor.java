@@ -32,50 +32,69 @@ public class PopularMvcEnvironmentPostProcessor implements
 	@Override
 	public void postProcessEnvironment(ConfigurableEnvironment environment,
 			SpringApplication application) {
-		//先填充默认配置信息
-		MapPropertySource defaultEnvConfig = new MapPropertySource(DEFAULT_ENV_CONFIG, DefaultConfigPropertiesValue.getAllDefaultConfigs());
-		environment.getPropertySources().addLast(defaultEnvConfig);
 		
-        boolean open = false;
+		Map<String,Object> defaultConfigs = DefaultConfigPropertiesValue.getAllDefaultConfigs();
+		
+        boolean printLog = false;
         String openLogValue = environment.getProperty(OPEN_LOG_KEY);
         if(!StringUtils.isEmpty(openLogValue)){
-        	open = Boolean.valueOf(openLogValue);
+        	printLog = Boolean.valueOf(openLogValue);
         }
-        if(open){
+        if(printLog){
         	System.out.println("#############################配置信息##############################");
         }		
 		for (Iterator<?> it = ((AbstractEnvironment) environment)
 				.getPropertySources().iterator(); it.hasNext();) {
 			PropertySource<?> propertySource = (PropertySource<?>) it.next();
+			//拼接默认配置到用户自定义配置上
 			Map<String,Object> modifyMap = new HashMap<>();
 			for(DefaultConfigPropertiesValue config : DefaultConfigPropertiesValue.values()){
-				if(propertySource.containsProperty(config.getKey())){
+				if(propertySource.containsProperty(config.getKey()) && config.needCompose()){
 					modifyMap.put(config.getKey(), config.getComposeValue(propertySource.getProperty(config.getKey())));
 				}
 			}
 			//批量修改属性值
 			updateStringPropertys(environment, propertySource, modifyMap);
-			if(open){
-				// 遍历每个配置来源中的配置项
-				if (propertySource instanceof EnumerablePropertySource) {
-					for (String name : ((EnumerablePropertySource<?>) propertySource)
-							.getPropertyNames()) {
+				
+			// 遍历每个配置来源中的配置项
+			if (propertySource instanceof EnumerablePropertySource) {
+				for (String name : ((EnumerablePropertySource<?>) propertySource)
+						.getPropertyNames()) {
+					if(defaultConfigs.containsKey(name)){
+						//如果存在配置就移除默认配置
+						defaultConfigs.remove(name);
+					}
+					if(printLog){
 						/*
 						 * 由于每个配置来源可能配置了同一个配置项，存在相互覆盖的情况，为了保证获取到的值与通过@Value获取到的值一致，
 						 * 需要通过env.getProperty(name)获取配置项的值。
 						 */
 						System.out.println(name + " = "
 								+ environment.getProperty(name));
-						
-					}
+			        }				
 				}
-	        }			
+			}
 		}
-		if(open){
+		//最后填充默认配置信息
+		if(!environment.getPropertySources().contains(DEFAULT_ENV_CONFIG) && defaultConfigs.size() > 0){
+			MapPropertySource defaultEnvConfig = new MapPropertySource(DEFAULT_ENV_CONFIG, defaultConfigs);
+			environment.getPropertySources().addLast(defaultEnvConfig);
+			if(printLog){//打印配置信息
+				defaultConfigs.forEach((key,value)->{
+					System.out.println(key + " = "
+							+ value.toString());
+				});
+			}
+		}		
+		if(printLog){
 			System.out.println("###############################################################");
         }		
 	}
 
+	/**
+	 * 批量修改配置信息
+	 * @author danyuan
+	 */
 	private void updateStringPropertys(ConfigurableEnvironment environment, PropertySource<?> source, Map<String, Object> params){
         Map<String,Object> map = new HashMap<>();
         if(source instanceof EnumerablePropertySource){

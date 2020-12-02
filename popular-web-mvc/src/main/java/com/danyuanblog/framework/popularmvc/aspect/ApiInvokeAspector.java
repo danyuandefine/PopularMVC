@@ -11,6 +11,7 @@ package com.danyuanblog.framework.popularmvc.aspect;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -125,10 +126,12 @@ public class ApiInvokeAspector {
 			MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
 			String[] parameterNames = methodSignature.getParameterNames();
 		    Method method = methodSignature.getMethod();
+		    //方法注解
+		    Annotation[] methodAnnos = method.getAnnotations();
 		    //参数注解，1维是参数，2维是注解
 	        Annotation[][] annotations = method.getParameterAnnotations();
 	        //获取参数
-			List<ApiRequestParameter> params = parseParameters(parameterNames, args, annotations);
+			List<ApiRequestParameter> params = parseParameters(parameterNames, args, annotations, methodAnnos);
 		    
 		    //获取接口信息
 		    HttpServletRequest request = RequestContext.getContext().getRequest();
@@ -185,7 +188,8 @@ public class ApiInvokeAspector {
 		return resp;
 	}
 	
-	private List<ApiRequestParameter> parseParameters(String[] parameterNames, Object [] args, Annotation[][] annotations){
+	private List<ApiRequestParameter> parseParameters(String[] parameterNames, Object [] args, 
+			Annotation[][] annotations, Annotation[] methodAnnos){
 		List<ApiRequestParameter> parameters = new ArrayList<>();
 		//提取业务请求参数
 		ApiRequestParameter param = null;
@@ -200,6 +204,8 @@ public class ApiInvokeAspector {
 	    			}else{
 	    				param.setParamName(paramName);
 	    			}    			
+	    		}else{
+	    			param.setParamName(parameterNames[i]);
 	    		}	    		
 	    		if(checkIsAnno(annotations[i], IgnoreSign.class)){
 	    			param.setNeedSign(false);
@@ -212,7 +218,18 @@ public class ApiInvokeAspector {
 	    			param.setDecrpt(false);
 	    		}
 	    		param.setParam(args[i]);
-	    		param.setAnnotations(annotations[i]);
+	    		
+  		
+	    		Annotation[] allAnnos = null;
+	    		if(methodAnnos != null && (annotations[i] != null)){
+	    			allAnnos = Arrays.copyOf(methodAnnos, methodAnnos.length + annotations[i].length);//数组扩容
+	    			System.arraycopy(annotations[i], 0, allAnnos, methodAnnos.length, annotations[i].length);
+	    		}else if(methodAnnos != null){
+	    			allAnnos = methodAnnos;
+	    		}else if(annotations[i] != null){
+	    			allAnnos = annotations[i];
+	    		}	    		
+	    		param.setAnnotations(allAnnos);
 	    		param.setIndex(i);
 	    		param.setArgs(args);
 	    		parameters.add(param);

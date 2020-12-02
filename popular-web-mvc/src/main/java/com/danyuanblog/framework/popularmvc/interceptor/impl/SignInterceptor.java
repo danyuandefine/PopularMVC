@@ -28,7 +28,7 @@ import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 import com.danyuanblog.framework.popularmvc.interceptor.AbstractApiMethodInterceptor;
 import com.danyuanblog.framework.popularmvc.properties.ChannelConfigProperties;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 
 @Service
 @Slf4j
@@ -41,7 +41,7 @@ public class SignInterceptor extends AbstractApiMethodInterceptor {
 	private ChannelConfigProperties channelConfigProperties;
 	
 	@Autowired
-	private SystemParameterProperties systemParameterProperties;
+	private SystemParameterRenameProperties systemParameterProperties;
 	/**
 	 * @author danyuan
 	 */

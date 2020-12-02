@@ -9,7 +9,11 @@
 package com.danyuanblog.framework.popularmvc.consts;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+
+import org.springframework.util.StringUtils;
 
 import lombok.Getter;
 
@@ -53,6 +57,10 @@ public enum DefaultConfigPropertiesValue {
 		this.forceUseDefaultValue = false;
 	}
 	
+	public boolean needCompose(){		
+		return !this.forceUseDefaultValue;
+	}
+	
 	public Object getComposeValue(Object originalValue){
 		if(this.forceUseDefaultValue){
 			return this.defaultValue;
@@ -60,13 +68,24 @@ public enum DefaultConfigPropertiesValue {
 		if(this.defaultValue.equals(originalValue)){
 			return originalValue;
 		}
+		if(StringUtils.isEmpty(originalValue)){
+			return this.defaultValue;
+		}
 		if(originalValue instanceof String){
 			StringBuffer buffer = new StringBuffer();
-			if(this.append){
-				buffer.append(originalValue).append(",").append(this.getDefaultValue());
-			}else{
-				buffer.append(this.getDefaultValue()).append(",").append(originalValue);
+			Set<String> set = new HashSet<>();
+			for(String val : ((String) originalValue).split(",")){
+				if(!set.contains(val)){
+					set.add(val);
+				}
 			}
+			if(!set.contains(this.defaultValue)){
+				if(this.append){
+					buffer.append(originalValue).append(",").append(this.getDefaultValue());
+				}else{
+					buffer.append(this.getDefaultValue()).append(",").append(originalValue);
+				}
+			}			
 			return buffer.toString();
 		}
 		return originalValue;

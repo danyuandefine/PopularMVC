@@ -30,25 +30,27 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcSwaggerProperties;
-import com.danyuanblog.framework.popularmvc.properties.SystemParameterProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterConfigProperties;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 
 @EnableSwagger2
 @EnableKnife4j
 @EnableConfigurationProperties({ 
-	PopularMvcSwaggerProperties.class
+	PopularMvcSwaggerProperties.class,
+	SystemParameterConfigProperties.class
 	})
 @ConditionalOnProperty(name={"popularmvc.enable","popularmvc.enableSwagger"},havingValue = "true")
 @AutoConfigureBefore(PopularMvcWebConfigurer.class)
 @Configuration
 public class PopularMvcSwaggerConfigurer {
 	@Bean
-	public Docket businessApi(@Autowired PopularMvcSwaggerProperties swagger,@Autowired SystemParameterProperties systemParameterProperties) {
+	public Docket businessApi(@Autowired SystemParameterConfigProperties otherParams, @Autowired PopularMvcSwaggerProperties swagger,@Autowired SystemParameterRenameProperties systemParameterProperties) {
 		Docket docket=new Docket(DocumentationType.SWAGGER_2)
 				        .apiInfo(apiInfo(swagger))
 				        //分组名称
 				        .groupName(swagger.getTitle())
-				        .globalOperationParameters(getGlobalOperationParameters(systemParameterProperties))
+				        .globalOperationParameters(getGlobalOperationParameters(systemParameterProperties, otherParams, false))
 				        .select()
 				        //这里指定Controller扫描包路径
 				        .apis(RequestHandlerSelectors.basePackage(swagger.getBasePackage()))
@@ -57,27 +59,39 @@ public class PopularMvcSwaggerConfigurer {
 		return docket;
 	}
 	
-	private List<Parameter> getGlobalOperationParameters(SystemParameterProperties systemParameterProperties) {
+	private List<Parameter> getGlobalOperationParameters(SystemParameterRenameProperties systemParameterProperties, 
+			SystemParameterConfigProperties otherParams, boolean execlud) {
 		List<Parameter> pars = new ArrayList<>();
 		
         ParameterBuilder parameterBuilder = new ParameterBuilder();
-        SystemParameterProperties.defaultParameterMap.forEach((key,value) -> {
-        	parameterBuilder.name(value).description(key)
-        	.modelRef(new ModelRef("string"))
-        	.parameterType("query")
-        	.required(false);
-        	pars.add(parameterBuilder.build());
+        if(!execlud){
+        	otherParams.toParamMap().forEach((key,value) -> {
+            	parameterBuilder.name(value).description(key)
+            	.modelRef(new ModelRef("string"))
+            	.parameterType("query")
+            	.required(false);
+            	pars.add(parameterBuilder.build());
+            });        
+        }
+        SystemParameterRenameProperties.DEFAULT_PARAM_MAP.forEach((key,value) -> {
+        	if(!(execlud && otherParams.getOtherParams().contains(key))){
+        		parameterBuilder.name(value).description(key)
+            	.modelRef(new ModelRef("string"))
+            	.parameterType("query")
+            	.required(false);
+            	pars.add(parameterBuilder.build());
+        	}        	
         });        
 		return pars;
 	}
 
 	@Bean(value = "defaultApi")		
-    public Docket defaultApi(@Autowired SystemParameterProperties systemParameterProperties) {
+    public Docket defaultApi(@Autowired SystemParameterRenameProperties systemParameterProperties, SystemParameterConfigProperties otherParams) {
         Docket docket=new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(systemApiInfo())
                 //分组名称
                 .groupName("PopularMvc内置API")
-                .globalOperationParameters(getGlobalOperationParameters(systemParameterProperties))
+                .globalOperationParameters(getGlobalOperationParameters(systemParameterProperties, otherParams, true))
                 .select()
                 //这里指定Controller扫描包路径
                 .apis(RequestHandlerSelectors.basePackage("com.danyuanblog.framework.popularmvc.controller"))

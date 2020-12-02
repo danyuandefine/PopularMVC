@@ -18,6 +18,16 @@ public interface FieldDataFormatHandler {
 	 */
 	int order();
 	
-	Object handle(Object data, Map<Class<?>, Annotation> annotations) throws Throwable;
+	/**
+	 * 是否处理请求
+	 */
+	boolean handleRequest();
+	/**
+	 * 是否处理响应
+	 * @author danyuan
+	 */
+	boolean handleResponse();
+	
+	Object handle(String fieldName, Object data, Map<Class<?>, Annotation> annotations) throws Throwable;
 	
 }
