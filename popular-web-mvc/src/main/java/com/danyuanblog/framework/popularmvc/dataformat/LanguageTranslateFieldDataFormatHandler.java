@@ -15,11 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.annotation.LanguageTranslate;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
+import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 
 @Component
 @Slf4j
@@ -41,6 +41,9 @@ public class LanguageTranslateFieldDataFormatHandler extends AbstractFieldDataFo
 	@Override
 	public Object handle(String fieldName, Object data, Map<Class<?>, Annotation> annotations)
 			throws Throwable {
+		if(StringUtils.isBlank(data)){
+			return data;
+		}
 		Annotation anno = annotations.get(LanguageTranslate.class);
 		if(anno != null){
 			LanguageTranslate languageTranslate = (LanguageTranslate) anno;

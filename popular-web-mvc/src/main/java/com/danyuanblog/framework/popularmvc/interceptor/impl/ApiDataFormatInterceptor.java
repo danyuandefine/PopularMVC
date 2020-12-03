@@ -53,7 +53,7 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 	 */
 	@Override
 	public int order() {
-		return 998;
+		return -2;
 	}
 
 	/**
@@ -77,7 +77,11 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 				obj = BeanPropertyUtil.decorateObj(parameter.getParamName(), obj, annos,  (fieldName, data, annotations)->{
 					for(FieldDataFormatHandler handler : handlers){
 						if(handler.handleRequest()){
-							data = handler.handle(fieldName, data, annotations);
+							try{
+								data = handler.handle(fieldName, data, annotations);
+							}catch(Exception e){
+								log.warn(e.getMessage());
+							}							
 						}						
 					}						
 					return data;
@@ -106,7 +110,11 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 		BeanPropertyUtil.decorateObj("resp", resp, annos,  (fieldName, data,annotations)->{
 			for(FieldDataFormatHandler handler : handlers){
 				if(handler.handleResponse()){
-					data = handler.handle(fieldName, data, annotations);
+					try{
+						data = handler.handle(fieldName, data, annotations);
+					}catch(Exception e){
+						log.warn(e.getMessage());
+					}	
 				}				
 			}				
 			return data;

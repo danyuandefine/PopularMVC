@@ -19,6 +19,7 @@ import com.danyuanblog.framework.popularmvc.annotation.Decrypt;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.encrypt.DataEncryptHandler;
 import com.danyuanblog.framework.popularmvc.utils.SpringBeanUtil;
+import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 
 @Component
 @Slf4j
@@ -38,6 +39,9 @@ public class DecryptFieldDataFormatHandler extends AbstractFieldDataFormatHandle
 	@Override
 	public Object handle(String fieldName, Object data, Map<Class<?>, Annotation> annotations)
 			throws Throwable {
+		if(StringUtils.isBlank(data)){
+			return data;
+		}
 		Annotation anno = annotations.get(Decrypt.class);
 		if(anno != null){
 			Decrypt decrypt = (Decrypt) anno;

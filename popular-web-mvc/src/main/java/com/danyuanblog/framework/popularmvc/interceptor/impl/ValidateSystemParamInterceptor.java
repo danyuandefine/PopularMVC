@@ -215,7 +215,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 	 */
 	@Override
 	public int order() {
-		return -2;
+		return -3;
 	}
 
 }

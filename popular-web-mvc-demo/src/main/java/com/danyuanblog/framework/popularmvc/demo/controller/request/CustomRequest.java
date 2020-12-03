@@ -10,6 +10,8 @@ package com.danyuanblog.framework.popularmvc.demo.controller.request;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.NotBlank;
+
 import lombok.Data;
 
 @Data
@@ -19,10 +21,10 @@ public class CustomRequest implements Serializable{/**
 	private static final long serialVersionUID = 1L;
 	
 	private String clientId;
-	
+	@NotBlank
 	private String locale;
 	
 	private String appName;
-	
+	@NotBlank
 	private String countryCode;
 }

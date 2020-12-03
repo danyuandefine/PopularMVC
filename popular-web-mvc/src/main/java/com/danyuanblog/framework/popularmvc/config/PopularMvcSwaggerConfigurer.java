@@ -86,7 +86,7 @@ public class PopularMvcSwaggerConfigurer {
 	}
 
 	@Bean(value = "defaultApi")		
-    public Docket defaultApi(@Autowired SystemParameterRenameProperties systemParameterProperties, SystemParameterConfigProperties otherParams) {
+    public Docket defaultApi(@Autowired SystemParameterRenameProperties systemParameterProperties, @Autowired SystemParameterConfigProperties otherParams) {
         Docket docket=new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(systemApiInfo())
                 //分组名称

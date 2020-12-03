@@ -168,19 +168,27 @@ public class BeanPropertyUtil {
                 Map<Object,Object> map = (Map)object;
                 if (map!=null && map.size()>0){
                     for (Object key : map.keySet()){                    	
-                        Object val = map.get(key);                       
-                        if(isBaseType(val)){
-                        	map.put(key, (Object)fun.decorate(fieldName + key, val, allAnnos));
-                        }else{
-                        	map.put(key, decorateObj(fieldName + key, val, allAnnos, fun, hashCodeSet));
-                        }
+                        Object val = map.get(key);    
+                        try{
+                        	if(isBaseType(val)){
+                            	map.put(key, (Object)fun.decorate(fieldName + key, val, allAnnos));
+                            }else{
+                            	map.put(key, decorateObj(fieldName + key, val, allAnnos, fun, hashCodeSet));
+                            }
+                    	}catch(Exception e){
+                    		log.warn(e.getMessage());
+                    	}                        
                     }
                 }
             }else if(object.getClass().isArray()){//数组
             	Object[] arr = (Object[]) object;            	
             	for(int i=0; i<arr.length; i++){
             		Object subObj = arr[i];
-            		arr[i]=decorateObj(fieldName + i, subObj, allAnnos, fun, hashCodeSet);
+            		try{
+                		arr[i]=decorateObj(fieldName + i, subObj, allAnnos, fun, hashCodeSet);
+                	}catch(Exception e){
+                		log.warn(e.getMessage());
+                	}             		
             	}
             }else if(object instanceof Collection<?>){//集合
             	Collection col = (Collection) object;
@@ -190,7 +198,11 @@ public class BeanPropertyUtil {
             		list.add(decorateObj(fieldName + i++, subObj, allAnnos, fun, hashCodeSet));
             	}
             	col.clear();
-            	col.addAll(list);
+            	try{
+            		col.addAll(list);
+            	}catch(Exception e){
+            		log.warn(e.getMessage());
+            	}            	
             }else{//普通对象
                 List<Field> fields = getAllField(object);
                 for (Field field : fields) {
@@ -202,8 +214,12 @@ public class BeanPropertyUtil {
                 			for(Annotation anno : fieldAnnos){
                 				allAnnos.put(anno.annotationType(), anno);
                 			}
-                		}                    	
-                    	field.set(object, decorateObj(field.getName(), subObj, allAnnos, fun, hashCodeSet));
+                		}   
+                    	try{
+                    		field.set(object, decorateObj(field.getName(), subObj, allAnnos, fun, hashCodeSet));
+                    	}catch(Exception e){
+                    		log.warn(e.getMessage());
+                    	}
                 	}                	
                 }
             } 
