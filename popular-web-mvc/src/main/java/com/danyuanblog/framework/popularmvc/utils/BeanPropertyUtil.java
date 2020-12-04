@@ -145,7 +145,7 @@ public class BeanPropertyUtil {
 			return fun.decorate(fieldName, object, annotations);
 		}
 		if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
-			return object;
+			return fun.decorate(fieldName, object, annotations);
 		}
 		hashCodeSet.add(String.valueOf(object.hashCode()));
 		Annotation[] currentAnnotations = object.getClass().getAnnotations();//获取类上的注解

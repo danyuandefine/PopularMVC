@@ -1,30 +1,25 @@
 /**  
-* Title ErrorCodeDto.java  
+* Title QueryErrorCodeRequest.java  
 * Description  
 * @author danyuan
-* @date Nov 8, 2019
+* @date Dec 4, 2020
 * @version 1.0.0
 * site: www.danyuanblog.com
 */ 
-package com.danyuanblog.framework.popularmvc.dto;
+package com.danyuanblog.framework.popularmvc.controller.request;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
 import java.io.Serializable;
 
-import com.danyuanblog.framework.popularmvc.annotation.LanguageTranslate;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
-
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-@JsonInclude(Include.NON_NULL)
 @Data
 @Accessors(chain = true)
-@ApiModel(value="ErrorCodeDto",description="业务错误码参数")
-public class ErrorCodeDto implements Serializable{
+@ApiModel(value="QueryErrorCodeRequest",description="查询某个错误码的信息")
+public class QueryErrorCodeRequest implements Serializable {
 
 	/** 
 	 *serialVersionUID
@@ -45,11 +40,4 @@ public class ErrorCodeDto implements Serializable{
 			example="100671495"
 			)
 	private Integer code;
-	
-	@ApiModelProperty(
-			value="错误描述信息",
-			example="该用户账号未找到！"
-			)
-	@LanguageTranslate
-	private String msg;
 }

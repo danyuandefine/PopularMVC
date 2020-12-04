@@ -20,8 +20,8 @@ popularmvc:
   #printAllProperties: true
   error: #错误码相关配置
     #自定义系统错误码值,格式【枚举名 ：数值】
-    #systemErrorCodes: 
-      #INVALID_METHOD: 404
+    systemErrorCodes: 
+      NOT_FOUND: 404
     #业务异常定义，格式【错误码多语言字典值 ：错误码指代的默认中文翻译描述信息】
     #业务错误码默认起始值
     businessCodeStart: 200001

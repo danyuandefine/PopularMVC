@@ -60,11 +60,11 @@ public class PopularMvcSwaggerConfigurer {
 	}
 	
 	private List<Parameter> getGlobalOperationParameters(SystemParameterRenameProperties systemParameterProperties, 
-			SystemParameterConfigProperties otherParams, boolean execlud) {
+			SystemParameterConfigProperties otherParams, boolean exclude) {
 		List<Parameter> pars = new ArrayList<>();
 		
         ParameterBuilder parameterBuilder = new ParameterBuilder();
-        if(!execlud){
+        if(!exclude){
         	otherParams.toParamMap().forEach((key,value) -> {
             	parameterBuilder.name(value).description(key)
             	.modelRef(new ModelRef("string"))
@@ -74,7 +74,7 @@ public class PopularMvcSwaggerConfigurer {
             });        
         }
         SystemParameterRenameProperties.DEFAULT_PARAM_MAP.forEach((key,value) -> {
-        	if(!(execlud && otherParams.getOtherParams() !=null && otherParams.getOtherParams().contains(key))){
+        	if(!(exclude && otherParams.getOtherParams() !=null && otherParams.getOtherParams().contains(key))){
         		parameterBuilder.name(value).description(key)
             	.modelRef(new ModelRef("string"))
             	.parameterType("query")

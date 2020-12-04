@@ -23,7 +23,7 @@ public enum ErrorCodes {
 	INVALID_MEDIA_TYPE(110001),//HTTP请求Content-Type类型错误
 	INVALID_HTTP_ACTION(110002),//HTTP请求类型错误
 	NOT_FOUND(110003),//无效的接口名
-	TIMOUT(110004),//请求超时
+	TIMEOUT(110004),//请求超时
 	NETWORK_ERROR(110005),//网络异常
 	
 	//参数校验相关错误码
@@ -33,15 +33,14 @@ public enum ErrorCodes {
 	
 	//系统业务错误码
 	FORCEOUT_SESSION_ID(130001),//被踢出的会话ID
-	INVALID_SESSION_ID(130002),//无效的会话ID
-	INVALID_APPID(130003),//无效的渠道标识
-	ERROR_SIGN(130004),//验签失败
-	IVALID_UNIQUE_TOKEN(130005),//防重码无效
-	UNIQUE_TOKEN_USED(130006),//您提交的请求正在处理，请耐心等待
+	INVALID_SESSION_ID(130002),//无效的会话ID	
+	ERROR_SIGN(130005),//验签失败
+	INVALID_UNIQUE_TOKEN(130006),//防重码无效
+	UNIQUE_TOKEN_USED(130007),//您提交的请求正在处理，请耐心等待
 	
 	//接口权限相关错误码	
-	INVALID_PKGNAME(140001),//非法的APP接入
-	NOT_PERMIT_APPID(140002),//该渠道禁止访问	
+	NOT_PERMIT_APPID(140001),//该渠道禁止访问	
+	INVALID_APPID(140002),//无效的渠道标识	
 	EXCEED_USER_INVOKE_LIMITED(140003),//用户总调用次数超限
 	EXCEED_SESSION_INVOKE_LIMITED(140004),//用户该次会话内调用次数超限
 	EXCEED_APP_INVOKE_LIMITED(140005),//渠道总调用次数超限

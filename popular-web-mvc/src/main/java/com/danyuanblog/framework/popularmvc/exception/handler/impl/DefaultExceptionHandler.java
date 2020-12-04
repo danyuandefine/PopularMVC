@@ -86,8 +86,8 @@ public class DefaultExceptionHandler implements CommonExceptionHandler{
 		} else if (e instanceof AsyncRequestTimeoutException || e instanceof TimeoutException) {
 			//接口超时
 			errorMsg = languageTranslateManager.get(
-					ErrorCodes.TIMOUT.getMsgCode(), locale);			
-			errorCode = ErrorCodes.TIMOUT.getCode();
+					ErrorCodes.TIMEOUT.getMsgCode(), locale);			
+			errorCode = ErrorCodes.TIMEOUT.getCode();
 		}else if(e instanceof IOException){//NETWORK_ERROR
 			errorMsg = languageTranslateManager.get(
 					ErrorCodes.NETWORK_ERROR.getMsgCode(), locale,e.getMessage());

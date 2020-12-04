@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import com.danyuanblog.framework.popularmvc.annotation.InjectSystemParam;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
+import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 
 @Component
 public class InjectSystemParamFieldDataFormatHandler extends AbstractFieldDataFormatHandler{
@@ -36,6 +37,10 @@ public class InjectSystemParamFieldDataFormatHandler extends AbstractFieldDataFo
 	@Override
 	public Object handle(String fieldName, Object data, Map<Class<?>, Annotation> annotations)
 			throws Throwable {
+		if(StringUtils.isNotBlank(data)){
+			//值不为空，不需要填充系统参数
+			return data;
+		}
 		if(!SystemParameterRenameProperties.DEFAULT_PARAM_MAP.keySet().contains(fieldName)){
 			//非系统参数直接返回原值
 			return data;

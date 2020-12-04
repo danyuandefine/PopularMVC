@@ -83,10 +83,9 @@ public class BussinessErrorCodeInterpreter {
 		List<ErrorCodeDto> list = new ArrayList<>();
 		ErrorCodeDto dto = null;
 		for(String key : codeMap.keySet()){
-			BusinessErrorDescription error = errorCodeProperties.getBusinessErrorCodes().get(key);
 			dto = new ErrorCodeDto();
 			dto.setError(key)
-				.setMsg(error.getDesc())
+				.setMsg(key)
 				.setCode(codeMap.get(key))
 				.setHexCode("0x0" + Integer.toHexString(codeMap.get(key)).toUpperCase());
 			
@@ -100,14 +99,21 @@ public class BussinessErrorCodeInterpreter {
 	 * @return
 	 * @author danyuan
 	 */
-	public static List<ErrorCodeDto> getSystemCodes(){
+	public List<ErrorCodeDto> getSystemCodes(){
 		List<ErrorCodeDto> list = new ArrayList<>();
 		ErrorCodeDto dto = null;
-		for(ErrorCodes error : ErrorCodes.values()){			
+		for(ErrorCodes error : ErrorCodes.values()){	
 			dto = new ErrorCodeDto();
 			dto.setError(error.getMsgCode())
-				.setCode(error.getCode())
-				.setHexCode("0x0" + Integer.toHexString(error.getCode()).toUpperCase());
+				.setMsg(dto.getError());				
+			if(errorCodeProperties.getSystemErrorCodes().containsKey(error.name())){
+				//自定义系统错误码转换
+				dto.setCode(errorCodeProperties.getSystemErrorCodes().get(error.name()))
+					.setHexCode("0x0" + Integer.toHexString(errorCodeProperties.getSystemErrorCodes().get(error.name())).toUpperCase());
+			}else{
+				dto.setCode(error.getCode())
+					.setHexCode("0x0" + Integer.toHexString(error.getCode()).toUpperCase());
+			}
 			
 			list.add(dto);
 		}
