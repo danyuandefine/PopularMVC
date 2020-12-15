@@ -23,6 +23,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class SystemParameterRenameProperties implements InitializingBean{
 	public static final Map<String, String> DEFAULT_PARAM_MAP = new HashMap<>();
 	
+	public static final String SECRET_ID = "secretId";
 	public static final String APP_ID = "appId";
 	public static final String CHANNEL_ID = "channelId";
 	public static final String SESSION_ID = "sessionId";
@@ -38,6 +39,10 @@ public class SystemParameterRenameProperties implements InitializingBean{
 	public static final String CLIENT_ID = "clientId";
 	public static final String CLIENT_IP = "clientIp";
 	
+	/**
+	 * 秘钥ID，可以按秘钥维度控制api的访问权限
+	 */
+	private String secretId = SECRET_ID;
 	/**
 	 * 应用ID，可以按应用维度控制api的访问权限
 	 */

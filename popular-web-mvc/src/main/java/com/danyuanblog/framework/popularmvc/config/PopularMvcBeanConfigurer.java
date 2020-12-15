@@ -24,6 +24,7 @@ import com.danyuanblog.framework.popularmvc.CheckRepeatManager;
 import com.danyuanblog.framework.popularmvc.InvokeApiLogManager;
 import com.danyuanblog.framework.popularmvc.InvokeTimesManager;
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
+import com.danyuanblog.framework.popularmvc.SecretManager;
 import com.danyuanblog.framework.popularmvc.SessionManager;
 import com.danyuanblog.framework.popularmvc.SignManager;
 import com.danyuanblog.framework.popularmvc.encrypt.DataEncryptHandler;
@@ -36,10 +37,12 @@ import com.danyuanblog.framework.popularmvc.impl.DefaultCheckRepeatManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultInvokeApiLogManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultInvokeTimesManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultLanguageTranslateManagerImpl;
+import com.danyuanblog.framework.popularmvc.impl.DefaultSecretManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultSessionManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultSignManagerImpl;
 import com.danyuanblog.framework.popularmvc.properties.ChannelConfigProperties;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
+import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
 
 
 @Configuration
@@ -110,8 +113,15 @@ public class PopularMvcBeanConfigurer {
 	
 	@Bean
 	@ConditionalOnMissingBean(DataEncryptHandler.class)
-	public DataEncryptHandler dataEncryptHandler(@Autowired ChannelConfigProperties channelConfigProperties) {
-		return new AESDataEncryptHandler().setChannelConfigProperties(channelConfigProperties);
+	public DataEncryptHandler dataEncryptHandler(@Autowired SecretManager secretManager) {
+		return new AESDataEncryptHandler().setSecretManager(secretManager);
+	}
+	
+	@Bean
+	@ConditionalOnMissingBean(SecretManager.class)
+	public SecretManager secretManager(@Autowired ChannelConfigProperties channelConfigProperties, @Autowired SystemParameterRenameProperties systemParameterProperties) {
+		DefaultSecretManagerImpl secretManager = new DefaultSecretManagerImpl(channelConfigProperties, systemParameterProperties);
+		return secretManager;
 	}
 	
 }

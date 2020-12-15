@@ -8,39 +8,36 @@
 */ 
 package com.danyuanblog.framework.popularmvc.encrypt.impl;
 
-import java.util.Map;
-
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import org.springframework.util.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import com.danyuanblog.framework.popularmvc.dto.ApiPermissionDto;
+import com.danyuanblog.framework.popularmvc.SecretManager;
+import com.danyuanblog.framework.popularmvc.context.RequestContext;
+import com.danyuanblog.framework.popularmvc.dto.SecretInfo;
 import com.danyuanblog.framework.popularmvc.encrypt.DataEncryptHandler;
-import com.danyuanblog.framework.popularmvc.properties.ChannelConfigProperties;
 import com.danyuanblog.framework.popularmvc.utils.EncryptUtils;
 
 @Setter
 @Accessors(chain = true)
 public class AESDataEncryptHandler implements DataEncryptHandler {
 
-	private ChannelConfigProperties channelConfigProperties;
+	@Autowired
+	private SecretManager secretManager;
 	/**
 	 * @author danyuan
 	 * @throws Exception 
 	 */
 	@Override
 	public String encrypt(String appId, String channelId, String userId, String content) throws Throwable {
-		Map<String, ApiPermissionDto> apps = channelConfigProperties.getChannels().get(channelId);
-		if(apps != null){
-			ApiPermissionDto permission = apps.get(appId);
-			if(permission == null){
-				//如果不存在单个应用的配置信息，则使用渠道默认配置
-				permission = apps.get(ChannelConfigProperties.DEFAULT_APP);
-			}
-			if(permission != null && !StringUtils.isEmpty(permission.getSecret())){
-				return EncryptUtils.encodeAES128(permission.getSecret(), content);
-			}
+		SecretInfo secret = secretManager.load(RequestContext.getContext().getChannelId(), 				
+				RequestContext.getContext().getAppId(), 
+				RequestContext.getContext().getSecretId(), 
+				RequestContext.getContext().getUserId(), 
+				RequestContext.getContext().getSessionId());
+		if(secret != null){
+			return EncryptUtils.encodeAES128(secret.getSecret(), content);
 		}		
 		return content;
 	}
@@ -50,16 +47,13 @@ public class AESDataEncryptHandler implements DataEncryptHandler {
 	 */
 	@Override
 	public String decrypt(String appId, String channelId, String userId, String content) throws Throwable {
-		Map<String, ApiPermissionDto> apps = channelConfigProperties.getChannels().get(channelId);
-		if(apps != null){
-			ApiPermissionDto permission = apps.get(appId);
-			if(permission == null){
-				//如果不存在单个应用的配置信息，则使用渠道默认配置
-				permission = apps.get(ChannelConfigProperties.DEFAULT_APP);
-			}
-			if(permission != null && !StringUtils.isEmpty(permission.getSecret())){
-				return EncryptUtils.decodeAES128(permission.getSecret(), content);
-			}
+		SecretInfo secret = secretManager.load(RequestContext.getContext().getChannelId(), 				
+				RequestContext.getContext().getAppId(), 
+				RequestContext.getContext().getSecretId(), 
+				RequestContext.getContext().getUserId(), 
+				RequestContext.getContext().getSessionId());
+		if(secret != null){
+			return EncryptUtils.decodeAES128(secret.getSecret(), content);
 		}		
 		return content;
 	}

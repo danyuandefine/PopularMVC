@@ -19,7 +19,7 @@ import lombok.Getter;
 
 @Getter
 public enum DefaultConfigPropertiesValue {
-	SRPRING_MSG_BASENAME("spring.messages.basename","popularMvcMessages")
+	SRPRING_MSG_BASENAME("spring.messages.basename","META-INF/i18n/popularMvcMessages")
 	,POPULARMVC_BASE_PACKAGES("popularmvc.basePackages","com.danyuanblog.framework.popularmvc")
 	,POPULARMVC_ENABLE("popularmvc.enable",true)
 	,POPULARMVC_ENABLE_SWAGGER("popularmvc.enableSwagger",true)

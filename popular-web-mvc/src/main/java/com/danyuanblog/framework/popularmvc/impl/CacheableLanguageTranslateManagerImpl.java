@@ -19,13 +19,13 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.properties.ErrorCodeProperties;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
 import com.danyuanblog.framework.popularmvc.utils.CacheUtil;
 import com.danyuanblog.framework.popularmvc.utils.IOUtils;
+import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 
 @Service
 @Slf4j
@@ -59,10 +59,10 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 	 */
 	@Override
 	public String get(String key, String locale, Object... params) {
-		if(StringUtils.isEmpty(key)){
+		if(StringUtils.isBlank(key)){
 			return key;
 		}
-		if(StringUtils.isEmpty(locale)){
+		if(StringUtils.isBlank(locale)){
 			locale = this.getDefaultLocale();
 		}
 		String value = key;

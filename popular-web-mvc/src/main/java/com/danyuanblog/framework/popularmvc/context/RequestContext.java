@@ -164,6 +164,11 @@ public class RequestContext {
     public String getClientIp(){
     	return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.CLIENT_IP));
     } 
+    
+	public String getSecretId() {
+		return this.getAttachment(SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.SECRET_ID));
+	}
+	
     /**
      * 设置响应系统参数信息
      * @author danyuan
@@ -179,4 +184,6 @@ public class RequestContext {
     public Object getResonseSystemParamValue(String key){
     	return resonseSystemParams.get(key);
     }
+
+	
 }

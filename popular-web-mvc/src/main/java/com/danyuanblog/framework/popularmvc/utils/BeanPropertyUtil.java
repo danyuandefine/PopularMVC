@@ -190,19 +190,29 @@ public class BeanPropertyUtil {
                 		log.warn(e.getMessage());
                 	}             		
             	}
-            }else if(object instanceof Collection<?>){//集合
-            	Collection col = (Collection) object;
-            	List list = new ArrayList();
+            }else if(object instanceof List<?>){//List集合
+            	List<Object> list = (List<Object>)object;
+            	for(int i=0; i < list.size(); i++){
+            		Object subObj = list.get(i);
+            		try{
+                		list.set(i, decorateObj(fieldName + i, subObj, allAnnos, fun, hashCodeSet));
+                	}catch(Exception e){
+                		log.warn(e.getMessage());
+                	}             		
+            	}            	      	
+            }else if(object instanceof Set<?>){//Set集合
+            	Set<Object> set = (Set<Object>)object;
+            	Set<Object> newSet = new HashSet<Object>();
             	int i = 0;
-            	for(Object subObj : col){
-            		list.add(decorateObj(fieldName + i++, subObj, allAnnos, fun, hashCodeSet));
-            	}
-            	col.clear();
-            	try{
-            		col.addAll(list);
-            	}catch(Exception e){
-            		log.warn(e.getMessage());
-            	}            	
+            	for(Object subObj : set){
+            		try{
+            			newSet.add(decorateObj(fieldName + i++, subObj, allAnnos, fun, hashCodeSet));
+                	}catch(Exception e){
+                		log.warn(e.getMessage());
+                	}             		
+            	} 
+            	set.removeAll(set);
+            	set.addAll(newSet);
             }else{//普通对象
                 List<Field> fields = getAllField(object);
                 for (Field field : fields) {
@@ -281,7 +291,10 @@ public class BeanPropertyUtil {
 	 * @param object
 	 * @return
 	 */
-	public static boolean isBaseType(Object object) {	   
+	public static boolean isBaseType(Object object) {	
+		if(object == null){
+			return true;
+		}
 		Class<?> className = object.getClass();
 	    return className.equals(String.class)||
 	    		className.equals(Integer.class) ||
