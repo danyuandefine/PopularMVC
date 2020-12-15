@@ -6,7 +6,7 @@
 * @version 1.0.0
 * site: www.danyuanblog.com
 */ 
-package com.danyuanblog.framework.popularmvc.demo.controller.request;
+package com.danyuanblog.framework.demo.popularmvc.controller.request;
 
 import java.io.Serializable;
 

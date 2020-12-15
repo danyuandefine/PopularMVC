@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.danyuanblog.framework.popularmvc.demo.startup.Startup;
+import com.danyuanblog.framework.demo.popularmvc.startup.Startup;
 import com.danyuanblog.framework.popularmvc.dto.ApiInfo;
 import com.danyuanblog.framework.popularmvc.utils.SpringBeanUtil;
 

@@ -6,7 +6,7 @@
 * @version 1.0.0
 * site: www.danyuanblog.com
 */ 
-package com.danyuanblog.framework.popularmvc.demo.controller;
+package com.danyuanblog.framework.demo.popularmvc.controller;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,15 +19,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.AccountInfo;
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.SnakeNode;
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.UserInfoDto;
+import com.danyuanblog.framework.demo.popularmvc.controller.request.SignTestRequest;
+import com.danyuanblog.framework.demo.popularmvc.controller.response.SignTestResponse;
 import com.danyuanblog.framework.popularmvc.annotation.Decrypt;
 import com.danyuanblog.framework.popularmvc.annotation.Encrypt;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredSign;
 import com.danyuanblog.framework.popularmvc.consts.SignScope;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.AccountInfo;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.SnakeNode;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.UserInfoDto;
-import com.danyuanblog.framework.popularmvc.demo.controller.request.SignTestRequest;
-import com.danyuanblog.framework.popularmvc.demo.controller.response.SignTestResponse;
 
 @Api(tags = "测试接口安全组件功能")
 @RestController

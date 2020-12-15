@@ -6,7 +6,7 @@
 * @version 1.0.0
 * site: www.danyuanblog.com
 */ 
-package com.danyuanblog.framework.popularmvc.demo.controller;
+package com.danyuanblog.framework.demo.popularmvc.controller;
 
 
 
@@ -18,12 +18,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageInfoDto;
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageTranslateFieldTestDto;
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.UserInfoDto;
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.annotation.IgnoreResponseWrapper;
 import com.danyuanblog.framework.popularmvc.controller.response.SuccessResponse;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.LanguageInfoDto;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.LanguageTranslateFieldTestDto;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.UserInfoDto;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 
 @Api(tags = "测试响应结构自动包装和业务异常的使用")

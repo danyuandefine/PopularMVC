@@ -6,7 +6,7 @@
 * @version 1.0.0
 * site: www.danyuanblog.com
 */ 
-package com.danyuanblog.framework.popularmvc.demo.controller;
+package com.danyuanblog.framework.demo.popularmvc.controller;
 
 import java.util.Arrays;
 
@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.danyuanblog.framework.demo.popularmvc.controller.dto.ParamsCheckDto;
+import com.danyuanblog.framework.demo.popularmvc.controller.request.CustomRequest;
 import com.danyuanblog.framework.popularmvc.annotation.InjectSystemParam;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredCountryCode;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredCurrency;
@@ -34,8 +36,6 @@ import com.danyuanblog.framework.popularmvc.annotation.RequiredTimestamp;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredVersion;
 import com.danyuanblog.framework.popularmvc.consts.DenyRepeatSubmitType;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
-import com.danyuanblog.framework.popularmvc.demo.controller.dto.ParamsCheckDto;
-import com.danyuanblog.framework.popularmvc.demo.controller.request.CustomRequest;
 
 @Api(tags = "测试api请求参数或响应内容的校验")
 @RestController

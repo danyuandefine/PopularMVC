@@ -1,6 +1,7 @@
-spring.messages:
+#spring.messages:
   #业务错误码翻译文件地址
-  basename: i18n/messages/messages
+  #basename: i18n/messages/messages
+  #fallbackToSystemLocale: true
   
 popularmvc:
   #全局默认配置
@@ -15,7 +16,7 @@ popularmvc:
   #是否强制对所有api响应添加响应壳
   #forceAutoAddResponseWrapper: true
   #根包名集合,以逗号分隔
-  basePackages: "com.danyuanblog.framework.popularmvc.demo"
+  basePackages: "com.danyuanblog.framework.demo.popularmvc"
   #是否在控制台打印所有配置信息
   #printAllProperties: true
   error: #错误码相关配置
@@ -37,7 +38,7 @@ popularmvc:
     #业务接口api包名
     swagger: 
       #业务接口所在根包名，swagger会扫描这个包下的内容，生成接口文档
-      basePackage: "com.danyuanblog.framework.popularmvc.demo.controller"  
+      basePackage: "com.danyuanblog.framework.demo.popularmvc.controller"  
       title: "业务API"
       description: "所有业务接口列表"
       termsOfServiceUrl: "www.danyuanblog.com"
