@@ -70,8 +70,11 @@ public class PopularMvcBeanConfigurer {
 
 	@Bean
 	@ConditionalOnMissingBean(CheckRepeatManager.class)
-	public CheckRepeatManager checkRepeatManager() {
-		return new DefaultCheckRepeatManagerImpl();
+	public CheckRepeatManager checkRepeatManager(@Autowired PopularMvcConfig popularMvcConfig, @Autowired CacheManager cacheManager) {
+		DefaultCheckRepeatManagerImpl checkRepeatManager= new DefaultCheckRepeatManagerImpl();
+		checkRepeatManager.setCacheManager(cacheManager);
+		checkRepeatManager.setPopularMvcConfig(popularMvcConfig);
+		return checkRepeatManager;
 	}
 
 	@Bean

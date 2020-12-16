@@ -10,7 +10,7 @@ package com.danyuanblog.framework.popularmvc.consts;
 
 public enum DenyRepeatSubmitType {
 	/**
-	 * 使用从服务器获取防重复提交码模式
+	 * 客户端主动生成全局唯一防重复提交码模式
 	 */
 	GENERATE_TOKEN,
 	/**

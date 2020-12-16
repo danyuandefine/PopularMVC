@@ -52,6 +52,10 @@ public class PopularMvcConfig implements Serializable {
 	 */
 	private Boolean alwaysUseDefaultLocale;
 	/**
+	 * 防重复提交码过期时间
+	 */
+	private Long noSubmitRepeatTimeoutSeconds;
+	/**
 	 * 是否强制对所有api响应添加响应壳
 	 */
 	private Boolean forceAutoAddResponseWrapper;
@@ -69,6 +73,7 @@ public class PopularMvcConfig implements Serializable {
 		this.locale = Locale.CHINA.toString();
 		this.enableLanguageCache = true;
 		this.languageCacheSeconds = 180L;//默认缓存3分钟
+		this.noSubmitRepeatTimeoutSeconds = 120L;//默认2分钟
 		this.alwaysUseDefaultLocale = true;
 		this.forceAutoAddResponseWrapper = true;
 		this.basePackages = "com.danyuanblog.framework.popularmvc";

@@ -39,8 +39,9 @@ public class NoRepeatSubmitInterceptor extends AbstractApiMethodInterceptor {
 		}
 		if(RequestContext.getContext().getApiRestrictions().getUniqueSubmit()){
 			//检查接口防重复提交
-			checkRepeatManager.check(RequestContext.getContext().getRepeatCodeKey(), RequestContext.getContext().getRepeatCode());
+			checkRepeatManager.check(RequestContext.getContext().getRepeatCode());
 		}
+		
 	}
 
 	/**
@@ -49,6 +50,13 @@ public class NoRepeatSubmitInterceptor extends AbstractApiMethodInterceptor {
 	@Override
 	public Object afterInvoke(List<ApiRequestParameter> requestParams, Object resp,
 			Method method, Class<?> targetClass) throws Throwable {
+		if(log.isTraceEnabled()){
+			log.trace("释放接口防重复提交码！");
+		}
+		if(RequestContext.getContext().getApiRestrictions().getUniqueSubmit()){
+			//检查接口防重复提交
+			checkRepeatManager.release(RequestContext.getContext().getRepeatCode());
+		}
 		return resp;
 	}
 

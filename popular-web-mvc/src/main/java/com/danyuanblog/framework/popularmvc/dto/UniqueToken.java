@@ -10,26 +10,16 @@ package com.danyuanblog.framework.popularmvc.dto;
 
 import java.io.Serializable;
 
+import lombok.Data;
+import lombok.experimental.Accessors;
+@Data
+@Accessors(chain = true)
 public class UniqueToken implements Serializable{
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private String token;
+	private Long crtTime;
 	private boolean submit;
-	public String getToken() {
-		return token;
-	}
-	public UniqueToken setToken(String token) {
-		this.token = token;
-		return this;
-	}
-	public boolean isSubmit() {
-		return submit;
-	}
-	public UniqueToken setSubmit(boolean submit) {
-		this.submit = submit;
-		return this;
-	}
 	
 }

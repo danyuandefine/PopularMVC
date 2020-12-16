@@ -35,8 +35,8 @@ public enum ErrorCodes {
 	FORCEOUT_SESSION_ID(130001),//被踢出的会话ID
 	INVALID_SESSION_ID(130002),//无效的会话ID	
 	ERROR_SIGN(130005),//验签失败
-	INVALID_UNIQUE_TOKEN(130006),//防重码无效
-	UNIQUE_TOKEN_USED(130007),//您提交的请求正在处理，请耐心等待
+	UNIQUE_TOKEN_USING(130006),//您提交的请求正在处理，请勿重复提交
+	UNIQUE_TOKEN_USED(130007),//你的请求数据已提交成功，请勿重复提交
 	
 	//接口权限相关错误码	
 	NOT_PERMIT_APPID(140001),//该渠道禁止访问	

@@ -64,10 +64,7 @@ public class RequestContext {
 	 * 对响应信息进行数字签名的结果
 	 */
 	private DefaultResponseWrapper<?> responseWrapper;
-	/**
-	 * 防重复提交码的key
-	 */
-	private String repeatCodeKey;
+
 	/**
 	 * 额外的系统响应参数
 	 */
@@ -106,7 +103,6 @@ public class RequestContext {
         this.apiInfo = null;
         this.session = null;
         this.responseWrapper = null;
-        this.repeatCodeKey = null;        
     }
     
     public String getLocale(){

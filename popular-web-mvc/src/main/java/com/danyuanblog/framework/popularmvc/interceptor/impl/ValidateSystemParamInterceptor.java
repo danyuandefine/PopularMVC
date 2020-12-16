@@ -161,24 +161,25 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		}
 		//校验防重复提交码
 		RequiredNoRepeatSubmit requiredNoRepeatSubmit=method.getAnnotation(RequiredNoRepeatSubmit.class);
-		if(requiredNoRepeatSubmit != null && requiredNoRepeatSubmit.value()){			
+		if(requiredNoRepeatSubmit != null && requiredNoRepeatSubmit.value()){	
+			String timestamp = RequestContext.getContext().getTimestamp();
+			if(StringUtils.isBlank(timestamp)){
+				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
+			}
+			
 			if(DenyRepeatSubmitType.USE_SIGN.equals(requiredNoRepeatSubmit.mode())){
 				String sign = RequestContext.getContext().getSign();
 				if(StringUtils.isBlank(sign)){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getSign());
 				}
-				RequestContext.getContext().setRepeatCodeKey(sign);
+				RequestContext.getContext().setAttachment(
+						SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.REPEAT_CODE), sign);
 			}
-			if(DenyRepeatSubmitType.GENERATE_TOKEN.equals(requiredNoRepeatSubmit.mode())){
-				String timestamp = RequestContext.getContext().getTimestamp();
-				if(StringUtils.isBlank(timestamp)){
-					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
-				}
+			if(DenyRepeatSubmitType.GENERATE_TOKEN.equals(requiredNoRepeatSubmit.mode())){				
 				String repeatCode = RequestContext.getContext().getRepeatCode();
 				if(StringUtils.isBlank(repeatCode)){
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getRepeatCode());
 				}
-				RequestContext.getContext().setRepeatCodeKey(timestamp);
 			}			
 			restrictions.setUniqueSubmit(requiredNoRepeatSubmit.value());
 		}
