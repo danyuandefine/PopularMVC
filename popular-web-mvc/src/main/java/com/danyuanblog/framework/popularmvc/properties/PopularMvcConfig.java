@@ -40,6 +40,14 @@ public class PopularMvcConfig implements Serializable {
 	 */
 	private String locale;
 	/**
+	 * 是否开启多语言翻译缓存
+	 */
+	private Boolean enableLanguageCache;
+	/**
+	 * 多语言缓存的最长时间，单位秒
+	 */
+	private Long languageCacheSeconds;
+	/**
 	 * 当未找到该语言的翻译时，是否使用默认翻译内容
 	 */
 	private Boolean alwaysUseDefaultLocale;
@@ -59,6 +67,8 @@ public class PopularMvcConfig implements Serializable {
 		this.enable = true;
 		this.enableSwagger = true;
 		this.locale = Locale.CHINA.toString();
+		this.enableLanguageCache = true;
+		this.languageCacheSeconds = 180L;//默认缓存3分钟
 		this.alwaysUseDefaultLocale = true;
 		this.forceAutoAddResponseWrapper = true;
 		this.basePackages = "com.danyuanblog.framework.popularmvc";

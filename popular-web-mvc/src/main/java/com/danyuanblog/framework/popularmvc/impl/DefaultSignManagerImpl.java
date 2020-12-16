@@ -16,6 +16,7 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 
 import com.danyuanblog.framework.popularmvc.SignManager;
+import com.danyuanblog.framework.popularmvc.annotation.IgnoreSign;
 import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
 import com.danyuanblog.framework.popularmvc.encrypt.SignEncryptHandler;
 import com.danyuanblog.framework.popularmvc.utils.BeanPropertyUtil;
@@ -34,7 +35,7 @@ public class DefaultSignManagerImpl implements SignManager{
 		Map<String, String> nameValueMap = new HashMap<>();
 		for(ApiRequestParameter param : params){
 			if(param.isNeedSign()){
-				nameValueMap.putAll(BeanPropertyUtil.objToStringMap(param.getParam(), param.getParamName()));
+				nameValueMap.putAll(BeanPropertyUtil.objToStringMap(param.getParam(), param.getParamName(), IgnoreSign.class));
 			}			
 		}
 		//按key进行字符串自然序排序后，进行拼接

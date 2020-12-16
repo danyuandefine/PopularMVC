@@ -20,10 +20,10 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Service;
 
+import com.danyuanblog.framework.popularmvc.CacheManager;
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.properties.ErrorCodeProperties;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
-import com.danyuanblog.framework.popularmvc.utils.CacheUtil;
 import com.danyuanblog.framework.popularmvc.utils.IOUtils;
 import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 
@@ -50,6 +50,9 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 	@Autowired
 	private PopularMvcConfig popularMvcConfig;
 	
+	@Autowired
+	private CacheManager cacheManager;
+	
 	/**
 	 * @param key
 	 * @param locale
@@ -69,9 +72,9 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 		String cacheKey=locale+key;
 		boolean exists = true;
 		do{
-			if(CacheUtil.isPresent(cacheKey)){
+			if(popularMvcConfig.getEnableLanguageCache() && cacheManager.exists(cacheKey)){
 				//命中本地缓存，直接返回
-				value = CacheUtil.get(cacheKey);
+				value = cacheManager.get(cacheKey, String.class);
 				break;
 			}
 			try{		
@@ -118,7 +121,9 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 				if(StringUtils.isEmpty(value)){//如果为空也进行缓存，防止缓存穿透
 					value = "";		        
 				}
-		        CacheUtil.save(cacheKey, value);				
+				if(popularMvcConfig.getEnableLanguageCache()){
+					cacheManager.set(cacheKey, value, popularMvcConfig.getLanguageCacheSeconds());	
+				}		        			
 			}        
 		} while(false);
 		

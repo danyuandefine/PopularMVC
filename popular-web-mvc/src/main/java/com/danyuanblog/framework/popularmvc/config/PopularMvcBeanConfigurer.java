@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import com.danyuanblog.framework.popularmvc.ApplicationManager;
+import com.danyuanblog.framework.popularmvc.CacheManager;
 import com.danyuanblog.framework.popularmvc.CheckRepeatManager;
 import com.danyuanblog.framework.popularmvc.InvokeApiLogManager;
 import com.danyuanblog.framework.popularmvc.InvokeTimesManager;
@@ -33,6 +34,7 @@ import com.danyuanblog.framework.popularmvc.encrypt.impl.AESDataEncryptHandler;
 import com.danyuanblog.framework.popularmvc.encrypt.impl.Sha1SignEncryptHandler;
 import com.danyuanblog.framework.popularmvc.impl.CacheableLanguageTranslateManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultApplicationManagerImpl;
+import com.danyuanblog.framework.popularmvc.impl.DefaultCacheManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultCheckRepeatManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultInvokeApiLogManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultInvokeTimesManagerImpl;
@@ -122,6 +124,11 @@ public class PopularMvcBeanConfigurer {
 	public SecretManager secretManager(@Autowired ChannelConfigProperties channelConfigProperties, @Autowired SystemParameterRenameProperties systemParameterProperties) {
 		DefaultSecretManagerImpl secretManager = new DefaultSecretManagerImpl(channelConfigProperties, systemParameterProperties);
 		return secretManager;
+	}
+	
+	@Bean
+	public CacheManager cacheManager() {
+		return new DefaultCacheManagerImpl();
 	}
 	
 }

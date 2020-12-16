@@ -11,6 +11,8 @@ package com.danyuanblog.framework.popular.mvc.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import com.danyuanblog.framework.popularmvc.annotation.IgnoreSign;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,6 +28,6 @@ public class SkuCurrency implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	private String currency;
-	
+	@IgnoreSign
 	private BigDecimal price;
 }

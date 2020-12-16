@@ -54,10 +54,13 @@ public class BeanPropertyUtil {
 	}
 
 	public static Map<String, String> objToStringMap(Object object, String parentKey) {
-		Set<String> hashCodeSet = new HashSet<>();//防止对象间引用关系存在环状结构
-		return objToStringMap(object, parentKey, hashCodeSet);
+		return objToStringMap(object, parentKey,  null);
 	}
-	public static Map<String, String> objToStringMap(Object object, String parentKey, Set<String> hashCodeSet) {			
+	public static Map<String, String> objToStringMap(Object object, String parentKey, Class<?> ignoreAnno) {
+		Set<String> hashCodeSet = new HashSet<>();//防止对象间引用关系存在环状结构
+		return objToStringMap(object, parentKey, hashCodeSet, ignoreAnno);
+	}
+	public static Map<String, String> objToStringMap(Object object, String parentKey, Set<String> hashCodeSet, Class<?> ignoreAnno) {			
 		Map<String, String> resultMap = new HashMap<>();
 		if(object == null){
 			return resultMap;
@@ -88,7 +91,7 @@ public class BeanPropertyUtil {
                         if(isBaseType(val)){
                         	resultMap.put(currentKey, val.toString());
                         }else if(val instanceof Serializable){
-                        	resultMap.putAll(objToStringMap(val, currentKey, hashCodeSet));
+                        	resultMap.putAll(objToStringMap(val, currentKey, hashCodeSet, ignoreAnno));
                         }
                     }
                 }
@@ -106,12 +109,26 @@ public class BeanPropertyUtil {
                 	if(!StringUtils.isEmpty(parentKey)){
                 		currentKey = parentKey+"["+String.valueOf(i)+"]";
                 	}
-                	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet));
+                	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet, ignoreAnno));
             	}
             }else{//普通对象
             	List<Field> fields = getAllField(object);
+            	boolean ignoreField = false;
                 for (Field field : fields) {
-                	if(hasPublicGetter(field, object)){
+                	ignoreField = false;
+                	if(ignoreAnno != null){
+                		//判断该字段是否需要忽略
+                    	Annotation[] fieldAnnos= field.getAnnotations();
+                    	if(fieldAnnos != null){
+                			for(Annotation anno : fieldAnnos){
+                				if(anno.annotationType().equals(ignoreAnno)){
+                					ignoreField = true;
+                					break;
+                				}
+                			}
+                		}   
+                	}                	
+                	if(!ignoreField && hasPublicGetter(field, object)){
                 		field.setAccessible(true);
                     	Object subObj = field.get(object);
                     	String subKeyName = field.getName();
@@ -119,7 +136,7 @@ public class BeanPropertyUtil {
                     	if(!StringUtils.isEmpty(parentKey)){
                     		currentKey = parentKey+"."+currentKey;
                     	}
-                    	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet));
+                    	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet, ignoreAnno));
                 	}                	
                 }
             } 

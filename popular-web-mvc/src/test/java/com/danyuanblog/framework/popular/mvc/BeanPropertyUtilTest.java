@@ -21,6 +21,7 @@ import com.danyuanblog.framework.popular.mvc.dto.ComplextRequest;
 import com.danyuanblog.framework.popular.mvc.dto.ComplextResponse;
 import com.danyuanblog.framework.popular.mvc.dto.SkuCurrency;
 import com.danyuanblog.framework.popular.mvc.dto.SkuItem;
+import com.danyuanblog.framework.popularmvc.annotation.IgnoreSign;
 import com.danyuanblog.framework.popularmvc.utils.BeanPropertyUtil;
 
 public class BeanPropertyUtilTest {
@@ -45,7 +46,7 @@ public class BeanPropertyUtilTest {
 		req.setTotalSku(4);
 		req.setDesc("这是一个简单的测试!");
 		final AtomicInteger i = new AtomicInteger(0);
-		BeanPropertyUtil.objToStringMap(req, "").forEach((key,val) -> {
+		BeanPropertyUtil.objToStringMap(req, "", IgnoreSign.class).forEach((key,val) -> {
 			System.out.println("第"+ i.addAndGet(1) +"行："+key+"="+val);
 		});
 	}

@@ -12,6 +12,7 @@ import java.util.Locale;
 
 import lombok.AllArgsConstructor;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
@@ -20,6 +21,7 @@ import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 
 @Setter
 @AllArgsConstructor
+@Slf4j
 public class DefaultLanguageTranslateManagerImpl implements LanguageTranslateManager{
 
 	private MessageSource messageSource;
@@ -31,10 +33,15 @@ public class DefaultLanguageTranslateManagerImpl implements LanguageTranslateMan
 	 */
 	@Override
 	public String get(String key, String localeName, Object... params) {
-		Locale locale = new Locale(localeName);
+		
 		try{
+			String[] arr = localeName.split("_");
+			Locale locale = new Locale(arr[0], arr[1]);
 			return messageSource.getMessage(key, params, locale);
 		}catch(NoSuchMessageException e){
+			return key;
+		}catch(Exception e){
+			log.warn("Unkown locale [{}]", localeName);
 			return key;
 		}		
 	}
@@ -44,10 +51,14 @@ public class DefaultLanguageTranslateManagerImpl implements LanguageTranslateMan
 	 */
 	@Override
 	public String get(String key, Object... params) {
-		Locale locale = new Locale(this.getDefaultLocale());
 		try{
+			String[] arr = this.getDefaultLocale().split("_");
+			Locale locale = new Locale(arr[0], arr[1]);
 			return messageSource.getMessage(key, params, locale);
 		}catch(NoSuchMessageException e){
+			return key;
+		}catch(Exception e){
+			log.warn("Unkown default locale [{}]", this.getDefaultLocale());
 			return key;
 		}
 	}

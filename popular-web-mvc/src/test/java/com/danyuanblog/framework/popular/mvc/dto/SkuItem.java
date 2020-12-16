@@ -12,6 +12,8 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.List;
 
+import com.danyuanblog.framework.popularmvc.annotation.IgnoreSign;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -25,6 +27,7 @@ public class SkuItem implements Serializable{/**
 	private static final long serialVersionUID = 1L;
 	private Integer skuId;
 	private String skuName;
+	@IgnoreSign
 	private BigDecimal price;
 	private List<SkuCurrency> priceList;
 }
