@@ -1,7 +1,6 @@
-#spring.messages:
+spring.messages:
   #业务错误码翻译文件地址
-  #basename: i18n/messages/messages
-  #fallbackToSystemLocale: true
+  basename: i18n/messages/messages
   
 popularmvc:
   #全局默认配置
@@ -11,6 +10,12 @@ popularmvc:
   #enableSwagger: true
   #默认语言,请求中或者会话中不存在语言参数时的默认取值
   #locale: "zh_CN"
+  #是否开启多语言翻译缓存
+  #enableLanguageCache: false
+  #多语言缓存的最长时间，单位秒
+  #languageCacheSeconds: 180
+  #防重复提交码过期时间
+  #noSubmitRepeatTimeoutSeconds: 120
   #当未找到该语言的翻译时，是否使用默认翻译内容
   #alwaysUseDefaultLocale: false
   #是否强制对所有api响应添加响应壳
