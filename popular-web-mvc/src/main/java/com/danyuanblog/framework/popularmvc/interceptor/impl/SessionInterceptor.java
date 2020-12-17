@@ -49,10 +49,10 @@ public class SessionInterceptor extends AbstractApiMethodInterceptor {
 		if(RequestContext.getContext().getApiRestrictions().getSession()){
 			//检查会话信息
 			String sessionId = RequestContext.getContext().getSessionId();
-			if(!sessionManager.exists(sessionId)){
-				throw new BusinessException(ErrorCodes.INVALID_SESSION_ID).setParam(systemParameterProperties.getSessionId(), sessionId);
-			}
 			Session session = sessionManager.get(sessionId);
+			if(session == null){
+				throw new BusinessException(ErrorCodes.INVALID_SESSION_ID).setParam(systemParameterProperties.getSessionId(), sessionId);
+			}			
 			RequestContext.getContext().setSession(session);
 		}
 	}

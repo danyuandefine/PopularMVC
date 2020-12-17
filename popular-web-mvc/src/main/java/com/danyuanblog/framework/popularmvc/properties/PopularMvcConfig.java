@@ -56,6 +56,10 @@ public class PopularMvcConfig implements Serializable {
 	 */
 	private Long noSubmitRepeatTimeoutSeconds;
 	/**
+	 * 会话失效时间
+	 */
+	private Long sessionExpireSeconds;
+	/**
 	 * 是否强制对所有api响应添加响应壳
 	 */
 	private Boolean forceAutoAddResponseWrapper;
@@ -74,6 +78,7 @@ public class PopularMvcConfig implements Serializable {
 		this.enableLanguageCache = true;
 		this.languageCacheSeconds = 180L;//默认缓存3分钟
 		this.noSubmitRepeatTimeoutSeconds = 120L;//默认2分钟
+		this.sessionExpireSeconds = 600L; //默认10分钟
 		this.alwaysUseDefaultLocale = true;
 		this.forceAutoAddResponseWrapper = true;
 		this.basePackages = "com.danyuanblog.framework.popularmvc";

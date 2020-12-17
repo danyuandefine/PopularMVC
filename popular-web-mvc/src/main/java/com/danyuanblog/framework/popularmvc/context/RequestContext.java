@@ -108,6 +108,10 @@ public class RequestContext {
         this.apiInfo = null;
         this.session = null;
         this.responseWrapper = null;
+        this.method = null;
+        this.handler = null;
+        this.request = null;
+        this.response = null;
     }
     
     public String getLocale(){

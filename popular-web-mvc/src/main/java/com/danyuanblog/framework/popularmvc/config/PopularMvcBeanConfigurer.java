@@ -85,8 +85,11 @@ public class PopularMvcBeanConfigurer {
 
 	@Bean
 	@ConditionalOnMissingBean(SessionManager.class)
-	public SessionManager sessionManager() {
-		return new DefaultSessionManagerImpl();
+	public SessionManager sessionManager(@Autowired CacheManager cacheManager, @Autowired PopularMvcConfig popularMvcConfig) {
+		DefaultSessionManagerImpl sessionManager = new DefaultSessionManagerImpl();
+		sessionManager.setCacheManager(cacheManager);
+		sessionManager.setExpireSeconds(popularMvcConfig.getSessionExpireSeconds());
+		return sessionManager;
 	}
 	
 	@Bean

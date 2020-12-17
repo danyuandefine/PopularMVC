@@ -78,11 +78,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 			String sessionId = RequestContext.getContext().getSessionId();
 			if(StringUtils.isBlank(sessionId)){
 				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getSessionId());
-			}
-			String timestamp = RequestContext.getContext().getTimestamp();
-			if(StringUtils.isBlank(timestamp)){
-				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
-			}
+			}			
 			restrictions.setSession(requiredSession.value());
 		}
 		//检查多语言

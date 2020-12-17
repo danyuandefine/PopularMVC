@@ -1,5 +1,5 @@
 /**  
-* Title LocalCacheContainer.java  
+* Title LocalWriteCacheContainer.java  
 * Description  本地缓存管理器，以失效时间为key进行管理
 * @author danyuan
 * @date Dec 17, 2020
@@ -17,7 +17,7 @@ import java.util.concurrent.locks.ReentrantLock;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
 
-public class LocalCacheContainer {
+public class LocalWriteCacheContainer {
 	/**
 	 * 单个缓存管理器最多能缓存多少key
 	 */
@@ -25,7 +25,7 @@ public class LocalCacheContainer {
 	/**
 	 * 最多允许开启多少个缓存
 	 */
-	private static final Long MAX_CACHE_NUM = 20L;
+	private static final Long MAX_CACHE_NUM = 2000L;
 	/**
 	 * 默认缓存管理器超时时间,3分钟
 	 */

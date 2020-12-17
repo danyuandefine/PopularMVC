@@ -39,10 +39,6 @@ public class Session implements Serializable{
 	 */
 	private String userId;
 	/**
-	 * 客户端通过秘钥+参数进行验签后生成的数字签名
-	 */
-	private String sign;
-	/**
 	 * 客户端ID,用于区分是哪个APP或者其他客户端的不同分支
 	 */
 	private String clientId;
@@ -50,14 +46,6 @@ public class Session implements Serializable{
 	 * 客户端版本号
 	 */
 	private String versionCode;
-	/**
-	 * 防重复提交码,用来控制接口防重复提交
-	 */
-	private String repeatCode;
-	/**
-	 * 时间戳
-	 */
-	private Long timestamp;
 	/**
 	 * 客户端IP地址
 	 */

@@ -22,11 +22,14 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -90,6 +93,22 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
 			List<HandlerMethodArgumentResolver> resolvers) {
 		WebMvcConfigurer.super.addArgumentResolvers(resolvers);
 	}
+	
+
+	@Override
+	public void configureMessageConverters(
+			List<HttpMessageConverter<?>> converters) {
+		// 添加默认转换器
+		converters.addAll(new WebMvcConfigurationSupport() {
+
+			public List<HttpMessageConverter<?>> defaultMessageConverters() {
+				return super.getMessageConverters();
+			}
+
+		}.defaultMessageConverters());			
+		converters.removeIf(httpMessageConverter -> httpMessageConverter.getClass() == StringHttpMessageConverter.class);
+		
+	}	
 
 	@Override
 	public Validator getValidator() {
@@ -104,4 +123,6 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
         registration.addUrlPatterns("/*");
         return registration;
     }
+
+
 }

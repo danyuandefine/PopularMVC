@@ -15,30 +15,55 @@ import com.danyuanblog.framework.popularmvc.dto.CacheManagerState;
 
 public interface CacheManager {
 	/**
-	 * 保存一个缓存，并设置过期时间
+	 * 保存一个缓存，并设置过期时间,默认为写后超时模式
 	 * @author danyuan
 	 */
 	void set(String key, Object value, Long expireSeconds);
 	/**
-	 * 是否存在该缓存
+	 * 保存一个缓存，并设置过期时间
+	 * @author danyuan
+	 */
+	void set(String key, Object value, Long expireSeconds, boolean refreshAfterWrite);
+	/**
+	 * 是否存在该缓存,默认为写后超时模式
 	 * @author danyuan
 	 */
 	boolean exists(String key);
 	/**
-	 * 获取一个缓存
+	 * 是否存在该缓存
+	 * @author danyuan
+	 */
+	boolean exists(String key, boolean refreshAfterWrite);
+	/**
+	 * 获取一个缓存,默认为写后超时模式
 	 * @author danyuan
 	 */
 	<T> T get(String key, Class<T> type);
 	/**
-	 * 重新设置一个缓存的超时时间
+	 * 获取一个缓存
+	 * @author danyuan
+	 */
+	<T> T get(String key, Class<T> type, boolean refreshAfterWrite);
+	/**
+	 * 重新设置一个缓存的超时时间,默认为写后超时模式
 	 * @author danyuan
 	 */
 	void setExpire(String key, Long expireSeconds);
 	/**
-	 * 删除缓存
+	 * 重新设置一个缓存的超时时间
+	 * @author danyuan
+	 */
+	void setExpire(String key, Long expireSeconds, boolean refreshAfterWrite);
+	/**
+	 * 删除缓存,默认为写后超时模式
 	 * @author danyuan
 	 */
 	void remove(String key);
+	/**
+	 * 删除缓存
+	 * @author danyuan
+	 */
+	void remove(String key, boolean refreshAfterWrite);
 	/**
 	 * 清空所有缓存
 	 * @author danyuan
