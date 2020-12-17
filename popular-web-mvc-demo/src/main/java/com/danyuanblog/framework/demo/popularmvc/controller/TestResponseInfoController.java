@@ -79,5 +79,26 @@ public class TestResponseInfoController {
 		user.setDesc(desc);		
 		return user;
 	}
+	
+	@GetMapping(value="testWrapStringResponse",
+			name="测试自动包装字符串返回值")
+	@ApiOperation(value="测试自动包装字符串返回值", notes="测试自动包装字符串返回值")
+	public String testWrapStringResponse(){
+		return "this is a string result !";
+	}
+	
+	@GetMapping(value="testWrapIntegerResponse",
+			name="测试自动包装数字型返回值")
+	@ApiOperation(value="测试自动包装数字型返回值", notes="测试自动包装数字型返回值")
+	public Integer testWrapIntegerResponse(){
+		return 22;
+	}
+	
+	@GetMapping(value="testWrapBooleanResponse",
+			name="测试自动包装bool型返回值")
+	@ApiOperation(value="测试自动包装bool型返回值", notes="测试自动包装bool型返回值")
+	public Boolean testWrapBooleanResponse(){
+		return true;
+	}
 		
 }

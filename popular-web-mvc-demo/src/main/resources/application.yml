@@ -16,6 +16,8 @@ popularmvc:
   #languageCacheSeconds: 180
   #防重复提交码过期时间
   #noSubmitRepeatTimeoutSeconds: 120
+  #用户会话失效时间
+  #sessionExpireSeconds: 600
   #当未找到该语言的翻译时，是否使用默认翻译内容
   #alwaysUseDefaultLocale: false
   #是否强制对所有api响应添加响应壳
