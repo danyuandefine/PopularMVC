@@ -18,18 +18,25 @@ import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.dataformat.FieldDataFormatHandler;
 import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
+import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 import com.danyuanblog.framework.popularmvc.interceptor.AbstractApiMethodInterceptor;
 import com.danyuanblog.framework.popularmvc.utils.BeanPropertyUtil;
+import com.danyuanblog.framework.popularmvc.utils.IOUtils;
 
 @Service
 @Slf4j
 public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 
 	private static List<FieldDataFormatHandler> handlers = new ArrayList<>();
+	
+	@Autowired
+	private LanguageTranslateManager languageTranslateManager;
 	
 	public static void addDataFormatHandler(FieldDataFormatHandler handler){
 		handlers.add(handler);
@@ -79,8 +86,10 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 						if(handler.handleRequest()){
 							try{
 								data = handler.handle(fieldName, data, annotations);
+							}catch(BusinessException e){
+								log.warn(languageTranslateManager.get(e.getMessage(), e.getParams()));
 							}catch(Exception e){
-								log.warn(e.getMessage());
+								log.warn(IOUtils.getThrowableInfo(e));
 							}							
 						}						
 					}						
@@ -112,8 +121,10 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 				if(handler.handleResponse()){
 					try{
 						data = handler.handle(fieldName, data, annotations);
+					}catch(BusinessException e){
+						log.warn(languageTranslateManager.get(e.getMessage(), e.getParams()));
 					}catch(Exception e){
-						log.warn(e.getMessage());
+						log.warn(IOUtils.getThrowableInfo(e));
 					}	
 				}				
 			}				

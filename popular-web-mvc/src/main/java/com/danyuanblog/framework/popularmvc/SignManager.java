@@ -11,12 +11,9 @@ package com.danyuanblog.framework.popularmvc;
 import java.util.List;
 
 import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
-import com.danyuanblog.framework.popularmvc.encrypt.SignEncryptHandler;
 
 public interface SignManager {
-	
-	void setSignEncryptHandler(SignEncryptHandler signEncryptHandler);
-	
+		
 	/**
 	 * 生成数字签名
 	 * @author danyuan

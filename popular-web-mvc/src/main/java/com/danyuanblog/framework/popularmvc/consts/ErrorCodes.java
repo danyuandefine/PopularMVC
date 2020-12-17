@@ -44,8 +44,13 @@ public enum ErrorCodes {
 	EXCEED_USER_INVOKE_LIMITED(140003),//用户总调用次数超限
 	EXCEED_SESSION_INVOKE_LIMITED(140004),//用户该次会话内调用次数超限
 	EXCEED_APP_INVOKE_LIMITED(140005),//渠道总调用次数超限
-	EXCEED_APP_INVOKE_FREQUENCY_LIMITED(140006)//渠道单位时间内调用频次超限
+	EXCEED_APP_INVOKE_FREQUENCY_LIMITED(140006),//渠道单位时间内调用频次超限
+	
+	//管理配置错误
+	NOT_FOUND_CONFIG(150001)//未找到配置信息	
 	;
+	
+	
 	private Integer code;
 	private String msgCode;
 	private ErrorCodes(Integer code)

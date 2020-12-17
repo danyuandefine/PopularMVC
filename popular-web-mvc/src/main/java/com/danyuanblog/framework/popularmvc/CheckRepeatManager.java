@@ -19,8 +19,13 @@ public interface CheckRepeatManager {
 	 */
 	void check(String key);
 	/**
-	 * 提交成功后，主动释放防重复码
+	 * 提交失败后，主动释放防重复码
 	 * @author danyuan
 	 */
 	void release(String key);
+	/**
+	 * 标记防重复提交码已经被成功使用
+	 * @author danyuan
+	 */
+	void used(String key);
 }

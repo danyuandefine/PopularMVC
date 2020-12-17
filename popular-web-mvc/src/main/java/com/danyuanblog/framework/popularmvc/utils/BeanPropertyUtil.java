@@ -65,15 +65,17 @@ public class BeanPropertyUtil {
 		if(object == null){
 			return resultMap;
 		}
-		if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
-			return resultMap;
-		}
-		hashCodeSet.add(String.valueOf(object.hashCode()));
+		if(!isBaseType(object)){//非基础数据类型需要防止重复引用的问题
+			if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
+				return resultMap;
+			}
+			hashCodeSet.add(String.valueOf(object.hashCode()));
+		}		
         if(parentKey == null){
         	parentKey = "";
         }
         try {
-            if (object==null || isBaseType(object)){
+            if (isBaseType(object)){
                 //如果object是null/基本数据类型/包装类/日期类型，则不需要在递归调用
             	if(object != null){
             		resultMap.put(parentKey, object.toString());
@@ -161,10 +163,12 @@ public class BeanPropertyUtil {
 		if(object == null){
 			return fun.decorate(fieldName, object, annotations);
 		}
-		if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
-			return fun.decorate(fieldName, object, annotations);
-		}
-		hashCodeSet.add(String.valueOf(object.hashCode()));
+		if(!isBaseType(object)){//非基础数据类型需要防止重复引用的问题
+			if(hashCodeSet.contains(String.valueOf(object.hashCode()))){
+				return fun.decorate(fieldName, object, annotations);
+			}
+			hashCodeSet.add(String.valueOf(object.hashCode()));
+		}		
 		Annotation[] currentAnnotations = object.getClass().getAnnotations();//获取类上的注解
 		Map<Class<?>, Annotation> allAnnos = new HashMap<>();
 		if(annotations != null){

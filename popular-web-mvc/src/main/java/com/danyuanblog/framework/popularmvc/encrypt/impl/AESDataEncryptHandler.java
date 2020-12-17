@@ -11,19 +11,18 @@ package com.danyuanblog.framework.popularmvc.encrypt.impl;
 import lombok.Setter;
 import lombok.experimental.Accessors;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.danyuanblog.framework.popularmvc.SecretManager;
+import com.danyuanblog.framework.popularmvc.consts.ErrorCodes;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.dto.SecretInfo;
 import com.danyuanblog.framework.popularmvc.encrypt.DataEncryptHandler;
+import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 import com.danyuanblog.framework.popularmvc.utils.EncryptUtils;
 
 @Setter
 @Accessors(chain = true)
 public class AESDataEncryptHandler implements DataEncryptHandler {
 
-	@Autowired
 	private SecretManager secretManager;
 	/**
 	 * @author danyuan
@@ -38,8 +37,8 @@ public class AESDataEncryptHandler implements DataEncryptHandler {
 				RequestContext.getContext().getSessionId());
 		if(secret != null){
 			return EncryptUtils.encodeAES128(secret.getSecret(), content);
-		}		
-		return content;
+		}
+		throw new BusinessException(ErrorCodes.NOT_FOUND_CONFIG).setParam("secret_key");
 	}
 
 	/**
@@ -55,7 +54,7 @@ public class AESDataEncryptHandler implements DataEncryptHandler {
 		if(secret != null){
 			return EncryptUtils.decodeAES128(secret.getSecret(), content);
 		}		
-		return content;
+		throw new BusinessException(ErrorCodes.NOT_FOUND_CONFIG).setParam("secret_key");
 	}
 
 }

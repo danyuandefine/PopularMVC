@@ -8,6 +8,7 @@
 */ 
 package com.danyuanblog.framework.popularmvc.context;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -36,6 +37,10 @@ public class RequestContext {
     };
     
     private Class<?> targetClass;
+    /**
+     * 当前执行的方法信息
+     */
+    private Method method;
     /**
      * 当前执行的方法
      */

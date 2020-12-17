@@ -54,8 +54,8 @@ public class NoRepeatSubmitInterceptor extends AbstractApiMethodInterceptor {
 			log.trace("释放接口防重复提交码！");
 		}
 		if(RequestContext.getContext().getApiRestrictions().getUniqueSubmit()){
-			//检查接口防重复提交
-			checkRepeatManager.release(RequestContext.getContext().getRepeatCode());
+			//标记接口防重复提交成功
+			checkRepeatManager.used(RequestContext.getContext().getRepeatCode());
 		}
 		return resp;
 	}

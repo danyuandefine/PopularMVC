@@ -52,9 +52,19 @@ public class DefaultCheckRepeatManagerImpl implements CheckRepeatManager {
 	 */
 	@Override
 	public void release(String key) {
+		cacheManager.remove(key);	
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public void used(String key) {
 		UniqueToken token = cacheManager.get(key, UniqueToken.class);
-		token.setSubmit(true);
-		cacheManager.set(key, token, popularMvcConfig.getNoSubmitRepeatTimeoutSeconds());
+		if(token != null && !token.isSubmit()){
+			token.setSubmit(true);
+			cacheManager.set(key, token, popularMvcConfig.getNoSubmitRepeatTimeoutSeconds());
+		}	
 	}
 
 }

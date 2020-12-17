@@ -92,8 +92,7 @@ public class PopularMvcBeanConfigurer {
 	@Bean
 	@ConditionalOnMissingBean(SignManager.class)
 	public SignManager signManager(@Autowired SignEncryptHandler signEncryptHandler) {
-		SignManager signManager = new DefaultSignManagerImpl();
-		signManager.setSignEncryptHandler(signEncryptHandler);
+		DefaultSignManagerImpl signManager = new DefaultSignManagerImpl();
 		return signManager;
 	}
 	

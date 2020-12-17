@@ -65,7 +65,7 @@ public class SignInterceptor extends AbstractApiMethodInterceptor {
 			}
 		}else if(RequestContext.getContext().getApiRestrictions().getRequestSign()){
 			log.warn("渠道和应用的验签秘钥配置均为空，无法进行进行验签，请先配置!");
-			throw new BusinessException(ErrorCodes.UNKOWN_ERROR).setParam("渠道和应用验签秘钥配置均为空，无法进行进行验签，请先配置!");
+			throw new BusinessException(ErrorCodes.NOT_FOUND_CONFIG).setParam("secret_key");
 		}
 	}
 

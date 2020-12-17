@@ -112,7 +112,9 @@ public class LocalCacheContainer {
 	public static Object get(String key){
 		for(Cache<String,Object> cache : cacheMap.values()){
 			Object content = cache.getIfPresent(key);
-			return content;
+			if(content != null){
+				return content;
+			}			
 		}
 		return null;
 	}
