@@ -12,6 +12,10 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -26,11 +30,14 @@ import com.danyuanblog.framework.demo.popularmvc.controller.request.SignTestRequ
 import com.danyuanblog.framework.demo.popularmvc.controller.response.SignTestResponse;
 import com.danyuanblog.framework.popularmvc.annotation.Decrypt;
 import com.danyuanblog.framework.popularmvc.annotation.Encrypt;
+import com.danyuanblog.framework.popularmvc.annotation.RequiredNoRepeatSubmit;
 import com.danyuanblog.framework.popularmvc.annotation.RequiredSign;
+import com.danyuanblog.framework.popularmvc.consts.DenyRepeatSubmitType;
 import com.danyuanblog.framework.popularmvc.consts.SignScope;
 
 @Api(tags = "测试接口安全组件功能")
 @RestController
+@Slf4j
 public class TestSecurityComponentsController {
 
 	@PostMapping(value="testSign",
@@ -88,5 +95,41 @@ public class TestSecurityComponentsController {
 		user.setAge(18);
 		user.setDesc("this is a encrypt test .");		
 		return user;
+	}
+	
+	@GetMapping(value="testEncryptListResponseData",
+			name="测试加密列表响应信息")
+	@ApiOperation(value="测试加密列表响应信息", notes="测试加密列表响应信息")
+	public List<UserInfoDto> testEncryptListResponseData(){
+		List<UserInfoDto> list = new ArrayList<>();
+		UserInfoDto user1 = new UserInfoDto();
+		user1.setUsername("danyuan");
+		user1.setAge(18);
+		user1.setDesc("this is a encrypt test 1 .");
+		UserInfoDto user2 = new UserInfoDto();
+		user2.setUsername("小明");
+		user2.setAge(22);
+		user2.setDesc("this is a encrypt test 2 .");
+		list.add(user1);
+		list.add(user2);
+		return list;
+		
+	}
+	
+	@PostMapping(value="testUserAccountRegistNoRepeatSubmit",
+			name="测试注册用户账号接口防重复提交功能")
+	@ApiOperation(value="测试注册用户账号接口防重复提交功能", notes="防重复提交码由客户端生成，防止同一用户重复注册!")
+	@RequiredNoRepeatSubmit(mode = DenyRepeatSubmitType.GENERATE_TOKEN)
+	public void testUserAccountRegistNoRepeatSubmit(@RequestBody UserInfoDto userInfo){
+		log.info("保存用户信息成功[{}]!",userInfo.toString());
+	}
+	
+	@PostMapping(value="testUserAccountRegistNoRepeatSubmitBySign",
+			name="测试注册用户账号接口防重复提交功能数字签名模式")
+	@ApiOperation(value="测试注册用户账号接口防重复提交功能数字签名模式", notes="使用数字签名，防止同一用户重复注册!")
+	@RequiredNoRepeatSubmit(mode = DenyRepeatSubmitType.USE_SIGN)
+	@RequiredSign
+	public void testUserAccountRegistNoRepeatSubmitBySign(@RequestBody UserInfoDto userInfo){
+		log.info("保存用户信息成功[{}]!",userInfo.toString());
 	}
 }
