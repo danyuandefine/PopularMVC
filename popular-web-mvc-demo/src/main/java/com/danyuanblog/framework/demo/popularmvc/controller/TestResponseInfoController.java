@@ -22,6 +22,7 @@ import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageInfoDto;
 import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageTranslateFieldTestDto;
 import com.danyuanblog.framework.demo.popularmvc.controller.dto.UserInfoDto;
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
+import com.danyuanblog.framework.popularmvc.annotation.CacheMethodResult;
 import com.danyuanblog.framework.popularmvc.annotation.IgnoreResponseWrapper;
 import com.danyuanblog.framework.popularmvc.controller.response.SuccessResponse;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
@@ -84,6 +85,14 @@ public class TestResponseInfoController {
 			name="测试自动包装字符串返回值")
 	@ApiOperation(value="测试自动包装字符串返回值", notes="测试自动包装字符串返回值")
 	public String testWrapStringResponse(){
+		return "this is a string result !";
+	}
+	
+	@GetMapping(value="testIgnoreStringResponseWrapper",
+			name="测试忽略自动包装字符串返回值")
+	@ApiOperation(value="测试忽略自动包装字符串返回值", notes="测试忽略自动包装字符串返回值")
+	@IgnoreResponseWrapper
+	public String testIgnoreStringResponseWrapper(){
 		return "this is a string result !";
 	}
 	
