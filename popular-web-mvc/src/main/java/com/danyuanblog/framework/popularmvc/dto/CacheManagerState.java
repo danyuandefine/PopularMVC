@@ -11,18 +11,20 @@ package com.danyuanblog.framework.popularmvc.dto;
 import java.io.Serializable;
 
 import lombok.Data;
+import lombok.experimental.Accessors;
 
 @Data
+@Accessors(chain = true)
 public class CacheManagerState implements Serializable {
 	/**
 	 * serialVersionUID
 	 */
 	private static final long serialVersionUID = 1L;
 	private String cacheName;
-	private final long hitCount;
-	private final long missCount;
-	private final long loadSuccessCount;
-	private final long loadTotalCount;
-	private final long totalLoadTime;
-	private final long evictionCount;
+	private long hitCount;
+	private long missCount;
+	private long loadSuccessCount;
+	private long loadTotalCount;
+	private long totalLoadTime;
+	private long evictionCount;
 }

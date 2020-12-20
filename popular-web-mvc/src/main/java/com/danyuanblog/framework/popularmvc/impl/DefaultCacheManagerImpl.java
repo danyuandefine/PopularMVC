@@ -8,7 +8,9 @@
 */ 
 package com.danyuanblog.framework.popularmvc.impl;
 
-import java.util.List;
+import java.util.Map;
+
+import lombok.Setter;
 
 import com.danyuanblog.framework.popularmvc.CacheManager;
 import com.danyuanblog.framework.popularmvc.cache.LocalReadCacheContainer;
@@ -16,8 +18,13 @@ import com.danyuanblog.framework.popularmvc.cache.LocalWriteCacheContainer;
 import com.danyuanblog.framework.popularmvc.consts.CacheExpireMode;
 import com.danyuanblog.framework.popularmvc.dto.CacheManagerState;
 
+@Setter
 public class DefaultCacheManagerImpl implements CacheManager {
 
+	private LocalWriteCacheContainer localWriteCacheContainer;
+	
+	private LocalReadCacheContainer localReadCacheContainer;
+	
 	/**
 	 * @author danyuan
 	 */
@@ -29,18 +36,18 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	@Override
 	public void set(String key, Object value, Long expireSeconds, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			LocalWriteCacheContainer.set(key, value, expireSeconds);
+			localWriteCacheContainer.set(key, value, expireSeconds);
 		}else{
-			LocalReadCacheContainer.set(key, value, expireSeconds);
+			localReadCacheContainer.set(key, value, expireSeconds);
 		}		
 	}
 
 	@Override
 	public void set(String key, Object value, Long expireSeconds, Long oldExpireSeconds, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			LocalWriteCacheContainer.set(key, value, expireSeconds, oldExpireSeconds);
+			localWriteCacheContainer.set(key, value, expireSeconds, oldExpireSeconds);
 		}else{
-			LocalReadCacheContainer.set(key, value, expireSeconds, oldExpireSeconds);
+			localReadCacheContainer.set(key, value, expireSeconds, oldExpireSeconds);
 		}		
 	}
 	/**
@@ -59,9 +66,9 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	@Override
 	public boolean exists(String key, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			return LocalWriteCacheContainer.exists(key);
+			return localWriteCacheContainer.exists(key);
 		}else{
-			return LocalReadCacheContainer.exists(key);
+			return localReadCacheContainer.exists(key);
 		}
 		
 	}
@@ -69,9 +76,9 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	@Override
 	public boolean exists(String key, Long expireSeconds, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			return LocalWriteCacheContainer.exists(key, expireSeconds);
+			return localWriteCacheContainer.exists(key, expireSeconds);
 		}else{
-			return LocalReadCacheContainer.exists(key, expireSeconds);
+			return localReadCacheContainer.exists(key, expireSeconds);
 		}
 		
 	}
@@ -94,9 +101,9 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	public <T> T get(String key, Class<T> type, CacheExpireMode mode) {
 		Object content = null;
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			content = LocalWriteCacheContainer.get(key);
+			content = localWriteCacheContainer.get(key);
 		}else{
-			content = LocalReadCacheContainer.get(key);
+			content = localReadCacheContainer.get(key);
 		}
 		if(content != null && content.getClass().isAssignableFrom(type)){
 			return (T)content;
@@ -108,9 +115,9 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	public Object get(String key, Long expireSeconds, CacheExpireMode mode){
 		Object content = null;
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			content = LocalWriteCacheContainer.get(key, expireSeconds);
+			content = localWriteCacheContainer.get(key, expireSeconds);
 		}else{
-			content = LocalReadCacheContainer.get(key, expireSeconds);
+			content = localReadCacheContainer.get(key, expireSeconds);
 		}
 		return content;
 	}
@@ -141,18 +148,18 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	@Override
 	public void setExpire(String key, Long expireSeconds, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			LocalWriteCacheContainer.setExpire(key, expireSeconds);
+			localWriteCacheContainer.setExpire(key, expireSeconds);
 		}else{
-			LocalReadCacheContainer.setExpire(key, expireSeconds);
+			localReadCacheContainer.setExpire(key, expireSeconds);
 		}		
 	}
 	
 	@Override
 	public void setExpire(String key, Long expireSeconds, Long oldExpireSeconds, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			LocalWriteCacheContainer.setExpire(key, expireSeconds, oldExpireSeconds);
+			localWriteCacheContainer.setExpire(key, expireSeconds, oldExpireSeconds);
 		}else{
-			LocalReadCacheContainer.setExpire(key, expireSeconds, oldExpireSeconds);
+			localReadCacheContainer.setExpire(key, expireSeconds, oldExpireSeconds);
 		}		
 	}
 
@@ -172,18 +179,18 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	@Override
 	public void remove(String key, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			LocalWriteCacheContainer.remove(key);
+			localWriteCacheContainer.remove(key);
 		}else{
-			LocalReadCacheContainer.remove(key);
+			localReadCacheContainer.remove(key);
 		}
 		
 	}
 	@Override
 	public void remove(String key, Long expireSeconds, CacheExpireMode mode) {
 		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
-			LocalWriteCacheContainer.remove(key, expireSeconds);
+			localWriteCacheContainer.remove(key, expireSeconds);
 		}else{
-			LocalReadCacheContainer.remove(key, expireSeconds);
+			localReadCacheContainer.remove(key, expireSeconds);
 		}
 		
 	}
@@ -193,22 +200,50 @@ public class DefaultCacheManagerImpl implements CacheManager {
 	 */
 	@Override
 	public void clear() {
-		LocalWriteCacheContainer.clear(null);
-		LocalReadCacheContainer.clear(null);
+		localWriteCacheContainer.clear(null);
+		localReadCacheContainer.clear(null);
 	}
 
 	@Override
 	public void clear(Long expireSeconds) {
-		LocalWriteCacheContainer.clear(expireSeconds);
-		LocalReadCacheContainer.clear(expireSeconds);
+		localWriteCacheContainer.clear(expireSeconds);
+		localReadCacheContainer.clear(expireSeconds);
 	}
 	
 	/**
 	 * @author danyuan
 	 */
 	@Override
-	public List<CacheManagerState> stats() {
-		return null;
+	public Map<String, CacheManagerState> stats(CacheExpireMode mode) {
+		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
+			return localWriteCacheContainer.stats(null);
+		}else{
+			return localReadCacheContainer.stats(null);
+		}
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public Map<String, Map<String, Object>> getAllCaches(CacheExpireMode mode) {
+		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
+			return localWriteCacheContainer.getCaches(null);
+		}else{
+			return localReadCacheContainer.getCaches(null);
+		}
+	}
+
+	/**
+	 * @author danyuan
+	 */
+	@Override
+	public Map<String, Object> getCaches(Long expireSeconds, CacheExpireMode mode) {
+		if(CacheExpireMode.EXPIRE_AFTER_WRITE.equals(mode)){
+			return localWriteCacheContainer.getCaches(expireSeconds).get(expireSeconds);
+		}else{
+			return localReadCacheContainer.getCaches(expireSeconds).get(expireSeconds);
+		}
 	}
 
 }

@@ -9,7 +9,7 @@
 */ 
 package com.danyuanblog.framework.popularmvc;
 
-import java.util.List;
+import java.util.Map;
 
 import com.danyuanblog.framework.popularmvc.consts.CacheExpireMode;
 import com.danyuanblog.framework.popularmvc.dto.CacheManagerState;
@@ -135,6 +135,16 @@ public interface CacheManager {
 	 * 缓存管理器统计数据
 	 * @author danyuan
 	 */
-	List<CacheManagerState> stats();
+	Map<String, CacheManagerState> stats(CacheExpireMode mode);
+	/**
+	 * 查询所有缓存信息
+	 * @author danyuan
+	 */
+	Map<String, Map<String, Object>> getAllCaches(CacheExpireMode mode);
+	/**
+	 * 查询某个时间失效的所有缓存信息
+	 * @author danyuan
+	 */
+	Map<String, Object> getCaches(Long expireSeconds, CacheExpireMode mode);
 	
 }

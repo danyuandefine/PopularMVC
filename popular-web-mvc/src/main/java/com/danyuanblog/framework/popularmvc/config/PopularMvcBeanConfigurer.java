@@ -28,6 +28,8 @@ import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.SecretManager;
 import com.danyuanblog.framework.popularmvc.SessionManager;
 import com.danyuanblog.framework.popularmvc.SignManager;
+import com.danyuanblog.framework.popularmvc.cache.LocalReadCacheContainer;
+import com.danyuanblog.framework.popularmvc.cache.LocalWriteCacheContainer;
 import com.danyuanblog.framework.popularmvc.encrypt.DataEncryptHandler;
 import com.danyuanblog.framework.popularmvc.encrypt.SignEncryptHandler;
 import com.danyuanblog.framework.popularmvc.encrypt.impl.AESDataEncryptHandler;
@@ -132,8 +134,12 @@ public class PopularMvcBeanConfigurer {
 	}
 	
 	@Bean
-	public CacheManager cacheManager() {
-		return new DefaultCacheManagerImpl();
+	public CacheManager cacheManager(@Autowired LocalReadCacheContainer localReadCacheContainer,
+			@Autowired LocalWriteCacheContainer localWriteCacheContainer) {
+		DefaultCacheManagerImpl cacheManager = new DefaultCacheManagerImpl();
+		cacheManager.setLocalReadCacheContainer(localReadCacheContainer);
+		cacheManager.setLocalWriteCacheContainer(localWriteCacheContainer);
+		return cacheManager;
 	}
 	
 }
