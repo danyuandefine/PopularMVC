@@ -8,7 +8,6 @@
 */ 
 package com.danyuanblog.framework.popularmvc.interceptor;
 
-import com.danyuanblog.framework.popularmvc.aspect.ApiInvokeMethodInterceptorManager;
 
 public abstract class AbstractApiMethodInterceptor implements ApiMethodInterceptor {
 	

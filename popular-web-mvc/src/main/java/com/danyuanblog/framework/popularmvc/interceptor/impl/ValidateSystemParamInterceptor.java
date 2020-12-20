@@ -66,10 +66,7 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 		Encrypt encrypt = method.getAnnotation(Encrypt.class);
 		if(encrypt != null && encrypt.value()){
 			restrictions.setEncrptResponseData(encrypt.value());
-			restrictions.setEncrptHandlerClass(encrypt.type());
-			if(StringUtils.isBlank(RequestContext.getContext().getChannelId())){
-				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getChannelId());
-			}
+			restrictions.setEncrptHandlerClass(encrypt.type());			
 		}
 				
 		//校验会话信息
@@ -141,10 +138,6 @@ public class ValidateSystemParamInterceptor extends AbstractApiMethodInterceptor
 					throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getTimestamp());
 				}
 			}
-			if(StringUtils.isBlank(RequestContext.getContext().getChannelId())){
-				throw new BusinessException(ErrorCodes.PARAM_LOST).setParam(systemParameterProperties.getChannelId());
-			}
-			
 			
 		}	
 		//检查版本号

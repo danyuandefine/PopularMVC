@@ -72,9 +72,9 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 		String cacheKey=locale+key;
 		boolean exists = true;
 		do{
-			if(popularMvcConfig.getEnableLanguageCache() && cacheManager.exists(cacheKey)){
+			if(popularMvcConfig.getEnableLanguageCache() && cacheManager.exists(cacheKey, popularMvcConfig.getLanguageCacheSeconds())){
 				//命中本地缓存，直接返回
-				value = cacheManager.get(cacheKey, String.class);
+				value = cacheManager.get(cacheKey, String.class, popularMvcConfig.getLanguageCacheSeconds());
 				break;
 			}
 			try{		

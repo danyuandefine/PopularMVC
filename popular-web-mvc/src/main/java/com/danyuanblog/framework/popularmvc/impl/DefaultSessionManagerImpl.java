@@ -8,14 +8,11 @@
 */ 
 package com.danyuanblog.framework.popularmvc.impl;
 
-import java.util.Map;
-
-import org.springframework.beans.BeanUtils;
-
 import lombok.Setter;
 
 import com.danyuanblog.framework.popularmvc.CacheManager;
 import com.danyuanblog.framework.popularmvc.SessionManager;
+import com.danyuanblog.framework.popularmvc.consts.CacheExpireMode;
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
 import com.danyuanblog.framework.popularmvc.dto.Session;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
@@ -52,7 +49,7 @@ public class DefaultSessionManagerImpl implements SessionManager {
 				.setVersionCode(context.getVersionCode())
 				;
 			
-			cacheManager.set(sessionId, session, expireSeconds, false);
+			cacheManager.set(sessionId, session, expireSeconds, CacheExpireMode.EXPIRE_AFTER_REDA);
 			RequestContext.getContext().setSession(session);
 			RequestContext.getContext().setAttachment(
 					SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.SESSION_ID), sessionId);
@@ -68,7 +65,7 @@ public class DefaultSessionManagerImpl implements SessionManager {
 		//创建会话
 		String sessionId = UUIDGenerator.getUUID();
 		session.setSessionId(sessionId);
-		cacheManager.set(sessionId, session, expireSeconds, false);
+		cacheManager.set(sessionId, session, expireSeconds, CacheExpireMode.EXPIRE_AFTER_REDA);
 		RequestContext.getContext().setSession(session);
 		RequestContext.getContext().setAttachment(
 				SystemParameterRenameProperties.DEFAULT_PARAM_MAP.get(SystemParameterRenameProperties.SESSION_ID), sessionId);
@@ -79,7 +76,7 @@ public class DefaultSessionManagerImpl implements SessionManager {
 	 */
 	@Override
 	public Session get(String sessionId) {
-		Session session = cacheManager.get(sessionId, Session.class, false);
+		Session session = cacheManager.get(sessionId, Session.class, this.expireSeconds, CacheExpireMode.EXPIRE_AFTER_REDA);
 		return session;
 	}
 
@@ -88,7 +85,7 @@ public class DefaultSessionManagerImpl implements SessionManager {
 	 */
 	@Override
 	public boolean exists(String sessionId) {
-		return cacheManager.exists(sessionId, false);
+		return cacheManager.exists(sessionId, this.expireSeconds, CacheExpireMode.EXPIRE_AFTER_REDA);
 	}
 
 	/**
@@ -104,7 +101,7 @@ public class DefaultSessionManagerImpl implements SessionManager {
 	 */
 	@Override
 	public void refreshAliveTime(String sessionId) {
-		cacheManager.setExpire(sessionId, expireSeconds, false);
+		cacheManager.setExpire(sessionId, expireSeconds, expireSeconds, CacheExpireMode.EXPIRE_AFTER_REDA);
 	}
 
 	/**
@@ -112,7 +109,7 @@ public class DefaultSessionManagerImpl implements SessionManager {
 	 */
 	@Override
 	public void remove(String sessionId) {
-		cacheManager.remove(sessionId, false);
+		cacheManager.remove(sessionId, this.expireSeconds, CacheExpireMode.EXPIRE_AFTER_REDA);
 		RequestContext.getContext().setSession(null);
 	}
 

@@ -11,6 +11,7 @@ package com.danyuanblog.framework.popularmvc;
 
 import java.util.List;
 
+import com.danyuanblog.framework.popularmvc.consts.CacheExpireMode;
 import com.danyuanblog.framework.popularmvc.dto.CacheManagerState;
 
 public interface CacheManager {
@@ -23,52 +24,113 @@ public interface CacheManager {
 	 * 保存一个缓存，并设置过期时间
 	 * @author danyuan
 	 */
-	void set(String key, Object value, Long expireSeconds, boolean refreshAfterWrite);
+	void set(String key, Object value, Long expireSeconds, CacheExpireMode mode);
+	
+	/**
+	 * 保存一个缓存，并设置过期时间
+	 * @author danyuan
+	 */
+	void set(String key, Object value, Long expireSeconds, Long oldExpireSeconds, CacheExpireMode mode);
 	/**
 	 * 是否存在该缓存,默认为写后超时模式
 	 * @author danyuan
 	 */
 	boolean exists(String key);
 	/**
+	 * 是否存在该缓存,默认为写后超时模式
+	 * @author danyuan
+	 */
+	boolean exists(String key, Long expireSeconds);
+	/**
 	 * 是否存在该缓存
 	 * @author danyuan
 	 */
-	boolean exists(String key, boolean refreshAfterWrite);
+	boolean exists(String key, Long expireSeconds, CacheExpireMode mode);
+	/**
+	 * 是否存在该缓存
+	 * @author danyuan
+	 */
+	boolean exists(String key, CacheExpireMode mode);
+	/**
+	 * 获取原始类型的对象
+	 * @author danyuan
+	 */
+	public Object get(String key, Long expireSeconds, CacheExpireMode mode);
+
 	/**
 	 * 获取一个缓存,默认为写后超时模式
 	 * @author danyuan
 	 */
 	<T> T get(String key, Class<T> type);
+	
+	/**
+	 * 获取一个缓存,默认为写后超时模式
+	 * @author danyuan
+	 */
+	<T> T get(String key, Class<T> type, Long expireSeconds);
+	
 	/**
 	 * 获取一个缓存
 	 * @author danyuan
 	 */
-	<T> T get(String key, Class<T> type, boolean refreshAfterWrite);
+	<T> T get(String key, Class<T> type, CacheExpireMode mode);
+	
+	/**
+	 * 获取一个缓存
+	 * @author danyuan
+	 */
+	<T> T get(String key, Class<T> type, Long expireSeconds, CacheExpireMode mode);
+	
 	/**
 	 * 重新设置一个缓存的超时时间,默认为写后超时模式
 	 * @author danyuan
 	 */
 	void setExpire(String key, Long expireSeconds);
 	/**
+	 * 重新设置一个缓存的超时时间,默认为写后超时模式
+	 * @author danyuan
+	 */
+	void setExpire(String key, Long expireSeconds, Long oldExpireSeconds);
+	/**
 	 * 重新设置一个缓存的超时时间
 	 * @author danyuan
 	 */
-	void setExpire(String key, Long expireSeconds, boolean refreshAfterWrite);
+	void setExpire(String key, Long expireSeconds, Long oldExpireSeconds, CacheExpireMode mode);
+	/**
+	 * 重新设置一个缓存的超时时间
+	 * @author danyuan
+	 */
+	void setExpire(String key, Long expireSeconds, CacheExpireMode mode);
 	/**
 	 * 删除缓存,默认为写后超时模式
 	 * @author danyuan
 	 */
 	void remove(String key);
 	/**
+	 * 删除缓存,默认为写后超时模式
+	 * @author danyuan
+	 */
+	void remove(String key, Long expireSeconds);
+	/**
 	 * 删除缓存
 	 * @author danyuan
 	 */
-	void remove(String key, boolean refreshAfterWrite);
+	void remove(String key, Long expireSeconds, CacheExpireMode mode);
+	/**
+	 * 删除缓存
+	 * @author danyuan
+	 */
+	void remove(String key, CacheExpireMode mode);
 	/**
 	 * 清空所有缓存
 	 * @author danyuan
 	 */
 	void clear();
+	/**
+	 * 清空所有缓存
+	 * @author danyuan
+	 */
+	void clear(Long expireSeconds);
 	/**
 	 * 缓存管理器统计数据
 	 * @author danyuan

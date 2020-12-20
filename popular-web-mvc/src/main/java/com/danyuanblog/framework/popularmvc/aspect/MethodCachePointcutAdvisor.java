@@ -1,5 +1,5 @@
 /**  
- * Title ApiInvokePointcutAdvisor.java  
+ * Title MethodCachePointcutAdvisor.java  
  * Description  
  * @author danyuan
  * @date Dec 17, 2020
@@ -17,28 +17,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.danyuanblog.framework.popularmvc.interceptor.ApiInvokeMethodInterceptorManager;
-import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
-import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
+import com.danyuanblog.framework.popularmvc.annotation.CacheMethodResult;
+import com.danyuanblog.framework.popularmvc.annotation.CacheMethodResultEvict;
+import com.danyuanblog.framework.popularmvc.interceptor.MethodCacheInterceptorManager;
 
 @Component
-public class ApiInvokePointcutAdvisor extends
+public class MethodCachePointcutAdvisor extends
 StaticMethodMatcherPointcutAdvisor implements InitializingBean {
 	
 	@Autowired
 	@Lazy
-	private ApiInvokeMethodInterceptorManager apiInvokeMethodInterceptorManager;
-	
-	@Autowired
-	@Lazy
-	private PopularMvcConfig config;
+	private MethodCacheInterceptorManager methodCacheInterceptorManager;
 	
 	/** 
 	 *serialVersionUID
@@ -46,9 +36,8 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
 	private static final long serialVersionUID = 1L;
 	// 需要拦截的注解
 	@SuppressWarnings("unchecked")
-	private static final Class<? extends Annotation>[] API_ANNOTATION_CLASSES = new Class[] {
-			PostMapping.class, GetMapping.class, RequestMapping.class,
-			PutMapping.class, DeleteMapping.class, PatchMapping.class };
+	private static final Class<? extends Annotation>[] METHOD_ANNOTATION_CLASSES = new Class[] {
+		CacheMethodResult.class, CacheMethodResultEvict.class };
 
 	/**
 	 * @param method
@@ -67,7 +56,7 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
         if ( targetClass != null) {
             try {
                 m = targetClass.getMethod(m.getName(), m.getParameterTypes());
-                return isApiAnnotationPresent(m) && isApiPackageScopePresent(targetClass);
+                return isApiAnnotationPresent(m);
             } catch (NoSuchMethodException ignored) {
                 //default return value is false.  If we can't find the method, then obviously
                 //there is no annotation, so just use the default return value.
@@ -77,17 +66,9 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
 		return false;
 	}
 
-	// 判断目标类是否为指定包名下的
-	private boolean isApiPackageScopePresent(Class<?> targetClazz) {
-		if(ClassOriginCheckUtil.isBasePackagesChild(targetClazz, config.getAllBasePackages())){
-			return true;
-		}
-		return false;
-	}
-
 	// 判断目标方法上是否有注解
 	private boolean isApiAnnotationPresent(Method method) {
-		for (Class<? extends Annotation> annClass : API_ANNOTATION_CLASSES) {
+		for (Class<? extends Annotation> annClass : METHOD_ANNOTATION_CLASSES) {
 			Annotation a = AnnotationUtils.findAnnotation(method, annClass);
 			if (a != null) {
 				return true;
@@ -102,7 +83,8 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
 	 */
 	@Override
 	public void afterPropertiesSet() throws Exception {
-		this.setAdvice(apiInvokeMethodInterceptorManager);
+		this.setAdvice(methodCacheInterceptorManager);
+		this.setOrder(LOWEST_PRECEDENCE);
 	}
 
 }

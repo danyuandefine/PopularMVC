@@ -34,7 +34,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.danyuanblog.framework.popularmvc.filter.RepeatedlyReadFilter;
-import com.danyuanblog.framework.popularmvc.interceptor.impl.PopularMvcHandlerInterceptor;
+import com.danyuanblog.framework.popularmvc.interceptor.PopularMvcHandlerInterceptor;
 import com.danyuanblog.framework.popularmvc.properties.ChannelConfigProperties;
 import com.danyuanblog.framework.popularmvc.properties.ErrorCodeProperties;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;

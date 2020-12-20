@@ -22,7 +22,7 @@ import com.danyuanblog.framework.popularmvc.dto.ApiPermissionDto;
 @ConfigurationProperties(prefix = "popularmvc.api")
 public class ChannelConfigProperties {
 	
-	public static final String DEFAULT_APP = "default";
+	public static final String DEFAULT = "default";
 	/**
 	 * 渠道ID<br>
 	 *   应用标识:<br>

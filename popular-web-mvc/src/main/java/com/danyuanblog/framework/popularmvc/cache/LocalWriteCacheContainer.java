@@ -92,6 +92,23 @@ public class LocalWriteCacheContainer {
         }		
 	}
 	
+	public static void set(String key, Object content, Long expireSeconds, Long oldExpireSeconds){
+		try {
+            lock.lock(); 
+            if(oldExpireSeconds != null){
+            	//删除旧key
+                remove(key, oldExpireSeconds);
+            }else{
+            	remove(key);
+            }           
+            //保存新key
+    		Cache<String, Object> cacheContainer = getCache(expireSeconds);
+    		cacheContainer.put(key, content);
+		} finally {
+            lock.unlock();
+        }		
+	}
+	
 	public static void setExpire(String key, Long seconds){
 		Object content = get(key);
 		if(content == null){
@@ -101,6 +118,29 @@ public class LocalWriteCacheContainer {
             lock.lock();             
             //删除旧key
             remove(key);
+            //保存新key
+    		Cache<String, Object> cacheContainer = getCache(seconds);
+    		cacheContainer.put(key, content);
+		} finally {
+            lock.unlock();
+        }		
+	}
+	
+	public static void setExpire(String key, Long seconds, Long oldExpireSeconds){
+		Object content =null;
+		if(oldExpireSeconds != null){
+			content = get(key, oldExpireSeconds);
+		}else{
+			content = get(key);
+		}
+		if(content == null){
+			return ;
+		}
+		try {
+            lock.lock();   
+            if(oldExpireSeconds != null){
+            	remove(key, oldExpireSeconds);
+            }            
             //保存新key
     		Cache<String, Object> cacheContainer = getCache(seconds);
     		cacheContainer.put(key, content);
@@ -119,6 +159,19 @@ public class LocalWriteCacheContainer {
 		return null;
 	}
 	
+	public static Object get(String key, Long expireSeconds){
+		if(expireSeconds != null){
+			Cache<String, Object> cacheContainer = getCache(expireSeconds);		
+			Object content = cacheContainer.getIfPresent(key);
+			if(content != null){
+				return content;
+			}
+		}else{
+			return get(key);
+		}		
+		return null;
+	}
+	
 	public static void remove(String key){
 		try {
             lock.lock(); 
@@ -130,6 +183,20 @@ public class LocalWriteCacheContainer {
 		} finally {
             lock.unlock();
         }		
+	}
+	
+	public static void remove(String key, Long expireSeconds){
+		if(expireSeconds != null){
+			try {
+	            lock.lock(); 
+	            Cache<String, Object> cacheContainer = getCache(expireSeconds);
+				cacheContainer.invalidate(key);
+			} finally {
+	            lock.unlock();
+	        }
+		}else{
+			remove(key);
+		}				
 	}
 	
 	public static void clear(Long expireSeconds){
@@ -152,6 +219,10 @@ public class LocalWriteCacheContainer {
 	
 	public static boolean exists(String key){
 		return get(key) != null;
+	}
+	
+	public static boolean exists(String key, Long expireSeconds){
+		return get(key, expireSeconds) != null;
 	}
 	
 	private static String locate(String key){

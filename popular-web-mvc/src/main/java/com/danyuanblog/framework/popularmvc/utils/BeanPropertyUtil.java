@@ -14,7 +14,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -60,6 +59,7 @@ public class BeanPropertyUtil {
 		Set<String> hashCodeSet = new HashSet<>();//防止对象间引用关系存在环状结构
 		return objToStringMap(object, parentKey, hashCodeSet, ignoreAnno);
 	}
+	@SuppressWarnings("unchecked")
 	public static Map<String, String> objToStringMap(Object object, String parentKey, Set<String> hashCodeSet, Class<?> ignoreAnno) {			
 		Map<String, String> resultMap = new HashMap<>();
 		if(object == null){
@@ -97,14 +97,8 @@ public class BeanPropertyUtil {
                         }
                     }
                 }
-            }else if(object.getClass().isArray() || object instanceof Collection<?>){//数组或者集合
-            	Object[] arr = null;
-            	if(object instanceof Collection<?>){
-            		Collection<?> collection = (Collection<?>) object;
-            		arr = collection.toArray();
-            	}else{
-            		arr =(Object[]) object;
-            	}
+            }else if(object.getClass().isArray() && !isIgnoreType(object.getClass().getComponentType())){//数组
+            	Object[] arr = (Object[]) object;            	
             	for(int i=0; i<arr.length; i++){
             		Object subObj = arr[i];
                 	String currentKey = "";
@@ -113,6 +107,29 @@ public class BeanPropertyUtil {
                 	}
                 	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet, ignoreAnno));
             	}
+            }else if(object instanceof List<?>){//List集合
+            	List<Object> list = (List<Object>)object;
+            	for(int i=0; i < list.size(); i++){
+            		Object subObj = list.get(i);
+            		String currentKey = "";
+                	if(!StringUtils.isEmpty(parentKey)){
+                		currentKey = parentKey+"["+String.valueOf(i)+"]";
+                	}
+                	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet, ignoreAnno));
+            	}            	      	
+            }else if(object instanceof Set<?>){//Set集合
+            	Set<Object> set = (Set<Object>)object;
+            	Set<Object> newSet = new HashSet<Object>();
+            	int i = 0;
+            	for(Object subObj : set){
+            		String currentKey = "";
+                	if(!StringUtils.isEmpty(parentKey)){
+                		currentKey = parentKey+"["+String.valueOf(i++)+"]";
+                	}
+                	resultMap.putAll(objToStringMap(subObj, currentKey, hashCodeSet, ignoreAnno));           		
+            	} 
+            	set.removeAll(set);
+            	set.addAll(newSet);
             }else{//普通对象
             	List<Field> fields = getAllField(object);
             	boolean ignoreField = false;
@@ -201,7 +218,7 @@ public class BeanPropertyUtil {
                     	}                        
                     }
                 }
-            }else if(object.getClass().isArray()){//数组
+            }else if(object.getClass().isArray() && !isIgnoreType(object.getClass().getComponentType())){//数组
             	Object[] arr = (Object[]) object;            	
             	for(int i=0; i<arr.length; i++){
             		Object subObj = arr[i];
@@ -338,6 +355,20 @@ public class BeanPropertyUtil {
 	            object instanceof Number
 	            ;
 	}
+	
+	public static boolean isIgnoreType(Class<?> clazz) {	
+		if(clazz == null){
+			return true;
+		}
+	    return clazz.equals(Byte.class) ||
+	    		clazz.equals(byte.class) ||	    		
+	    		clazz.equals(Character.class) ||
+	    		clazz.equals(char.class) ||
+	    		clazz.equals(Boolean.class) ||
+	    		clazz.equals(boolean.class)
+	            ;
+	}
+
 
 	/**
 	 * 下划线转驼峰 

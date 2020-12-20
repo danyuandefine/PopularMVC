@@ -6,7 +6,7 @@
 * @version 1.0.0
 * site: www.danyuanblog.com
 */ 
-package com.danyuanblog.framework.popularmvc.interceptor.impl;
+package com.danyuanblog.framework.popularmvc.interceptor;
 
 
 import java.io.IOException;
