@@ -396,4 +396,32 @@ public class BeanPropertyUtil {
 		matcher.appendTail(sb);
 		return sb.toString();
 	}
+
+	/**
+	 * @author danyuan
+	 */
+	public static boolean isBaseTypeClass(Class<?> className) {
+		return className.equals(String.class)||
+	    		className.equals(Integer.class) ||
+	            className.equals(int.class) ||
+	            className.equals(Byte.class) ||
+	            className.equals(byte.class) ||
+	            className.equals(Long.class) ||
+	            className.equals(long.class) ||
+	            className.equals(Double.class) ||
+	            className.equals(double.class) ||
+	            className.equals(Float.class) ||
+	            className.equals(float.class) ||
+	            className.equals(Character.class) ||
+	            className.equals(char.class) ||
+	            className.equals(Short.class) ||
+	            className.equals(short.class) ||
+	            className.equals(Boolean.class) ||
+	            className.equals(boolean.class) ||
+	            className.equals(Date.class) ||
+	            className.isAssignableFrom(Number.class) ||
+	            className.isAssignableFrom(Void.class) ||
+	            className.getName().equals("void")
+	            ;
+	}
 }

@@ -14,6 +14,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +23,6 @@ import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageInfoDto;
 import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageTranslateFieldTestDto;
 import com.danyuanblog.framework.demo.popularmvc.controller.dto.UserInfoDto;
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
-import com.danyuanblog.framework.popularmvc.annotation.CacheMethodResult;
 import com.danyuanblog.framework.popularmvc.annotation.IgnoreResponseWrapper;
 import com.danyuanblog.framework.popularmvc.controller.response.SuccessResponse;
 import com.danyuanblog.framework.popularmvc.exception.BusinessException;
@@ -31,6 +31,7 @@ import com.danyuanblog.framework.popularmvc.exception.BusinessException;
 @RestController
 public class TestResponseInfoController {
 	@Autowired
+	@Lazy
 	private LanguageTranslateManager languageTranslateManager;
 		
 	@GetMapping(value="testResponseWrap",

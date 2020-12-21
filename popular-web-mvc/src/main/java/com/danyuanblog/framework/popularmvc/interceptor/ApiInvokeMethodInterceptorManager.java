@@ -24,6 +24,7 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.core.LocalVariableTableParameterNameDiscoverer;
+import org.springframework.core.MethodParameter;
 import org.springframework.core.ParameterNameDiscoverer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -35,6 +36,8 @@ import com.danyuanblog.framework.popularmvc.dto.ApiInfo;
 import com.danyuanblog.framework.popularmvc.dto.ApiRequestParameter;
 import com.danyuanblog.framework.popularmvc.interceptor.impl.ApiLogInterceptor;
 import com.danyuanblog.framework.popularmvc.interceptor.impl.NoRepeatSubmitInterceptor;
+import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
 import com.danyuanblog.framework.popularmvc.utils.MethdInvokeUtil;
 
 @Component
@@ -56,6 +59,10 @@ public class ApiInvokeMethodInterceptorManager implements MethodInterceptor {
 	@Autowired
 	@Lazy
 	private NoRepeatSubmitInterceptor noRepeatSubmitInterceptor;
+	
+	@Autowired
+	@Lazy
+	private PopularMvcConfig popularMvcConfig;	
 	
 	private static List<ApiMethodInterceptor> interceptors = new ArrayList<>();
 	
@@ -90,6 +97,10 @@ public class ApiInvokeMethodInterceptorManager implements MethodInterceptor {
 	 */
 	@Override
 	public Object invoke(MethodInvocation invocation) throws Throwable {
+		if(!isApiPackageScopePresent()){
+			return invocation.proceed();
+		}
+		
 		if(log.isTraceEnabled()){
 			log.trace("进入API接口调用切面!");
 		}
@@ -162,6 +173,20 @@ public class ApiInvokeMethodInterceptorManager implements MethodInterceptor {
 	    	noRepeatSubmitInterceptor.afterInvoke(params, response, method, targetClass);
 	    }		
 		return response;
+	}	
+	
+	// 判断目标类是否为指定包名下的
+	private boolean isApiPackageScopePresent() {
+		HandlerMethod handlerMethod = RequestContext.getContext().getHandler();
+		if(handlerMethod != null){
+			MethodParameter returnParam = handlerMethod.getReturnType();
+			Class<?> clazz = handlerMethod.getMethod().getDeclaringClass();
+			Class<?> returnClazz = returnParam.getParameterType();
+			if(ClassOriginCheckUtil.isNeedIntercept(clazz, returnClazz, popularMvcConfig.getAllBasePackages())){
+				return true;
+			}
+		}		
+		return false;
 	}	
 
 }

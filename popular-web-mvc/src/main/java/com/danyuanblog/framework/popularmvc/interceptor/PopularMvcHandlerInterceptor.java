@@ -16,7 +16,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import lombok.extern.slf4j.Slf4j;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -25,7 +27,9 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import com.danyuanblog.framework.popularmvc.context.RequestContext;
+import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
 import com.danyuanblog.framework.popularmvc.utils.IOUtils;
 import com.danyuanblog.framework.popularmvc.utils.request.BodyReaderHttpServletRequestWrapper;
 import com.danyuanblog.framework.popularmvc.utils.request.HttpHelper;
@@ -37,20 +41,38 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Slf4j
 public final class PopularMvcHandlerInterceptor implements HandlerInterceptor {
 	
+	@Autowired
+	private PopularMvcConfig popularMvcConfig;
+	
 	@Override
 	public boolean preHandle(HttpServletRequest request,
 			HttpServletResponse response, Object handler) throws Exception {
+		if(log.isTraceEnabled()){
+			log.trace("进入接口系统参数解析拦截器!");
+		}
 		if (handler instanceof HandlerMethod) {
-			//只拦截API接口
-			RequestContext.getContext().setHandler((HandlerMethod)handler);
+			HandlerMethod handlerMethod = (HandlerMethod) handler;
+			MethodParameter returnParam = handlerMethod.getReturnType();
+			Class<?> clazz = handlerMethod.getMethod().getDeclaringClass();
+			Class<?> returnClazz = returnParam.getParameterType();
+			RequestContext.getContext().setHandler(handlerMethod);
 			RequestContext.getContext().setRequest(request);
 			RequestContext.getContext().setResponse(response);
-			//解析系统公共参数
-			parseSystemParams(request);
-			String path=request.getServletPath();
-			if(path.replaceFirst("/", "").trim().equals("error")){//处理默认的错误结果页
-				//throw new ApiBusinessException(ErrorCodes.INVALID_METHOD).setParam(request.getRequestURI());
-			}		
+			if(ClassOriginCheckUtil.isNeedIntercept(clazz, returnClazz, popularMvcConfig.getAllBasePackages())){
+				//只解析指定包名下系统公共参数
+				if(log.isTraceEnabled()){
+					log.trace("开始解析系统参数!");
+				}
+				parseSystemParams(request);
+				if(log.isTraceEnabled()){
+					log.trace("解析系统参数完成!");
+				}
+				String path=request.getServletPath();
+				if(path.replaceFirst("/", "").trim().equals("error")){//处理默认的错误结果页
+					//throw new ApiBusinessException(ErrorCodes.INVALID_METHOD).setParam(request.getRequestURI());
+				}
+			}
+					
 		}
 		
 		return HandlerInterceptor.super.preHandle(request, response, handler);

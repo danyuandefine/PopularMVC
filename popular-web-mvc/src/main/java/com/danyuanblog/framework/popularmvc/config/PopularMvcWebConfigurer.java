@@ -25,13 +25,9 @@ import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.Validator;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
 import com.danyuanblog.framework.popularmvc.filter.RepeatedlyReadFilter;
 import com.danyuanblog.framework.popularmvc.interceptor.PopularMvcHandlerInterceptor;
@@ -52,7 +48,6 @@ import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProp
 	SystemParameterConfigProperties.class,
 	ErrorCodeProperties.class
 	})
-@EnableWebMvc
 @ComponentScan("com.danyuanblog.framework.popularmvc")
 @ConditionalOnProperty(name={"popularmvc.enable"},havingValue = "true")
 public class PopularMvcWebConfigurer implements WebMvcConfigurer {
@@ -60,20 +55,6 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
 	@Autowired
 	private PopularMvcHandlerInterceptor popularMvcHandlerInterceptor;
 
-	@Autowired
-	private RequestMappingHandlerAdapter requestMappingHandlerAdapter;
-
-	@Override
-	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/statics/**").addResourceLocations(
-				"classpath:/statics/");
-		// 解决 Knife4J 404报错
-		registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
-		registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-		log.info("Add swagger static resources success !");
-	}
-
-	
 	@Override
 	public void addFormatters(FormatterRegistry registry) {
 		WebMvcConfigurer.super.addFormatters(registry);
@@ -86,14 +67,7 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
 			log.trace("Add PopularMvcHandlerInterceptor success !");
 		}		
 		WebMvcConfigurer.super.addInterceptors(registry);
-	}
-
-	@Override
-	public void addArgumentResolvers(
-			List<HandlerMethodArgumentResolver> resolvers) {
-		WebMvcConfigurer.super.addArgumentResolvers(resolvers);
-	}
-	
+	}	
 
 	@Override
 	public void configureMessageConverters(

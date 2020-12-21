@@ -25,8 +25,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.danyuanblog.framework.popularmvc.interceptor.ApiInvokeMethodInterceptorManager;
-import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
-import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
 
 @Component
 public class ApiInvokePointcutAdvisor extends
@@ -35,10 +33,6 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
 	@Autowired
 	@Lazy
 	private ApiInvokeMethodInterceptorManager apiInvokeMethodInterceptorManager;
-	
-	@Autowired
-	@Lazy
-	private PopularMvcConfig config;
 	
 	/** 
 	 *serialVersionUID
@@ -67,7 +61,7 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
         if ( targetClass != null) {
             try {
                 m = targetClass.getMethod(m.getName(), m.getParameterTypes());
-                return isApiAnnotationPresent(m) && isApiPackageScopePresent(targetClass);
+                return isApiAnnotationPresent(m);
             } catch (NoSuchMethodException ignored) {
                 //default return value is false.  If we can't find the method, then obviously
                 //there is no annotation, so just use the default return value.
@@ -77,13 +71,7 @@ StaticMethodMatcherPointcutAdvisor implements InitializingBean {
 		return false;
 	}
 
-	// 判断目标类是否为指定包名下的
-	private boolean isApiPackageScopePresent(Class<?> targetClazz) {
-		if(ClassOriginCheckUtil.isBasePackagesChild(targetClazz, config.getAllBasePackages())){
-			return true;
-		}
-		return false;
-	}
+	
 
 	// 判断目标方法上是否有注解
 	private boolean isApiAnnotationPresent(Method method) {

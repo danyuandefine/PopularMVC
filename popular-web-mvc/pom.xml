@@ -6,7 +6,7 @@
 
 	<groupId>com.danyuanblog.framework</groupId>
 	<artifactId>popular-web-mvc</artifactId>
-	<version>1.0.6.RELEASE</version>
+	<version>1.0.7.RELEASE</version>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
