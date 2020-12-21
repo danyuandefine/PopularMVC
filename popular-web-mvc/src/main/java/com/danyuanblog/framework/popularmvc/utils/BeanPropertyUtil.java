@@ -419,8 +419,8 @@ public class BeanPropertyUtil {
 	            className.equals(Boolean.class) ||
 	            className.equals(boolean.class) ||
 	            className.equals(Date.class) ||
-	            className.isAssignableFrom(Number.class) ||
-	            className.isAssignableFrom(Void.class) ||
+	            Number.class.isAssignableFrom(className) ||
+	            Void.class.isAssignableFrom(className) ||
 	            className.getName().equals("void")
 	            ;
 	}

@@ -30,7 +30,7 @@ public class ClassOriginCheckUtil {
 			return false;
 		}
 		if(isBasePackagesChild(targetClass, pkgs)){
-			if(BeanPropertyUtil.isBaseTypeClass(returnValueClass) || returnValueClass.isAssignableFrom(Serializable.class)){
+			if(BeanPropertyUtil.isBaseTypeClass(returnValueClass) || Serializable.class.isAssignableFrom(returnValueClass)){
 				return true;
 			}
 		}
