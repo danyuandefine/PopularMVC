@@ -154,10 +154,11 @@
 
 # 2、项目模块
 
-| 模块                 | 说明                                    | 地址                                                         |
-| -------------------- | --------------------------------------- | ------------------------------------------------------------ |
-| popular-web-mvc      | 为springboot应用提供API业务增强解决方案 | https://mvnrepository.com/artifact/com.danyuanblog.framework/popular-web-mvc |
-| popular-web-mvc-demo | popularMVC框架使用示例demo              | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-demo |
+| 模块                         | 说明                                                         | 地址                                                         |
+| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| popular-web-mvc              | 为springboot应用提供API业务增强解决方案                      | https://mvnrepository.com/artifact/com.danyuanblog.framework/popular-web-mvc |
+| popular-web-mvc-demo         | popularMVC框架使用完整示例demo                               | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-demo |
+| popular-web-mvc-simple-demos | popularMVC框架简易demo集合，后续的使用示例尽量从单个项目包含单个特性去逐个演示 | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-simple-demos |
 
 # 3、入门demo
 
