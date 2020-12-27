@@ -422,39 +422,39 @@ public class StartDemoApplication {
 
 ## 4.2 自动填充API响应参数示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.3 业务错误码使用示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.4 接口响应国际化翻译示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.5 使用数字签名示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.6 接口数据加解密示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.7 接口防重复提交功能示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.8 接口查询缓存使用示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.9 接口用户会话功能使用示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 ## 4.10 静态资源使用示例
 
-[请参考使用示例](MORE.mdMORE.md)
+[请参考使用示例](MORE.md)
 
 # 5、业务定制化
 
