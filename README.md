@@ -1,9 +1,23 @@
 <center><h1>Popular MVC框架</h1></center>
 
+# 传送门
+
+[**Gitee源码地址：**https://gitee.com/danyuanblog/PopularMVC](https://gitee.com/danyuanblog/PopularMVC)
+
+[**演示地址：**http://www.danyuanblog.com:8181/doc.html](http://www.danyuanblog.com:8181/doc.html)
+
+[**官方文档地址：**http://www.danyuanblog.com/blog/app/blog/blogDetail.html?id=5fe86eb74c636312f4b70955](http://www.danyuanblog.com/blog/app/blog/blogDetail.html?id=5fe86eb74c636312f4b70955)
+
 # 1、应用场景
 
 ## 简介
 > 啥，听说你用了springboot，但是开发的接口还在裸奔？快来试试这个PopularMVC吧，它也许是你想要找的神器！
+
+* 神器亮相
+
+    > 为你的springboot项目插上翅膀！
+
+    ![popularmvc logo](doc/imgs/logo.jpg)
 
 ## 1.1 项目架构说明
 ### 1.1.1 PopularMVC跟Springboot的关系

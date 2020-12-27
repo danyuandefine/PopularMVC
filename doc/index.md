@@ -1,9 +1,23 @@
 <center><h1>Popular MVC框架</h1></center>
 
+# 传送门
+
+[**Gitee源码地址：**https://gitee.com/danyuanblog/PopularMVC](https://gitee.com/danyuanblog/PopularMVC)
+
+[**演示地址：**http://www.danyuanblog.com:8181/doc.html](http://www.danyuanblog.com:8181/doc.html)
+
+[**官方文档地址：**http://www.danyuanblog.com/blog/app/blog/blogDetail.html?id=5fe86eb74c636312f4b70955](http://www.danyuanblog.com/blog/app/blog/blogDetail.html?id=5fe86eb74c636312f4b70955)
+
 # 1、应用场景
 
 ## 简介
 > 啥，听说你用了springboot，但是开发的接口还在裸奔？快来试试这个PopularMVC吧，它也许是你想要找的神器！
+
+* 神器亮相
+
+    > 为你的springboot项目插上翅膀！
+
+    ![popularmvc logo](imgs/logo.jpg)
 
 ## 1.1 项目架构说明
 ### 1.1.1 PopularMVC跟Springboot的关系
@@ -154,10 +168,11 @@
 
 # 2、项目模块
 
-| 模块                 | 说明                                    | 地址                                                         |
-| -------------------- | --------------------------------------- | ------------------------------------------------------------ |
-| popular-web-mvc      | 为springboot应用提供API业务增强解决方案 | https://mvnrepository.com/artifact/com.danyuanblog.framework/popular-web-mvc |
-| popular-web-mvc-demo | popularMVC框架使用示例demo              | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-demo |
+| 模块                         | 说明                                                         | 地址                                                         |
+| ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
+| popular-web-mvc              | 为springboot应用提供API业务增强解决方案                      | https://mvnrepository.com/artifact/com.danyuanblog.framework/popular-web-mvc |
+| popular-web-mvc-demo         | popularMVC框架使用完整示例demo                               | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-demo |
+| popular-web-mvc-simple-demos | popularMVC框架简易demo集合，后续的使用示例尽量从单个项目包含单个特性去逐个演示 | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-simple-demos |
 
 # 3、入门demo
 
