@@ -131,6 +131,36 @@
 			<url>http://oss.sonatype.org/content/groups/public</url>
 		</pluginRepository>
 	</pluginRepositories>
-	
+	<build>
+        <plugins>      
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>${project.name}</id>
+                        <configuration>
+                            <archive>
+                                <manifest>
+                                    <mainClass>Main</mainClass>
+                                </manifest>
+                            </archive>
+                            <descriptors>
+                                <descriptor>src/main/resources/scripts/assembly.xml</descriptor>
+                            </descriptors>
+                            <descriptorRefs>
+                                <descriptorRef>jar-with-dependencies</descriptorRef>
+                            </descriptorRefs>
+                            <finalName>${project.name}-${project.version}</finalName>
+                        </configuration>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 	
 </project>
