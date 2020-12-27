@@ -22,11 +22,11 @@ public class PopularMvcSwaggerProperties {
 	private String contact;
 	private String version;
 	public PopularMvcSwaggerProperties(){
-		basePackage="com.danyuanblog.framework.popularmvc.controller";
-		title="PopularMVC 接口文档清单";
+		basePackage="";
+		title="业务接口清单";
 		description="接口文档随着接口动态同步更新！";
-		termsOfServiceUrl="http://www.danyuanblog.com";
-		contact="淡远文摘";
+		termsOfServiceUrl="http://localhost:8080/doc.html";
+		contact="后台开发同学";
 		version="1.0";
 	}
 }

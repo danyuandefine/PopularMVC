@@ -8,7 +8,7 @@
 */ 
 package com.danyuanblog.framework.popularmvc.exception;
 
-import com.danyuanblog.framework.popularmvc.component.BussinessErrorCodeInterpreter;
+import com.danyuanblog.framework.popularmvc.component.BusinessErrorCodeInterpreter;
 import com.danyuanblog.framework.popularmvc.consts.ErrorCodes;
 
 import lombok.Getter;
@@ -47,7 +47,7 @@ public class BusinessException extends RuntimeException {
 	public BusinessException(String subCode){
 		super(subCode);
 		this.subCode=subCode;
-		this.code=BussinessErrorCodeInterpreter.getCode(subCode);
+		this.code=BusinessErrorCodeInterpreter.getCode(subCode);
 	}
 	public BusinessException(int code){
 		this.code=code;
@@ -59,7 +59,7 @@ public class BusinessException extends RuntimeException {
 	}
 	public BusinessException(int code,String subCode,String msg){
 		super(msg);
-		this.code=BussinessErrorCodeInterpreter.getCode(subCode);
+		this.code=BusinessErrorCodeInterpreter.getCode(subCode);
 		this.subCode=subCode;
 		this.msg=msg;
 	}

@@ -18,7 +18,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.core.MethodParameter;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -52,14 +51,12 @@ public final class PopularMvcHandlerInterceptor implements HandlerInterceptor {
 		}
 		if (handler instanceof HandlerMethod) {
 			HandlerMethod handlerMethod = (HandlerMethod) handler;
-			MethodParameter returnParam = handlerMethod.getReturnType();
 			Class<?> clazz = handlerMethod.getMethod().getDeclaringClass();
-			Class<?> returnClazz = returnParam.getParameterType();
 			RequestContext.getContext().setHandler(handlerMethod);
 			RequestContext.getContext().setRequest(request);
 			RequestContext.getContext().setResponse(response);
-			if(ClassOriginCheckUtil.isNeedIntercept(clazz, returnClazz, popularMvcConfig.getAllBasePackages())){
-				//只解析指定包名下系统公共参数
+			if(ClassOriginCheckUtil.isBasePackagesChild(clazz, popularMvcConfig.getAllBasePackages())){
+				//只解析指定包名下系统公共参数,不区分资源类型
 				if(log.isTraceEnabled()){
 					log.trace("开始解析系统参数!");
 				}

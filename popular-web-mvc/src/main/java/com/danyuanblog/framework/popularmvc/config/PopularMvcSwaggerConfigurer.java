@@ -11,9 +11,12 @@ package com.danyuanblog.framework.popularmvc.config;
 import java.util.ArrayList;
 import java.util.List;
 
+import lombok.extern.slf4j.Slf4j;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureBefore;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -32,6 +35,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 import com.danyuanblog.framework.popularmvc.properties.PopularMvcSwaggerProperties;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterConfigProperties;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
+import com.danyuanblog.framework.popularmvc.utils.StringUtils;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 
 @EnableSwagger2
@@ -41,11 +46,21 @@ import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 	SystemParameterConfigProperties.class
 	})
 @ConditionalOnProperty(name={"popularmvc.enable","popularmvc.enableSwagger"},havingValue = "true")
+@ConditionalOnWebApplication
 @AutoConfigureBefore(PopularMvcWebConfigurer.class)
 @Configuration
+@Slf4j
 public class PopularMvcSwaggerConfigurer {
-	@Bean
+	
+	@Bean	
 	public Docket businessApi(@Autowired SystemParameterConfigProperties otherParams, @Autowired PopularMvcSwaggerProperties swagger,@Autowired SystemParameterRenameProperties systemParameterProperties) {
+		String basePackage = swagger.getBasePackage();
+		if(StringUtils.isBlank(basePackage)){
+			basePackage = ClassOriginCheckUtil.getDeafultBasePackage();
+		}
+		if(log.isTraceEnabled()){
+			log.trace("即将自动扫描包[{}]下的所有接口信息!", basePackage);
+		}
 		Docket docket=new Docket(DocumentationType.SWAGGER_2)
 				        .apiInfo(apiInfo(swagger))
 				        //分组名称
@@ -53,7 +68,7 @@ public class PopularMvcSwaggerConfigurer {
 				        .globalOperationParameters(getGlobalOperationParameters(systemParameterProperties, otherParams, false))
 				        .select()
 				        //这里指定Controller扫描包路径
-				        .apis(RequestHandlerSelectors.basePackage(swagger.getBasePackage()))
+				        .apis(RequestHandlerSelectors.basePackage(basePackage))
 				        .paths(PathSelectors.any())
 				        .build();
 		return docket;

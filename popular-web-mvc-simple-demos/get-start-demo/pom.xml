@@ -4,8 +4,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>com.danyuanblog.framework</groupId>
-  <artifactId>popular-web-mvc-demo</artifactId>
+  <groupId>com.danyuanblog.framework.demo.popularmvc</groupId>
+  <artifactId>get-start-demo</artifactId>
   <version>1.0.0.RELEASE</version>
   <parent>
 	<groupId>org.springframework.boot</groupId>
@@ -14,7 +14,7 @@
 	<relativePath /> <!-- lookup parent from repository -->
   </parent>
 
-  <name>popular-web-mvc-demo</name>
+  <name>get-start-demo</name>
   <url>http://www.danyuanblog.com</url>
 
 	<!-- 定义公共变量 -->
@@ -23,7 +23,6 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<java.version>1.8</java.version>		
 		<popular-web-mvc.version>1.1.0.RELEASE</popular-web-mvc.version>
-		<docker.image.prefix>192.168.56.22:5000/danyuanblog/framework</docker.image.prefix>
 	</properties>
 	
 	<dependencies>
@@ -43,18 +42,6 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
-	<!-- 配置部署本项目发布包的远程仓库 -->
-	<distributionManagement>
-		<repository>
-			<id>releases</id>
-			<url>http://www.danyuanblog.com:8082/nexus/content/repositories/releases</url>
-		</repository>
-		<snapshotRepository>
-			<id>snapshots</id>
-			<url>http://www.danyuanblog.com:8082/nexus/content/repositories/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 	
 	<!-- 配置拉取远程项目发布包仓库地址信息 -->
 	<repositories>			
@@ -87,44 +74,9 @@
                 <enabled>false</enabled>
             </snapshots>
         </repository>
-        <repository>
-            <id>public</id>
-            <name>Public Repositories</name>
-            <url>http://www.danyuanblog.com:8082/nexus/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <!-- 
-        <repository>            
-			<id>ossrh</id>
-			<name>oss.sonatype.org</name>
-            <url>https://oss.sonatype.org/content/groups/public</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-         -->
 	</repositories>
 
 	<pluginRepositories>
-		<pluginRepository>
-			<id>public</id>
-			<name>Public Repositories</name>
-			<url>http://www.danyuanblog.com:8082/nexus/content/groups/public</url>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>true</enabled>
-			</snapshots>
-		</pluginRepository>
 		<pluginRepository>
 			<name>oss.sonatype.org</name>
 			<id>oss.sonatype.org</id>

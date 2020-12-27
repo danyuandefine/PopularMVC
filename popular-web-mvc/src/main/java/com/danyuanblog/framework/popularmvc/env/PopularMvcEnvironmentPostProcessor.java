@@ -22,6 +22,7 @@ import org.springframework.core.env.PropertySource;
 import org.springframework.util.StringUtils;
 
 import com.danyuanblog.framework.popularmvc.consts.DefaultConfigPropertiesValue;
+import com.danyuanblog.framework.popularmvc.consts.DefaultConfigValueMode;
 
 public class PopularMvcEnvironmentPostProcessor implements
 		EnvironmentPostProcessor {
@@ -49,7 +50,7 @@ public class PopularMvcEnvironmentPostProcessor implements
 			//拼接默认配置到用户自定义配置上
 			Map<String,Object> modifyMap = new HashMap<>();
 			for(DefaultConfigPropertiesValue config : DefaultConfigPropertiesValue.values()){
-				if(propertySource.containsProperty(config.getKey()) && config.needCompose()){
+				if(propertySource.containsProperty(config.getKey()) && !DefaultConfigValueMode.OPTION.equals(config.getMode())){
 					modifyMap.put(config.getKey(), config.getComposeValue(propertySource.getProperty(config.getKey())));
 				}
 			}

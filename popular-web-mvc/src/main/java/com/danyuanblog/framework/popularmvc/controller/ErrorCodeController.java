@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
-import com.danyuanblog.framework.popularmvc.component.BussinessErrorCodeInterpreter;
+import com.danyuanblog.framework.popularmvc.component.BusinessErrorCodeInterpreter;
 import com.danyuanblog.framework.popularmvc.controller.request.QueryErrorCodeRequest;
 import com.danyuanblog.framework.popularmvc.controller.response.ErrorCodeListResponse;
 import com.danyuanblog.framework.popularmvc.dto.ErrorCodeDto;
@@ -31,7 +31,7 @@ public class ErrorCodeController {
 	private LanguageTranslateManager languageTranslateManager;
 	
 	@Autowired
-	private BussinessErrorCodeInterpreter bussinessErrorCodeInterpreter;
+	private BusinessErrorCodeInterpreter bussinessErrorCodeInterpreter;
 	
 	@GetMapping(value="system/errorList",
 			name="查询所有错误码列表")

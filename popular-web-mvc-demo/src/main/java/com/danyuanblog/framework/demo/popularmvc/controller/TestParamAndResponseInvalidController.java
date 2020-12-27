@@ -10,11 +10,13 @@ package com.danyuanblog.framework.demo.popularmvc.controller;
 
 import java.util.Arrays;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Email;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,6 +41,7 @@ import com.danyuanblog.framework.popularmvc.context.RequestContext;
 
 @Api(tags = "测试api请求参数或响应内容的校验")
 @RestController
+@Validated
 public class TestParamAndResponseInvalidController {
 
 	@GetMapping(value="testSystemParams",
@@ -61,7 +64,7 @@ public class TestParamAndResponseInvalidController {
 	@PostMapping(value="testRequestParamCheck",
 			name="测试校验请求参数")
 	@ApiOperation(value="测试校验请求参数", notes="测试校验请求参数")
-	public void testRequestParamCheck(@RequestBody ParamsCheckDto req, @RequestParam @Email String adminEmail){
+	public void testRequestParamCheck(@RequestBody ParamsCheckDto req, @Valid @RequestParam @Email String adminEmail){
 		
 	}
 	

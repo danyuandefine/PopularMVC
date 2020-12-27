@@ -10,9 +10,12 @@ package com.danyuanblog.framework.popularmvc.exception.handler.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -39,7 +42,7 @@ public class InvalidationExceptionHandler extends AbstractCommonExceptionHandler
 	 */
 	@Override
 	public boolean support(Exception e) {
-		if (e instanceof BindException || e instanceof MethodArgumentNotValidException){
+		if (e instanceof BindException || e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException){
 			return true;
 		}
 		return false;
@@ -54,35 +57,48 @@ public class InvalidationExceptionHandler extends AbstractCommonExceptionHandler
 		String systemError = null;			
 		String locale = RequestContext.getContext().getLocale();
 		List<FieldError> errors = null;
+		Set<ConstraintViolation<?>> constraints = null;
 		if(e instanceof BindException){
 			BindException ex=(BindException)e;
 			errors = ex.getFieldErrors();
-		}else{
+		}else if(e instanceof MethodArgumentNotValidException) {
 			MethodArgumentNotValidException ex = (MethodArgumentNotValidException)e;
 			errors = ex.getBindingResult().getFieldErrors();
+		}else if(e instanceof ConstraintViolationException){
+			ConstraintViolationException ex = (ConstraintViolationException) e;
+			constraints = ex.getConstraintViolations();
 		}
 		ErrorResponse errorResp=null;
 		systemError=languageTranslateManager.get(
 				ErrorCodes.INVALID_PARAM.getMsgCode(), locale,"",""
 				);
 		errorResp=new ErrorResponse().setSubErrors(new ArrayList<ErrorInfo>());
-		for(FieldError error :errors){
-			String filed=error.getField();
-			String errorType=error.getCode();
-			Character first=errorType.charAt(0);
-			errorType="system."+errorType.replaceFirst(String.valueOf(first), first.toString().toLowerCase());
-			String code=languageTranslateManager.get(errorType,locale);
-			if(code.equals(errorType)){//默认为参数非法
-				code=error.getDefaultMessage();
+		if(errors != null){
+			for(FieldError error :errors){
+				String filed=error.getField();
+				String errorType=error.getCode();
+				Character first=errorType.charAt(0);
+				errorType="system."+errorType.replaceFirst(String.valueOf(first), first.toString().toLowerCase());
+				String code=languageTranslateManager.get(errorType,locale);
+				if(code.equals(errorType)){//默认为参数非法
+					code=error.getDefaultMessage();
+				}
+				String subErrMsg=languageTranslateManager.get(
+						ErrorCodes.INVALID_PARAM.getMsgCode(), locale,filed,code
+						);
+				ErrorInfo info=new ErrorInfo();
+				info.setError(errorType)
+					.setMsg(subErrMsg);
+				errorResp.getSubErrors().add(info);
 			}
-			String subErrMsg=languageTranslateManager.get(
-					ErrorCodes.INVALID_PARAM.getMsgCode(), locale,filed,code
-					);
-			ErrorInfo info=new ErrorInfo();
-			info.setError(errorType)
-				.setMsg(subErrMsg);
-			errorResp.getSubErrors().add(info);
-		}
+		}else if(constraints != null){
+			for(ConstraintViolation<?> constraint :constraints){	
+				ErrorInfo info=new ErrorInfo();
+				info.setError(constraint.getMessageTemplate().substring(1, constraint.getMessageTemplate().length()-1))
+					.setMsg("[" + constraint.getPropertyPath().toString() + "]" + constraint.getMessage());
+				errorResp.getSubErrors().add(info);
+			}
+		}		
 					
 		DefaultResponseWrapper<ErrorResponse> responseWrapper = new DefaultResponseWrapper<>(
 				ErrorCodes.INVALID_PARAM.getCode(), systemError, errorResp);

@@ -8,6 +8,9 @@
 */ 
 package com.danyuanblog.framework.popularmvc.utils;
 
+import java.lang.annotation.Annotation;
+import java.util.Map;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.ApplicationContext;
@@ -41,6 +44,7 @@ public class SpringBeanUtil implements ApplicationContextAware {
      * @return
      */
     public static Object getBean(String beanName) {
+    	
         return getApplicationContext().getBean(beanName);
     }
 
@@ -53,6 +57,10 @@ public class SpringBeanUtil implements ApplicationContextAware {
      */
     public static <T> T getBean(Class<T> beanClass) {
         return getApplicationContext().getBean(beanClass);
+    }
+    
+    public static Map<String,Object> getBeansWithAnnotation(Class< ? extends Annotation> annotationType){
+    	return getApplicationContext().getBeansWithAnnotation(annotationType);    	
     }
 
     /**

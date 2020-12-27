@@ -182,7 +182,7 @@ public class ApiInvokeMethodInterceptorManager implements MethodInterceptor {
 			MethodParameter returnParam = handlerMethod.getReturnType();
 			Class<?> clazz = handlerMethod.getMethod().getDeclaringClass();
 			Class<?> returnClazz = returnParam.getParameterType();
-			if(ClassOriginCheckUtil.isNeedIntercept(clazz, returnClazz, popularMvcConfig.getAllBasePackages())){
+			if(ClassOriginCheckUtil.isNeedIntercept(clazz, returnClazz, handlerMethod.getMethod(), popularMvcConfig.getAllBasePackages())){
 				return true;
 			}
 		}		

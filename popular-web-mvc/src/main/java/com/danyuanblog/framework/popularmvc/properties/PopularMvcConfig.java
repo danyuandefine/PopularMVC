@@ -16,6 +16,8 @@ import java.util.Set;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.util.StringUtils;
 
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
+
 import lombok.Data;
 import lombok.experimental.Accessors;
 @Data
@@ -81,7 +83,7 @@ public class PopularMvcConfig implements Serializable {
 		this.sessionExpireSeconds = 600L; //默认10分钟
 		this.alwaysUseDefaultLocale = true;
 		this.forceAutoAddResponseWrapper = true;
-		this.basePackages = "com.danyuanblog.framework.popularmvc";
+		this.basePackages = "";
 		this.printAllProperties = false;
 	}
 	
@@ -93,6 +95,8 @@ public class PopularMvcConfig implements Serializable {
 				set.add(pkg);
 			}
 		}
+		//添加启动类所在的包
+		set.add(ClassOriginCheckUtil.getDeafultBasePackage());
 		return set;
 	}
 	

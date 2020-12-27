@@ -11,11 +11,12 @@
 1. 说明
     * PopularMVC是基于springboot开发的，自然强依赖于springboot和springmvc
     * PopularMVC在springboot提供的能力之上，为开发者编写API接口提供了很多额外的便利性
+
 2. 示意图
 
-> PopularMVC使用了springboot带来的所有便利，其在springmvc的基础上提供了额外的功能增强，如下图所示
->
-> ![PopularMVC业务流程图](doc/imgs/PopularMVC业务流程图.jpg)
+    * PopularMVC使用了springboot带来的所有便利，其在springmvc的基础上提供了额外的功能增强，如下图所示
+
+        ![PopularMVC业务流程图](doc/imgs/PopularMVC业务流程图.jpg)
 
 ### 1.1.2 PopularMVC项目组件架构解析
 * 架构图
@@ -114,7 +115,7 @@
   >
   >8. 时常为了写接口文档而占用太多coding time，而且接口文档还无法实时与接口变更保持同步
 
-  > 现在你有福了，你只需要引入PopularMVC框架，并为你的SpringBoot应用添加`@EnablePopularMvc`注解，再添加少量配置信息，即可解决上述所有的困扰！
+  > 现在你有福了，你只需要引入PopularMVC框架，并为你的SpringBoot应用添加`@EnablePopularMvc`注解，即可解决上述所有的困扰！
 
 * PopularMVC为你默默做了哪些工作呢？
 
@@ -174,21 +175,21 @@
     │     │              └─demo
     │     │                  └─popularmvc
     │     │                      ├─controller
-    │     │                      │  │  TestLanguageTranslateController.java
     │     │                      │  │      
-    │     │                      │  └─ TestParamsValidateController.java
+    │     │                      │  └─ TestController.java
     │     │                      │          
     │     │                      └─startup
-    │     │                              Startup.java #项目启动类
+    │     │                              StartDemoApplication.java #项目启动类
     │     │                              
     │     └─resources
-    │         │  application.yml  #项目配置信息
+    │         │  application.yml  #项目配置信息，可省略
     │         │  
-    │         └─i18n #如果需要自定义国际化支持，可以添加如下配置
+    │         └─i18n #自定义国际化支持，可省略
     │             └─messages #项目自定义国际化翻译信息
     │                     messages.properties
     │                     messages_en_US.properties
     │                     messages_zh_CN.properties
+    │                     #还可添加其他国际化翻译内容
     └─  pom.xml
     ```
 
@@ -205,184 +206,177 @@
 ## 3.2 启用PopularMvc框架
 
 ```java
-package com.danyuanblog.framework.demo.popularmvc.startup;
+/**  
+* Title StartDemoApplication.java  
+* Description  
+* @author danyuan
+* @date Oct 31, 2020
+* @version 1.0.0
+* site: www.danyuanblog.com
+*/ 
+package com.danyuanblog.framework.demo.popularmvc;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-
 import com.danyuanblog.framework.popularmvc.annotation.EnablePopularMvc;
 
 @SpringBootApplication
-//启用PopularMvc框架
 @EnablePopularMvc
-@ComponentScan("com.danyuanblog.framework.demo.popularmvc")
-public class Startup {
+public class StartDemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(Startup.class, args);
+		SpringApplication.run(StartDemoApplication.class, args);
 	}
 }
+
 ```
 
-## 3.3 添加配置信息
+## 3.3 测试接口代码示例
 
-* `application.yml`
-
-```yaml
-spring.messages:
-  #业务错误码翻译文件地址
-  basename: i18n/messages/messages
-  
-popularmvc:
-  #业务系统根包名集合,以逗号分隔
-  basePackages: "com.danyuanblog.framework.demo.popularmvc"
-  api:
-    #业务接口api包名
-    swagger: 
-      #业务接口API所在根包名，swagger会扫描这个包下的内容，生成接口文档
-      basePackage: "com.danyuanblog.framework.demo.popularmvc.controller"     
-```
-
-* 业务定制国际化翻译配置
-
-    * `messages_zh_CN.properties`
-
-        ```properties
-        #业务错误码翻译内容
-        USER_ACCOUNT_NOT_FOUND=对不起，你输入的账号[{0}]没有找到,请检查下你的账号哦！
-        ACCOUNT_NOT_FOUND=对不起，你的银行账户[{0}]输入错误，请核对！
-        #替换系统错误码默认翻译
-        system.invalidParam=这是无效参数{0}[{1}]
-        #业务信息翻译
-        danyuan.info=宇宙无敌帅小伙！
-        danyuan.tags=阳光，积极向上，热爱生活，拥抱变化，懂得容忍
-        ```
-
-    * `messages_en_US.properties`
-
-        ```properties
-        #业务错误码翻译内容U
-        SER_ACCOUNT_NOT_FOUND=Sorry , The user account[{0}] not found, please check your input.
-        ACCOUNT_NOT_FOUND=Sorry , The bank account[{0}] is invalid, please check your input.
-        #业务信息翻译
-        danyuan.info=The universe is invincible, handsome boy!
-        danyuan.tags=Sunshine, positive, love life, embrace change, understand tolerance
-        ```
-
-## 3.4 示例接口
-
-* 请求参数校验示例
+* 代码如下，`TestController.java`
 
     ```java
-    //接口示例
-    	@PostMapping(value="testRequestParamCheck",
-    			name="测试校验请求参数")
-    	@ApiOperation(value="测试校验请求参数", notes="测试校验请求参数")
-    	public void testRequestParamCheck(@RequestBody ParamsCheckDto req, @RequestParam @Email String adminEmail){
-    		
-    	}
-    
-    //请求参数校验DTO
-    @Data
-    @ApiModel
-    public class ParamsCheckDto implements Serializable{/** 
-    	 *serialVersionUID
-    	 */
-    	private static final long serialVersionUID = 1L;
-    	
-    	@NotBlank
-    	@Size(max=10, min=10, message = "账号长度只能为10!")
-    	@ApiModelProperty(value = "用户账号", required = true, example = "1321122321")
-    	private String account;
-    	
-    	@Email
-    	@ApiModelProperty(value = "用户邮箱号")
-    	private String email;
-    	
-    	@NotNull
-    	@Range(max=200, min=1, message = "年龄只能在1-200岁之间!")
-    	@ApiModelProperty(value = "用户年龄", required = true)
-    	private Integer age;
-    	
-    	@Size(max=3, min=0, message = "最多只能选择3个爱好!")
-    	@ApiModelProperty(value = "用户爱好")
-    	private List<String> likes;//爱好
-    }
-    
-    ```
-
-    
-
-* 国际化响应信息示例
-
-    * `TestLanguageTranslateController.java`
-
-    ```java
+    /**  
+    * Title TestController.java  
+    * Description  
+    * @author danyuan
+    * @date Dec 27, 2020
+    * @version 1.0.0
+    * site: www.danyuanblog.com
+    */ 
     package com.danyuanblog.framework.demo.popularmvc.controller;
     
-    import io.swagger.annotations.Api;
-    import io.swagger.annotations.ApiOperation;
+    import java.util.HashMap;
+    import java.util.Map;
     
+    import javax.validation.Valid;
+    import javax.validation.constraints.NotBlank;
+    import javax.validation.constraints.NotEmpty;
+    import javax.validation.constraints.Size;
+    
+    import org.springframework.validation.annotation.Validated;
     import org.springframework.web.bind.annotation.GetMapping;
+    import org.springframework.web.bind.annotation.PostMapping;
     import org.springframework.web.bind.annotation.RequestParam;
     import org.springframework.web.bind.annotation.RestController;
     
-    import com.danyuanblog.framework.demo.popularmvc.controller.dto.LanguageInfoDto;
+    import com.danyuanblog.framework.popularmvc.exception.BusinessException;
     
-    @Api(tags = "测试响应结构自动包装和业务异常的使用")
     @RestController
-    public class TestLanguageTranslateController {
+    @Validated
+    public class TestController {
     	
-    	@GetMapping(value="testGetLanguageInfo",
-    			name="测试信息国际化自动翻译功能")
-    	@ApiOperation(value="测试信息国际化自动翻译功能", notes="测试信息国际化自动翻译功能")
-    	public LanguageInfoDto testGetLanguageInfo(@RequestParam("info") String info){
-    		return new LanguageInfoDto(info,"danyuan",22);
-    	}
-    
-    }
-    
-    ```
-
-    * `LanguageInfoDto.java`
-
-    ```java
-    package com.danyuanblog.framework.demo.popularmvc.controller.dto;
-    
-    import java.io.Serializable;
-    
-    import com.danyuanblog.framework.popularmvc.annotation.LanguageTranslate;
-    
-    import lombok.AllArgsConstructor;
-    import lombok.Data;
-    import lombok.NoArgsConstructor;
-    
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public class LanguageInfoDto implements Serializable{
-    
-    	/** 
-    	 *serialVersionUID
+    	/**
+    	 * 参数自动校验、响应内容自动包装功能示例
+    	 * @author danyuan
     	 */
-    	private static final long serialVersionUID = 1L;
-        
-    	@LanguageTranslate
-    	private String info;
+    	@GetMapping("queryUserInfo")	
+    	public Map<String,Object> queryUserInfo(@Valid @Size(max=20, min=6) @NotBlank @RequestParam String username){
+    		
+    		System.out.println("查询用户["+username+"]的信息!");
+    		
+    		//TODO: 执行业务逻辑
+    		
+    		//mock数据
+    		Map<String,Object> userInfos = new HashMap<>();
+    		userInfos.put("username", username);
+    		userInfos.put("age", 23);
+    		userInfos.put("sex", "男");
+    		userInfos.put("desc", "阳光乐观外向，喜欢唱歌、打篮球！");
+    		
+    		//返回数据
+    		return userInfos;
+    	}
     	
-    	private String name;
-    	
-    	private int age;
+    	/**
+    	 * 业务异常的使用示例
+    	 * @author danyuan
+    	 */
+    	@PostMapping("user/regist")	
+    	public void userRegist(@Valid @NotEmpty String username, 
+    			@Valid @NotEmpty String password){
+    		//TODO: 执行业务逻辑，发现账号已存在，直接通过抛出异常的方式提示用户
+    		throw new BusinessException("用户名[{0}]已存在，请更换!").setParam(username);
+    	}
     }
-    
+    ```
+
+## 3.4 测试接口结果
+
+>  接口文档访问地址：http://localhost:8080/doc.html
+
+![](doc/imgs/get-start-demo/接口文档首页.png)
+
+### 3.4.1 测试参数校验
+
+* 请求参数
+
+   * knif4j接口文档调试时自动提示参数不能为空
+
+    ![](doc/imgs/get-start-demo/测试参数校验_请求1.png)
+
+    * 提交非法请求参数
+
+    ![](doc/imgs/get-start-demo/测试参数校验_请求2.png)
+
+* 结果
+
+    ```json
+    {
+      "msg": "[参数异常]", #错误信息概览
+      "code": 120002, #系统错误码
+      "data": {
+        "subErrors": [
+          {
+            "error": "javax.validation.constraints.Size.message",#业务错误码
+            "msg": "[queryUserInfo.username]个数必须在6和20之间" #详细错误信息
+          }
+        ]
+      }
+    }
+    ```
+
+### 3.4.2 测试正常响应信息返回
+
+* 请求参数
+
+    ![](doc/imgs/get-start-demo/测试正常响应信息返回_请求.png)
+
+* 结果
+     ![](doc/imgs/get-start-demo/测试正常响应信息返回_结果.png)
+
+     ```json
+     {
+       "code": 0,
+       "data": {
+         "sex": "男",
+         "age": 23,
+         "username": "Jone Lacy",
+         "desc": "阳光乐观外向，喜欢唱歌、打篮球！"
+       }
+     }
+     ```
+
+### 3.4.3 测试业务异常的使用
+
+* 请求参数
+
+    ![](doc/imgs/get-start-demo/测试业务异常的使用_请求.png)
+
+* 结果
+
+    ![](doc/imgs/get-start-demo/测试业务异常的使用_响应.png)
+
+    ```json
+    {
+      "msg": "用户名[test]已存在，请更换!",
+      "code": 200000
+    }
     ```
 
     
 
-## 3.5 接口文档示例
-
-* 接口文档访问地址：http://localhost:8080/doc.html
+## 3.5 更多功能示例
 
 * 系统内置接口
 
@@ -424,49 +418,51 @@ popularmvc:
 
 ## 4.1 参数校验示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.2 自动填充API响应参数示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.3 业务错误码使用示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.4 接口响应国际化翻译示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.5 使用数字签名示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.6 接口数据加解密示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.7 接口防重复提交功能示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.8 接口查询缓存使用示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.9 接口用户会话功能使用示例
 
-
+[请参考使用示例](../MORE.md)
 
 ## 4.10 静态资源使用示例
 
-
+[请参考使用示例](../MORE.md)
 
 # 5、业务定制化
 
 ## 5.1 配置定制化
 
-* 参数自定义
+* 接口文档个性化
+
+* 系统参数定制化
     * 系统公共请求参数名自定义
     * 添加额外的系统公共请求参数
     * 系统公共响应参数名自定义
@@ -492,10 +488,16 @@ popularmvc:
 > 2. 可以添加自定义接口调用拦截器，实现一些通用业务
 > 3. 可以添加自定义接口请求、响应参数装饰器，对参数进行加工
 > 4. 可以添加自定义响应序列化预处理器，根据业务需要定制化返回信息
-> 5. 可以添加自定义异常处理器，
+> 5. 可以添加自定义异常处理器，为目标类型的异常做额外的处理
 > 6. 可以灵活定制和使用自定义的加解密处理器
 
 # 6、交流与答疑
+
+> ​      此项目的设计初衷源于本人在多年API接口开发经验上，从接口规范、开发便捷易用、配置简单这些角度出发而总结出来的一套API解决方案。通过简单引入PopularMVC组件，可以快速搭建一套规范易用的API开发系统。
+>
+> ​      开源的目的在于，一则希望此项目能帮助更多的研发人员提升API开发质量，提供大量易用的开发套件提升研发人员的开发效率；二则希望更多的人加入到开源中，促进开源项目的成长，然后服务于更多的开发者；其次希望觉得此项目不错的朋友给个Star，分享给更多的朋友，让大家一起进步！
+>
+> ​      如果在使用此框架的过程中有任何疑问或者好的建议可以通过以下联系方式找到大部队，大家一起交流一起进步！
 
 | 渠道        | 联系地址                                                | 说明                                              |
 | ----------- | ------------------------------------------------------- | ------------------------------------------------- |
@@ -503,7 +505,5 @@ popularmvc:
 | 邮箱号      | admin@danyuanblog.com                                   | 有问题也可以发邮件留言                            |
 | 留言板      | http://www.danyuanblog.com/blog/app/words/msgBoard.html | 通过留言板留言                                    |
 | gitee Issue | https://gitee.com/danyuanblog/PopularMVC/issues         | 在使用过程中如果遇到问题，可以提Issue，不定时回复 |
-
-
 
 

@@ -1,5 +1,5 @@
 /**  
-* Title ErrorCodeUtil.java  
+* Title BusinessErrorCodeInterpreter.java  
 * Description  错误码工具包
 * @author danyuan
 * @date Nov 8, 2019
@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
-public class BussinessErrorCodeInterpreter {
+public class BusinessErrorCodeInterpreter {
 	private final static HashMap<String, Integer> codeMap = new HashMap<>();
 
 	@Autowired
@@ -71,7 +71,10 @@ public class BussinessErrorCodeInterpreter {
 	}
 	
 	public static Integer getCode(String error){
-		return codeMap.get(error);
+		if(codeMap.containsKey(error)){
+			return codeMap.get(error);
+		}
+		return ErrorCodes.BUSINNES_ERROR.getCode();
 	}
 	
 	/**

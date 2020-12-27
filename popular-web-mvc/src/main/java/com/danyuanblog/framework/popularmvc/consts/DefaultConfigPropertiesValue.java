@@ -19,58 +19,44 @@ import lombok.Getter;
 
 @Getter
 public enum DefaultConfigPropertiesValue {
-	SRPRING_MSG_BASENAME("spring.messages.basename","META-INF/i18n/popularMvcMessages")
-	,POPULARMVC_BASE_PACKAGES("popularmvc.basePackages","com.danyuanblog.framework.popularmvc")
-	,POPULARMVC_ENABLE("popularmvc.enable",true)
-	,POPULARMVC_ENABLE_SWAGGER("popularmvc.enableSwagger",true)
-	,SRPRING_MSG_USE_CODE_AS_DEFAULT_MESSAGE("spring.messages.useCodeAsDefaultMessage",false)
-	,SRPRING_MSG_FALLBACK_TO_SYSTEM_LOCALE("spring.messages.fallbackToSystemLocale",false)
+	SRPRING_MSG_BASENAME("spring.messages.basename","META-INF/i18n/popularMvcMessages,i18n/messages/messages", DefaultConfigValueMode.PREPEND)
+	,POPULARMVC_BASE_PACKAGES("popularmvc.basePackages","com.danyuanblog.framework.popularmvc", DefaultConfigValueMode.PREPEND)
+	,POPULARMVC_DEFAULT_LOG_LEVEL("logging.level.com.danyuanblog.framework.popularmvc","INFO", DefaultConfigValueMode.OPTION)
+	,POPULARMVC_ENABLE("popularmvc.enable",true, DefaultConfigValueMode.OPTION)
+	,POPULARMVC_ENABLE_SWAGGER("popularmvc.enableSwagger",true, DefaultConfigValueMode.OPTION)
+	,SRPRING_MSG_USE_CODE_AS_DEFAULT_MESSAGE("spring.messages.useCodeAsDefaultMessage",false, DefaultConfigValueMode.FORCE_DEFAULT)
+	,SRPRING_MSG_FALLBACK_TO_SYSTEM_LOCALE("spring.messages.fallbackToSystemLocale",false, DefaultConfigValueMode.FORCE_DEFAULT)
 	;
 	private String key;
 	
 	private Object defaultValue;
 	/**
-	 * 是否添加到末尾,否则添加在前面
+	 * 默认值使用模式
 	 */
-	private boolean append;
-	/**
-	 * 强制使用默认值
-	 */
-	private boolean forceUseDefaultValue;
+	private DefaultConfigValueMode mode;
+
 	
-	private DefaultConfigPropertiesValue(String key, Object defaultValue, boolean append, boolean forceUseDefaultValue){
+	private DefaultConfigPropertiesValue(String key, Object defaultValue, DefaultConfigValueMode mode){
 		this.key = key;
 		this.defaultValue = defaultValue;
-		this.append = append;
+		this.mode = mode;
 	}
 	
-	private DefaultConfigPropertiesValue(String key, Object defaultValue, boolean forceUseDefaultValue){
-		this.key = key;
-		this.defaultValue = defaultValue;
-		this.forceUseDefaultValue = forceUseDefaultValue;
-	}
 	
 	private DefaultConfigPropertiesValue(String key, Object defaultValue){
 		this.key = key;
 		this.defaultValue = defaultValue;
-		this.append = false; //默认添加到前面
-		this.forceUseDefaultValue = false;
+		this.mode = DefaultConfigValueMode.OPTION; //默认值，可被配置覆盖
 	}
 	
-	public boolean needCompose(){		
-		return !this.forceUseDefaultValue;
-	}
 	
 	public Object getComposeValue(Object originalValue){
-		if(this.forceUseDefaultValue){
+		if(DefaultConfigValueMode.FORCE_DEFAULT.equals(this.mode) || StringUtils.isEmpty(originalValue)){
 			return this.defaultValue;
 		}
-		if(this.defaultValue.equals(originalValue)){
+		if(DefaultConfigValueMode.OPTION.equals(this.mode) || this.defaultValue.equals(originalValue)){
 			return originalValue;
-		}
-		if(StringUtils.isEmpty(originalValue)){
-			return this.defaultValue;
-		}
+		}		
 		if(originalValue instanceof String){
 			StringBuffer buffer = new StringBuffer();
 			Set<String> set = new HashSet<>();
@@ -79,12 +65,21 @@ public enum DefaultConfigPropertiesValue {
 					set.add(val);
 				}
 			}
-			if(!set.contains(this.defaultValue)){
-				if(this.append){
-					buffer.append(originalValue).append(",").append(this.getDefaultValue());
-				}else{
-					buffer.append(this.getDefaultValue()).append(",").append(originalValue);
+			String[] defaultValues = ((String) this.defaultValue).split(",");
+			if(DefaultConfigValueMode.APPEND.equals(this.mode)){
+				buffer.append(originalValue);
+			}
+			for(String value : defaultValues){
+				if(!set.contains(value)){
+					if(DefaultConfigValueMode.APPEND.equals(this.mode)){
+						buffer.append(",").append(value);
+					}else{
+						buffer.append(value).append(",");
+					}
 				}
+			}
+			if(DefaultConfigValueMode.PREPEND.equals(this.mode)){
+				buffer.append(originalValue);
 			}			
 			return buffer.toString();
 		}
