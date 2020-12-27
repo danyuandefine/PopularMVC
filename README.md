@@ -15,7 +15,7 @@
 
 * 神器亮相
 
-    > 为你的springboot项目插上翅膀！
+    > springboot叫一键启动，popularmvc为你的springboot项目插上翅膀，力求一键起飞！
 
     ![popularmvc logo](doc/imgs/logo.jpg)
 
