@@ -168,11 +168,29 @@
 
 # 2、项目模块
 
+## 2.1 项目模块介绍
+
 | 模块                         | 说明                                                         | 地址                                                         |
 | ---------------------------- | ------------------------------------------------------------ | ------------------------------------------------------------ |
 | popular-web-mvc              | 为springboot应用提供API业务增强解决方案                      | https://mvnrepository.com/artifact/com.danyuanblog.framework/popular-web-mvc |
 | popular-web-mvc-demo         | popularMVC框架使用完整示例demo                               | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-demo |
 | popular-web-mvc-simple-demos | popularMVC框架简易demo集合，后续的使用示例尽量从单个项目包含单个特性去逐个演示 | https://gitee.com/danyuanblog/PopularMVC/tree/master/popular-web-mvc-simple-demos |
+
+## 2.2 项目版本依赖
+
+- **popular-web-mvc 1.0.x-1.1.x版本使用到的第三方依赖如下所示**
+
+|                       Category/License                       |                                                              | Group / Artifact                                             |                           Version                            |
+| :----------------------------------------------------------: | ------------------------------------------------------------ | ------------------------------------------------------------ | :----------------------------------------------------------: |
+| [Bytecode](https://mvnrepository.com/open-source/bytecode-libraries) Apache 2.0 | ![img](https://mvnrepository.com/img/36cfc0f02952ee8ec4287a964459c83b) | [cglib](https://mvnrepository.com/artifact/cglib) » [cglib-nodep](https://mvnrepository.com/artifact/cglib/cglib-nodep) | [3.1](https://mvnrepository.com/artifact/cglib/cglib-nodep/3.1) |
+|                          Apache 2.0                          | ![img](https://mvnrepository.com/img/dcbecb3f624f92b8114c301b93cb7584) | [com.github.xiaoymin](https://mvnrepository.com/artifact/com.github.xiaoymin) » [knife4j-spring-boot-starter](https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter) | [2.0.5](https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter/2.0.5) |
+| [Base64](https://mvnrepository.com/open-source/base64-libraries) Apache 2.0 | ![img](https://mvnrepository.com/img/c44e3998569145e628d7d13a288ba5a) | [commons-codec](https://mvnrepository.com/artifact/commons-codec) » [commons-codec](https://mvnrepository.com/artifact/commons-codec/commons-codec) | [1.11](https://mvnrepository.com/artifact/commons-codec/commons-codec/1.11) |
+|                        Apache 2.0MIT                         | ![img](https://mvnrepository.com/img/24847bc539dd874c2fa5c16656f79f97) | [net.logstash.logback](https://mvnrepository.com/artifact/net.logstash.logback) » [logstash-logback-encoder](https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder) | [5.0](https://mvnrepository.com/artifact/net.logstash.logback/logstash-logback-encoder/5.0) |
+| [AOP](https://mvnrepository.com/open-source/aop-programming) EPL 1.0 | ![img](https://mvnrepository.com/img/be00b7704f7142d8a71b7a3354ecd39a) | [org.aspectj](https://mvnrepository.com/artifact/org.aspectj) » [aspectjweaver](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver) | [1.9.2](https://mvnrepository.com/artifact/org.aspectj/aspectjweaver/1.9.2) |
+|                             MIT                              | ![img](https://mvnrepository.com/img/55c118774847d72925d47b54b3287b2d) | [org.projectlombok](https://mvnrepository.com/artifact/org.projectlombok) » [lombok](https://mvnrepository.com/artifact/org.projectlombok/lombok) (optional) | [1.18.6](https://mvnrepository.com/artifact/org.projectlombok/lombok/1.18.6) |
+|                          Apache 2.0                          | ![img](https://mvnrepository.com/img/98d8f4cfc82730584887c57255cf3af0) | [org.springframework.boot](https://mvnrepository.com/artifact/org.springframework.boot) » [spring-boot-starter-web](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web) | [2.1.3.RELEASE](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-web/2.1.3.RELEASE) |
+|                          Apache 2.0                          | ![img](https://mvnrepository.com/img/98d8f4cfc82730584887c57255cf3af0) | [org.springframework.boot](https://mvnrepository.com/artifact/org.springframework.boot) » [spring-boot-starter-undertow](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-undertow) | [2.1.3.RELEASE](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-undertow/2.1.3.RELEASE) |
+|                          Apache 2.0                          | ![img](https://mvnrepository.com/img/98d8f4cfc82730584887c57255cf3af0) | [org.springframework.boot](https://mvnrepository.com/artifact/org.springframework.boot) » [spring-boot-starter](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter) (optional) | [2.1.3.RELEASE](https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter/2.1.3.RELEASE) |
 
 # 3、入门demo
 
@@ -431,45 +449,7 @@ public class StartDemoApplication {
 
 # 4、更多特性介绍与使用示例
 
-## 4.1 参数校验示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.2 自动填充API响应参数示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.3 业务错误码使用示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.4 接口响应国际化翻译示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.5 使用数字签名示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.6 接口数据加解密示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.7 接口防重复提交功能示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.8 接口查询缓存使用示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.9 接口用户会话功能使用示例
-
-[请参考使用示例](doc/MORE.md)
-
-## 4.10 静态资源使用示例
-
-[请参考使用示例](doc/MORE.md)
+**[使用示例传送门](doc/demos.md)**
 
 # 5、业务定制化
 

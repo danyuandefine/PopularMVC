@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.BindException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 
 import com.danyuanblog.framework.popularmvc.LanguageTranslateManager;
 import com.danyuanblog.framework.popularmvc.consts.ErrorCodes;
@@ -42,7 +43,10 @@ public class InvalidationExceptionHandler extends AbstractCommonExceptionHandler
 	 */
 	@Override
 	public boolean support(Exception e) {
-		if (e instanceof BindException || e instanceof MethodArgumentNotValidException || e instanceof ConstraintViolationException){
+		if (e instanceof BindException 
+				|| e instanceof MethodArgumentNotValidException 
+				|| e instanceof ConstraintViolationException 
+				|| e instanceof MissingServletRequestParameterException){
 			return true;
 		}
 		return false;
@@ -67,6 +71,13 @@ public class InvalidationExceptionHandler extends AbstractCommonExceptionHandler
 		}else if(e instanceof ConstraintViolationException){
 			ConstraintViolationException ex = (ConstraintViolationException) e;
 			constraints = ex.getConstraintViolations();
+		}else if ( e instanceof MissingServletRequestParameterException){
+			MissingServletRequestParameterException ex = (MissingServletRequestParameterException) e;
+			systemError=languageTranslateManager.get(
+					ErrorCodes.PARAM_LOST.getMsgCode(), locale,ex.getParameterName()
+					);
+			return new DefaultResponseWrapper<>(
+					ErrorCodes.PARAM_LOST.getCode(), systemError);
 		}
 		ErrorResponse errorResp=null;
 		systemError=languageTranslateManager.get(
@@ -99,9 +110,16 @@ public class InvalidationExceptionHandler extends AbstractCommonExceptionHandler
 				errorResp.getSubErrors().add(info);
 			}
 		}		
-					
-		DefaultResponseWrapper<ErrorResponse> responseWrapper = new DefaultResponseWrapper<>(
-				ErrorCodes.INVALID_PARAM.getCode(), systemError, errorResp);
+		DefaultResponseWrapper<ErrorResponse> responseWrapper = null;
+		if(errorResp.getSubErrors().size() == 1){
+			//单个错误直接返回
+			systemError= errorResp.getSubErrors().get(0).getMsg();
+			responseWrapper = new DefaultResponseWrapper<>(
+					ErrorCodes.INVALID_PARAM.getCode(), systemError);
+		}else{
+			responseWrapper = new DefaultResponseWrapper<>(
+					ErrorCodes.INVALID_PARAM.getCode(), systemError, errorResp);
+		}	
 
 		return responseWrapper;
 	}
