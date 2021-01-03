@@ -194,6 +194,8 @@
 
 # 3、入门demo
 
+> 此demo是使用popularmvc的入门示例，演示了popularmvc在无侵入的模式下为你的项目提供乐参数校验、业务异常的使用等功能，为了简化入门门槛，就未做其他功能示例，如果需要学习使用更多功能，[请参考更多示例](doc/demos.md)。
+
 ## 3.1 项目结构
 
 * 项目结构
@@ -500,5 +502,6 @@ public class StartDemoApplication {
 | 邮箱号      | admin@danyuanblog.com                                   | 有问题也可以发邮件留言                            |
 | 留言板      | http://www.danyuanblog.com/blog/app/words/msgBoard.html | 通过留言板留言                                    |
 | gitee Issue | https://gitee.com/danyuanblog/PopularMVC/issues         | 在使用过程中如果遇到问题，可以提Issue，不定时回复 |
+|             | ![淡远文摘](doc/imgs/wechatBlog.png)                    | 关注公众号不迷路，不定期更新技术文章              |
 
 

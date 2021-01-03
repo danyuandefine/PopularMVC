@@ -1,0 +1,6 @@
+#popularmvc:
+  #全局默认配置
+  #是否启用popularMVC框架
+  #enable: false
+  #是否强制对所有api响应添加响应壳
+  #forceAutoAddResponseWrapper: false

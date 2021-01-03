@@ -16,6 +16,7 @@ import java.lang.annotation.Target;
 
 import com.danyuanblog.framework.popularmvc.consts.SignScope;
 import com.danyuanblog.framework.popularmvc.encrypt.SignEncryptHandler;
+import com.danyuanblog.framework.popularmvc.encrypt.impl.Sha1SignEncryptHandler;
 
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
@@ -27,5 +28,5 @@ public @interface RequiredSign {
 	 * 手动指定加密处理器,默认采用AES加解密
 	 * @author danyuan
 	 */
-	Class<? extends SignEncryptHandler> type() default SignEncryptHandler.class;
+	Class<? extends SignEncryptHandler> type() default Sha1SignEncryptHandler.class;
 }

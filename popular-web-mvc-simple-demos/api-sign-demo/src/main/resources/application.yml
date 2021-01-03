@@ -1,0 +1,38 @@
+popularmvc:
+  api: 
+    channels:
+      default: #用于不区分渠道信息的应用
+        default: #默认的秘钥信息
+          enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
+          secret: "123456"
+          keyPair: #用于非对称加解密的秘钥对
+            privateSecret: ""
+            publicSecret: ""
+        appId1: #某个应用下的秘钥信息
+          enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
+          secret: "123456"
+          keyPair: #用于非对称加解密的秘钥对
+            privateSecret: ""
+            publicSecret: ""
+      android:
+        default:
+          enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
+          secret: "123456"
+          keyPair: #用于非对称加解密的秘钥对
+            privateSecret: ""
+            publicSecret: ""
+      ios: 
+        default: 
+          enable: true
+          secret: "12345678"  
+          keyPair:
+            privateSecret: ""
+            publicSecret: ""  
+            
+logging:
+  level:
+    org.springframework.web: INFO
+    com.danyuanblog.framework.popularmvc: TRACE

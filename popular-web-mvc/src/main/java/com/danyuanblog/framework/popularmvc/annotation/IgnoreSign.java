@@ -16,7 +16,7 @@ import java.lang.annotation.Target;
 /**
  * 当接口开启验签时，添加此注解的字段不参与签名
  */
-@Target({ElementType.FIELD,ElementType.METHOD})
+@Target({ElementType.FIELD,ElementType.METHOD,ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface IgnoreSign {

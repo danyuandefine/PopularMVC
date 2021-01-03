@@ -1,0 +1,19 @@
+popularmvc:
+  error: #错误码相关配置
+    #自定义系统错误码值,格式【枚举名 ：数值】
+    systemErrorCodes: 
+      NOT_FOUND: 404
+    #业务异常定义，格式【错误码多语言字典值 ：错误码指代的默认中文翻译描述信息】
+    #每个服务的业务错误码值可以设置在某个区间，在一个大型系统中不同区间的错误码能直观的反应出是哪个服务抛出的问题
+    #业务错误码默认起始值
+    businessCodeStart: 200001
+    #业务错误码默认最大值
+    businessCodeEnd: 999999
+    #业务异常错误码值
+    businessErrorCodes: 
+      #默认将会自动生成业务错误码值
+      USER_ACCOUNT_NOT_FOUND.desc: "用户账号[{0}]未找到!"
+      #自定义业务错误码值示例
+      USER_PASSWORD_ERROR:
+        code: 200006
+        desc: "密码错误，请检查！"

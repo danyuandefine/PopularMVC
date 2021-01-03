@@ -1,0 +1,3 @@
+spring.messages: 
+  #默认会加载加载i18n/messages/messages字典翻译信息，这里我们再配置自定义国际化系统错误码的字典翻译信息
+  basename: i18n/custom/systemErrorCodeInfo

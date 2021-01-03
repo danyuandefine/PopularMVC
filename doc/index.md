@@ -500,7 +500,7 @@ public class StartDemoApplication {
 | 邮箱号      | admin@danyuanblog.com                                   | 有问题也可以发邮件留言                            |
 | 留言板      | http://www.danyuanblog.com/blog/app/words/msgBoard.html | 通过留言板留言                                    |
 | gitee Issue | https://gitee.com/danyuanblog/PopularMVC/issues         | 在使用过程中如果遇到问题，可以提Issue，不定时回复 |
-
+| 微信公众号  | ![淡远文摘](imgs/wechatBlog.png)                        | 关注公众号不迷路，不定期更新技术文章              |
 
 
 

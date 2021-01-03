@@ -1,0 +1,38 @@
+popularmvc:
+  api: 
+    channels:
+      default: #用于不区分渠道信息的应用
+        default: #默认的秘钥信息
+          enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
+          secret: "123456"
+          keyPair: #用于非对称加解密的秘钥对
+            privateSecret: "MIICdQIBADANBgkqhkiG9w0BAQEFAASCAl8wggJbAgEAAoGBAIZjqviU3YAn3yOftco++Ya+KcuE6hC3scAvh7CoC4bgYTAqWZhNmdXOu4I5jzd2rhz2r6E6CInRhhY+m9kRIKN8GKP7hsG2/GibY/iK304zxqetzhvX9jd8D/f9riTqd6N09g3zBkmh6XUBvbha52Xksi4UzXJhV3ZVgfWv1t4nAgMBAAECgYByVrQtQQLfuYypE4Yo58GHOZ33sUMwLAoImKfazm7YN2mZAD8wTL3Y4kY4ut418zyaGew9wVFoaKKrpGMWoPLhvZiMZGb92r5SIb4C9gI3S6XHKYoOaVXi8oSTkCF0duoSQdCy3w3CGZbdfTEO/qtT25CePyGB2c1bYj0VULUm2QJBAPTzhh5ndTyuGiV+wbnWk6x6gcONNUGpTuvdGkcNBw/fn6QAA44CA+LKdFOMDB2QQmO3vF/JhQEjG6L4mbq8A6UCQQCMc3l40RwRypJ3A9RbwrYtO1c0X2VHdGCpi1L4FMxLWdTB0c7y9HbbXcJdL0L3Bl48Go0bwzzNSkfr2vqR9MDbAkBcZqjHO1u8QijW0BQgGFOokqX0sIXQeR+uVb+d4coyMLc11FOC9DunB5wOEBxZ4ptIpnzG3Wvw29+HAKRtDpOJAkBwoBSTTlPM7H0glOCQKIY/pSsbozeq4ea1bjS9HKhp8AIM3jquVlyNMhUu9jwjrGaamcv3rEqwcFVWC0YNDpArAkBYjalgYWGq6hRTjYSYJ82mdHy2EGxGhBkq51U871uaReP8c/a5wGjxPEyZMclF5+fpfFTwD+F8JZReVqa70eh6df723820"
+            publicSecret: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCGY6r4lN2AJ98jn7XKPvmGvinLhOoQt7HAL4ewqAuG4GEwKlmYTZnVzruCOY83dq4c9q+hOgiJ0YYWPpvZESCjfBij+4bBtvxom2P4it9OM8anrc4b1/Y3fA/3/a4k6nejdPYN8wZJoel1Ab24Wudl5LIuFM1yYVd2VYH1r9beJwIDAQAB"
+        appId1: #某个应用下的秘钥信息
+          enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
+          secret: "123456"
+          keyPair: #用于非对称加解密的秘钥对
+            privateSecret: ""
+            publicSecret: ""
+      android:
+        default:
+          enable: true
+          #用于对称加解密、生成数字签名、验证数字签名的秘钥
+          secret: "123456"
+          keyPair: #用于非对称加解密的秘钥对
+            privateSecret: ""
+            publicSecret: ""
+      ios: 
+        default: 
+          enable: true
+          secret: "12345678"  
+          keyPair:
+            privateSecret: ""
+            publicSecret: ""  
+            
+logging:
+  level:
+    org.springframework.web: INFO
+    com.danyuanblog.framework.popularmvc: TRACE

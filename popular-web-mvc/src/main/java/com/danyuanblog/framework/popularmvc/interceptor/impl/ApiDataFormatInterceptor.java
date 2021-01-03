@@ -116,7 +116,7 @@ public class ApiDataFormatInterceptor extends AbstractApiMethodInterceptor {
 				annos.put(anno.annotationType(), anno);
 			}
 		}					
-		BeanPropertyUtil.decorateObj("resp", resp, annos,  (fieldName, data,annotations)->{
+		resp = BeanPropertyUtil.decorateObj("resp", resp, annos,  (fieldName, data,annotations)->{
 			for(FieldDataFormatHandler handler : handlers){
 				if(handler.handleResponse()){
 					try{

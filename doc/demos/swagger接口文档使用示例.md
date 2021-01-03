@@ -5,6 +5,8 @@
 >
 > 此项目只演示简单入门示例，更多接口文档使用细节请求参考swagger和knife4j官方文档!
 
+* [demo源码传送门](../../popular-web-mvc-simple-demos/api-doc-demo)
+
 # 项目示例
 
 ## 1 项目结构

@@ -115,13 +115,11 @@ public class PopularMvcBeanConfigurer {
 	}
 	
 	@Bean
-	@ConditionalOnMissingBean(SignEncryptHandler.class)
 	public SignEncryptHandler signEncryptHandler() {
 		return new Sha1SignEncryptHandler();
 	}
 	
 	@Bean
-	@ConditionalOnMissingBean(DataEncryptHandler.class)
 	public DataEncryptHandler dataEncryptHandler(@Autowired SecretManager secretManager) {
 		return new AESDataEncryptHandler().setSecretManager(secretManager);
 	}
