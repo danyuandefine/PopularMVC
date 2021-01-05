@@ -38,8 +38,10 @@ public class MethdInvokeUtil {
 	    			}else{
 	    				param.setParamName(paramName);
 	    			}    			
-	    		}else{
+	    		}else if(params != null){
 	    			param.setParamName(params[i]);
+	    		}else{
+	    			param.setParamName("p"+i);
 	    		}	    		
 	    		if(checkIsAnno(annotations[i], IgnoreSign.class)){
 	    			param.setNeedSign(false);

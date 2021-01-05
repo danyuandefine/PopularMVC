@@ -49,7 +49,11 @@ public class MethodCacheManager {
 		for(Object param : args){
 			paramName = MethdInvokeUtil.getBaseTypeParamName(method.getParameterAnnotations()[i]);
 			if(StringUtils.isBlank(paramName)){
-				paramName = parameters[i];
+				if(parameters != null){
+					paramName = parameters[i];
+				}else{
+					paramName = "p"+i;
+				}
 			}
 			nameValueMap.putAll(BeanPropertyUtil.objToStringMap(param, paramName));		
 			i++;
