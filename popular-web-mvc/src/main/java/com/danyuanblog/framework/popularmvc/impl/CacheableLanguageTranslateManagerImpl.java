@@ -36,7 +36,6 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 
 	@Autowired(required = false)
 	@Qualifier("languageTranslateManager")
-	@Lazy
 	private LanguageTranslateManager languageTranslateManager;
 	
 	@Autowired(required = false)
@@ -62,6 +61,10 @@ public class CacheableLanguageTranslateManagerImpl implements LanguageTranslateM
 	 */
 	@Override
 	public String get(String key, String locale, Object... params) {
+		if(languageTranslateManager == null){
+			languageTranslateManager = defaultLanguageTranslateManager;
+		}
+		
 		if(StringUtils.isBlank(key)){
 			return key;
 		}

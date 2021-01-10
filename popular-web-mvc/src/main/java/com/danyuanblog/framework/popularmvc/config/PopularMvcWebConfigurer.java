@@ -9,7 +9,10 @@
 package com.danyuanblog.framework.popularmvc.config;
 
 
+import java.util.ArrayList;
 import java.util.List;
+
+import javax.validation.Valid;
 
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -21,13 +24,18 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.MethodParameter;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.validation.Validator;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.mvc.method.annotation.RequestResponseBodyMethodProcessor;
 
 import com.danyuanblog.framework.popularmvc.filter.RepeatedlyReadFilter;
 import com.danyuanblog.framework.popularmvc.interceptor.PopularMvcHandlerInterceptor;
@@ -37,6 +45,7 @@ import com.danyuanblog.framework.popularmvc.properties.PopularMvcConfig;
 import com.danyuanblog.framework.popularmvc.properties.ResponseSystemFieldRenameProperties;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterConfigProperties;
 import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProperties;
+import com.danyuanblog.framework.popularmvc.utils.ClassOriginCheckUtil;
 
 @Configuration
 @Data
@@ -73,16 +82,20 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
 	public void configureMessageConverters(
 			List<HttpMessageConverter<?>> converters) {
 		// 添加默认转换器
-		converters.addAll(new WebMvcConfigurationSupport() {
+		converters.addAll(getDefaultHttpMessageConverter());			
+		converters.removeIf(httpMessageConverter -> httpMessageConverter.getClass() == StringHttpMessageConverter.class);
+		
+	}	
+	
+	private List<HttpMessageConverter<?>> getDefaultHttpMessageConverter(){
+		return new WebMvcConfigurationSupport() {
 
 			public List<HttpMessageConverter<?>> defaultMessageConverters() {
 				return super.getMessageConverters();
 			}
 
-		}.defaultMessageConverters());			
-		converters.removeIf(httpMessageConverter -> httpMessageConverter.getClass() == StringHttpMessageConverter.class);
-		
-	}	
+		}.defaultMessageConverters();
+	}
 
 	@Override
 	public Validator getValidator() {
@@ -97,6 +110,30 @@ public class PopularMvcWebConfigurer implements WebMvcConfigurer {
         registration.addUrlPatterns("/*");
         return registration;
     }
+
+	@Override
+	public void addArgumentResolvers(
+			List<HandlerMethodArgumentResolver> resolvers) {
+		if(resolvers == null){
+			resolvers = new ArrayList<>();
+		}		
+	    //对接口注解继承能力的支持，以便于feign和controller继承自相同的Interface接口
+		// RequestBody 支持接口注解
+		resolvers.add(new RequestResponseBodyMethodProcessor(getDefaultHttpMessageConverter()) {
+            @Override
+            public boolean supportsParameter(MethodParameter parameter) {
+                return super.supportsParameter(ClassOriginCheckUtil.interfaceMethodParameter(parameter, RequestBody.class));
+            }
+
+            @Override
+            // 支持@Valid验证
+            protected void validateIfApplicable(WebDataBinder binder, MethodParameter methodParam) {
+                super.validateIfApplicable(binder, ClassOriginCheckUtil.interfaceMethodParameter(methodParam, Valid.class));
+            }
+        });
+		
+		WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+	}
 
 
 }

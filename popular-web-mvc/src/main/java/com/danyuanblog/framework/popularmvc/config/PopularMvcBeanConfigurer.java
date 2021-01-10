@@ -34,7 +34,6 @@ import com.danyuanblog.framework.popularmvc.encrypt.DataEncryptHandler;
 import com.danyuanblog.framework.popularmvc.encrypt.SignEncryptHandler;
 import com.danyuanblog.framework.popularmvc.encrypt.impl.AESDataEncryptHandler;
 import com.danyuanblog.framework.popularmvc.encrypt.impl.Sha1SignEncryptHandler;
-import com.danyuanblog.framework.popularmvc.impl.CacheableLanguageTranslateManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultApplicationManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultCacheManagerImpl;
 import com.danyuanblog.framework.popularmvc.impl.DefaultCheckRepeatManagerImpl;
@@ -54,13 +53,13 @@ import com.danyuanblog.framework.popularmvc.properties.SystemParameterRenameProp
 @AutoConfigureAfter(PopularMvcWebConfigurer.class)
 public class PopularMvcBeanConfigurer {
 
-	@Bean
+	@Bean(name="defaultApplicationManager")
 	@ConditionalOnMissingBean(ApplicationManager.class)
 	public ApplicationManager applicationManager() {
 		return new DefaultApplicationManagerImpl();
 	}
 
-	@Bean
+	@Bean(name="defaultInvokeTimesManager")
 	@ConditionalOnMissingBean(InvokeTimesManager.class)
 	public InvokeTimesManager invokeTimesManager(@Autowired ApplicationManager applicationManager, @Autowired InvokeApiLogManager invokeApiLogManager) {
 		InvokeTimesManager manager = new DefaultInvokeTimesManagerImpl();
@@ -70,7 +69,7 @@ public class PopularMvcBeanConfigurer {
 		return manager;
 	}
 
-	@Bean
+	@Bean(name="defaultCheckRepeatManager")
 	@ConditionalOnMissingBean(CheckRepeatManager.class)
 	public CheckRepeatManager checkRepeatManager(@Autowired PopularMvcConfig popularMvcConfig, @Autowired CacheManager cacheManager) {
 		DefaultCheckRepeatManagerImpl checkRepeatManager= new DefaultCheckRepeatManagerImpl();
@@ -79,13 +78,13 @@ public class PopularMvcBeanConfigurer {
 		return checkRepeatManager;
 	}
 
-	@Bean
+	@Bean(name="defaultInvokeApiLogManager")
 	@ConditionalOnMissingBean(InvokeApiLogManager.class)
 	public InvokeApiLogManager invokeApiLogManager() {
 		return new DefaultInvokeApiLogManagerImpl();
 	}
 
-	@Bean
+	@Bean(name="defaultSessionManager")
 	@ConditionalOnMissingBean(SessionManager.class)
 	public SessionManager sessionManager(@Autowired CacheManager cacheManager, @Autowired PopularMvcConfig popularMvcConfig) {
 		DefaultSessionManagerImpl sessionManager = new DefaultSessionManagerImpl();
@@ -94,44 +93,37 @@ public class PopularMvcBeanConfigurer {
 		return sessionManager;
 	}
 	
-	@Bean
+	@Bean(name="defaultSignManager")
 	@ConditionalOnMissingBean(SignManager.class)
 	public SignManager signManager(@Autowired SignEncryptHandler signEncryptHandler) {
 		DefaultSignManagerImpl signManager = new DefaultSignManagerImpl();
 		return signManager;
 	}
 	
-	//自定义国际化处理器,如果没有定义，就使用spring i18n
-	@Bean
-	@ConditionalOnMissingBean(value = LanguageTranslateManager.class, ignored = CacheableLanguageTranslateManagerImpl.class)
-	public LanguageTranslateManager languageTranslateManager(@Autowired MessageSource messageSource, @Autowired PopularMvcConfig popularMvcConfig) {
-		return new DefaultLanguageTranslateManagerImpl(messageSource, new Locale(popularMvcConfig.getLocale()));
-	}
-	
 	//默认国际化处理器
-	@Bean
+	@Bean(name="defaultLanguageTranslateManager")
 	public LanguageTranslateManager defaultLanguageTranslateManager(@Autowired MessageSource messageSource, @Autowired PopularMvcConfig popularMvcConfig) {
 		return new DefaultLanguageTranslateManagerImpl(messageSource, new Locale(popularMvcConfig.getLocale()));
 	}
 	
-	@Bean
+	@Bean(name="defaultSignEncryptHandler")
 	public SignEncryptHandler signEncryptHandler() {
 		return new Sha1SignEncryptHandler();
 	}
 	
-	@Bean
+	@Bean(name="defaultDataEncryptHandler")
 	public DataEncryptHandler dataEncryptHandler(@Autowired SecretManager secretManager) {
 		return new AESDataEncryptHandler().setSecretManager(secretManager);
 	}
 	
-	@Bean
+	@Bean(name="defaultSecretManager")
 	@ConditionalOnMissingBean(SecretManager.class)
 	public SecretManager secretManager(@Autowired ChannelConfigProperties channelConfigProperties, @Autowired SystemParameterRenameProperties systemParameterProperties) {
 		DefaultSecretManagerImpl secretManager = new DefaultSecretManagerImpl(channelConfigProperties, systemParameterProperties);
 		return secretManager;
 	}
 	
-	@Bean
+	@Bean(name="defaultCacheManager")
 	public CacheManager cacheManager(@Autowired LocalReadCacheContainer localReadCacheContainer,
 			@Autowired LocalWriteCacheContainer localWriteCacheContainer) {
 		DefaultCacheManagerImpl cacheManager = new DefaultCacheManagerImpl();

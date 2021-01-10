@@ -54,8 +54,10 @@ public class PopularMvcEnvironmentPostProcessor implements
 					modifyMap.put(config.getKey(), config.getComposeValue(propertySource.getProperty(config.getKey())));
 				}
 			}
-			//批量修改属性值
-			updateStringPropertys(environment, propertySource, modifyMap);
+			if(modifyMap.size() > 0){
+				//批量修改属性值
+				updateStringPropertys(environment, propertySource, modifyMap);
+			}			
 				
 			// 遍历每个配置来源中的配置项
 			if (propertySource instanceof EnumerablePropertySource) {

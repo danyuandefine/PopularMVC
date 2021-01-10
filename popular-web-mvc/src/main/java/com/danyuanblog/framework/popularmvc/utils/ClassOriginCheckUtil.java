@@ -8,11 +8,13 @@
 */ 
 package com.danyuanblog.framework.popularmvc.utils;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.Set;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.MethodParameter;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -63,4 +65,42 @@ public class ClassOriginCheckUtil {
 		}
 		return false;
 	}
+	
+	//判断其父类是否有注解
+    public static <A extends Annotation> MethodParameter interfaceMethodParameter(MethodParameter parameter,
+            Class<A> annotationType) {
+        if (!parameter.hasParameterAnnotation(annotationType)) {
+        	Class<?> originalClass = parameter.getDeclaringClass();
+        	
+            for (Class<?> itf : originalClass.getInterfaces()) {
+                try {
+                    Method method = itf.getMethod(parameter.getMethod().getName(),
+                            parameter.getMethod().getParameterTypes());
+                    MethodParameter itfParameter = new MethodParameter(method, parameter.getParameterIndex());
+                    if (itfParameter.hasParameterAnnotation(annotationType)) {
+                        return itfParameter;
+                    }
+                } catch (NoSuchMethodException e) {
+                    continue;
+                }
+            }  
+            //继续查找父类，直到找到为止
+            Class<?> supserClass = originalClass.getSuperclass();
+            if(supserClass != null){
+            	Method method;
+				try {
+					method = supserClass.getMethod(parameter.getMethod().getName(),
+					        parameter.getMethod().getParameterTypes());
+					MethodParameter itfParameter = new MethodParameter(method, parameter.getParameterIndex());
+					return interfaceMethodParameter(itfParameter, annotationType);
+				} catch (NoSuchMethodException e) {
+					
+				} catch (SecurityException e) {
+					
+				}
+                
+            }
+        }
+        return parameter;
+    }
 }
